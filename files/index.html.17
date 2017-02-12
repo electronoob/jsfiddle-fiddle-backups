@@ -1,0 +1,1825 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    span {
+  text-align: right;
+}
+input {
+  padding: 0px;
+  margin: 0px;
+  border: 2px inset #ffffff;
+}
+button {
+  padding: 2px;
+  margin: 0px;
+  border: 2px outset #ffffff;
+  font-size: 8px;
+}
+body {
+  margin: 50px;
+  background-color: #f08080;
+  font-size: 10px;
+  background: url(http://i.imgur.com/EUfuLv5.png);
+}
+canvas {
+ //border: 2px inset #a0a0a0;
+  background-color: #606060;
+}
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+var elements = [];
+var id = 0;
+var X = 0;
+var sin1to4_canvas = ['SinusPic49','SinusPic43','SinusPic42','SinusPic41']
+var sin1to4_length = ['txtSinLen45', 'txtSinLen34', 'txtSinLen33', 'txtSinLen32'];
+var sin1to4_offset = ['txtSinOffs31','txtSinOffs30','txtSinOffs29','txtSinOffs28'];
+var sin1to4_periods = ['txtSinWaves27','txtSinWaves26','txtSinWaves25','txtSinWaves24'];
+var sin1to4_minimum = ['txtSinMin48','txtSinMin39','txtSinMin37','txtSinMin35'];
+var sin1to4_maximum = ['txtSinMax47','txtSinMax40','txtSinMax38','txtSinMax36'];
+var sin1to4_origin = ['txtSinOrigin9','txtSinOrigin8','txtSinOrigin7','txtSinOrigin6'];
+var sin1to4_range = ['txtSinRange5','txtSinRange4','txtSinRange3','txtSinRange2'];
+var sin1to4_speed = ['txtSinSpeed16','txtSinSpeed15','txtSinSpeed14','txtSinSpeed13'];
+var sin1to4_on = ['checkSin23','checkSin22','checkSin21','checkSin20'];
+var previewStepsX = 'txtPrvXmax17';
+var previewMinY = 'txtPrvYmin18';
+var previewMaxY = 'txtPrvYmax19';
+var previewCanvas = 'picPreview44';
+
+init();
+
+function draw() {
+  var  sin1ctx = document.getElementById(sin1to4_canvas[0]).getContext('2d');
+  var  sin2ctx = document.getElementById(sin1to4_canvas[1]).getContext('2d');
+  var  sin3ctx = document.getElementById(sin1to4_canvas[2]).getContext('2d');
+  var  sin4ctx = document.getElementById(sin1to4_canvas[3]).getContext('2d');
+
+  sin1_length = V(sin1to4_length[0]);
+  sin2_length = V(sin1to4_length[1]);
+  sin3_length = V(sin1to4_length[2]);
+  sin4_length = V(sin1to4_length[3]);
+
+  sin1_offset = V(sin1to4_offset[0]);
+  sin2_offset = V(sin1to4_offset[1]);
+  sin3_offset = V(sin1to4_offset[2]);
+  sin4_offset = V(sin1to4_offset[3]);
+
+  sin1_periods = V(sin1to4_periods[0])  * (Math.PI*2) ;
+  sin2_periods = V(sin1to4_periods[1])  * (Math.PI*2) ;
+  sin3_periods = V(sin1to4_periods[2])  * (Math.PI*2) ;
+  sin4_periods = V(sin1to4_periods[3])  * (Math.PI*2) ;
+
+  sin1_minimum = V(sin1to4_minimum[0]);
+  sin2_minimum = V(sin1to4_minimum[1]);
+  sin3_minimum = V(sin1to4_minimum[2]);
+  sin4_minimum = V(sin1to4_minimum[3]);
+
+  sin1_maximum = V(sin1to4_maximum[0]);
+  sin2_maximum = V(sin1to4_maximum[1]);
+  sin3_maximum = V(sin1to4_maximum[2]);
+  sin4_maximum = V(sin1to4_maximum[3]);
+
+  sin1_origin = V(sin1to4_origin[0]);
+  sin2_origin = V(sin1to4_origin[1]);
+  sin3_origin = V(sin1to4_origin[2]);
+  sin4_origin = V(sin1to4_origin[3]);
+
+  sin1_range = V(sin1to4_range[0]);
+  sin2_range = V(sin1to4_range[1]);
+  sin3_range = V(sin1to4_range[2]);
+  sin4_range = V(sin1to4_range[3]);
+
+  sin1_speed = V(sin1to4_speed[0]);
+  sin2_speed = V(sin1to4_speed[1]);
+  sin3_speed = V(sin1to4_speed[2]);
+  sin4_speed = V(sin1to4_speed[3]);
+  
+	sin1_data = [];
+  sin1ctx.fillStyle = "#00ff00";
+  sin1ctx.clearRect(0,0,100,100);
+  p = 100/sin1_periods;
+  for(i=0;i<100;i+=0.2) {
+  	sin1ctx.fillRect(
+    	i,
+      70 - ( Math.sin(i/p) * 35 + 35) 
+      ,1,1
+    );
+  }
+  
+  sin2_data = [];
+  sin2ctx.fillStyle = "#00ff00";
+  sin2ctx.clearRect(0,0,100,100);
+  p = 100/sin2_periods;
+  for(i=0;i<100;i+=0.2) {
+  	sin2ctx.fillRect(
+    	i,
+      70 - ( Math.sin(i/p) * 35 + 35)
+      ,1,1
+    );
+  }
+  
+  
+  sin3_data = [];
+  sin3ctx.fillStyle = "#00ff00";
+  sin3ctx.clearRect(0,0,100,100);
+  p = 100/sin3_periods;
+  for(i=0;i<100;i+=0.2) {
+  	sin3ctx.fillRect(
+    	i,
+      70 - ( Math.sin(i/p) * 35 + 35)
+      ,1,1
+    );
+  }
+  
+  
+  sin4_data = [];
+  sin4ctx.fillStyle = "#00ff00";
+  sin4ctx.clearRect(0,0,110,110);
+  p = 100/sin4_periods;
+  
+  
+  for(i=0;i<100;i+=0.2) {
+  	sin4ctx.fillRect(
+    	i,
+      70 - ( Math.sin(i/p) * 35 + 35)
+      ,1,1
+    );
+  }
+  
+  
+
+	pctx = document.getElementById(previewCanvas).getContext('2d');
+  pctx.fillStyle = "#00ff00";
+  pctx.clearRect(0,0,500,200);
+
+  
+  
+
+  ic = 220 / V(previewStepsX);
+  
+  for (i=0;i<V(previewStepsX);i+=0.1)
+  {
+  	tot = 0;
+    var r = (Math.PI*2);
+    
+    
+    if (C(sin1to4_on[0]) == true) {
+     tot += Math.sin(  (sin1_periods * (Math.PI * 2)) / V(previewStepsX) * i + X / (30 / sin1_speed) );
+    }
+    
+        if (C(sin1to4_on[1]) == true) {
+     tot += Math.sin(  (sin2_periods * (Math.PI * 2)) / V(previewStepsX) * i + X / (30 / sin2_speed) );
+    }
+    
+        if (C(sin1to4_on[2]) == true) {
+     tot += Math.sin(  (sin3_periods * (Math.PI * 2)) / V(previewStepsX) * i + X / (30 / sin3_speed) );
+    }
+    
+        if (C(sin1to4_on[3]) == true) {
+     tot += Math.sin(  (sin4_periods * (Math.PI * 2)) / V(previewStepsX) * i + X / (30 / sin4_speed) ) - (sin4_origin/20);
+    }
+    
+  	pctx.fillRect (
+ 
+ 			ic * i,
+      35 - tot * 10,
+ 			1,1);
+
+  }
+  
+  
+  
+	window.requestAnimationFrame(draw);
+}
+function V(id) {
+	return parseInt( document.getElementById(id).value ,10);
+}
+function C(id) {
+	return document.getElementById(id).checked;
+}
+setInterval (function () {
+	X++;
+}, 10);
+
+
+for(i=0;i<elements.length;i++) {
+  element = elements[i];
+  id++;
+  switch (element.ELEMENT ) {
+  	case "VB.Form":
+    	gVBForm(element);
+    break;
+  	case "Label":
+    	gLabel(element);
+    break;
+  	case "TextBox":
+    	gTextBox(element);
+    break;
+    case "CommandButton":
+    	gCommandButton(element);
+    break;
+    case "CheckBox":
+    	gCheckBox(element);
+    break;
+    case "PictureBox":
+    	gPictureBox(element);
+    break;
+    default:
+      id--;
+    break;
+  }
+}
+draw();
+function gVBForm(o) {
+
+/*
+elements.push({
+"ELEMENT":"VB.Form",
+"ID":"Form1",
+"Caption": "::..                        ..:: GPZ's Sinus Lab V1 (c)'98 by Hitmen ::..                     ..::",
+"BackColor": "#808080",
+"ForeColor": "#404040",
+"ScaleMode": 1,
+"AutoRedraw": true,
+"FontTransparent": false,
+"FillStyle": 0,
+"BorderStyle": 1,//Fixed Single,
+"Icon": "Form1.frx",
+"LinkTopic": "Form1",
+"MaxButton": 0  ,//false,
+"ClipControls": 0  ,//false,
+"ClientLeft": 36,
+"ClientTop": 324,
+"ClientWidth": 7188,
+"ClientHeight": 5736,
+});*/
+	e = document.createElement('div');
+  e.style.zIndex = "1";
+  e.style.top = tppx(0 + pt(50));
+  e.style.left = tppx(0 + pt(50));
+  e.style.height = tppx(o.ClientHeight);
+  e.style.width = tppx(o.ClientWidth);
+  e.style.position = "absolute";
+  e.id = o.ID + id;
+  e.style.color = o.ForeColor ? o.ForeColor : '#000000';
+  e.style.backgroundColor = o.BackColor ? o.BackColor : '#ffffff';
+  e.style.borderStyle = "outset";
+  e.style.borderWidth = "1px";
+  e.style.borderRadius = "0px 0px 5px 5px";
+  e.style.boxShadow = "2px 2px 5px rgba(0,0,0,0.5)";
+  document.getElementById('x').appendChild(e);
+  e = document.createElement('span');
+  e.style.zIndex = "0";
+  e.style.borderStyle = "outset";
+  e.style.borderWidth = "1px";
+  e.style.boxShadow = "2px 2px 5px rgba(0,0,0,0.5)";
+  e.style.color = o.ForeColor;
+  e.style.backgroundColor = o.BackColor;
+  e.style.top = tppx(pt(30));
+  e.style.left = tppx(o.Left + pt(50));
+  e.style.height = tppx(pt(20));
+  e.style.width = tppx(o.ClientWidth);
+  e.innerText = o.Caption ? o.Caption : '';
+  e.style.position = "absolute";
+  e.style.fontSize = "14px";
+  e.style.textAlign = "center";
+  e.id = o.ID;
+  document.getElementById('x').appendChild(e);
+}
+
+
+function  gPictureBox (o) {
+/*
+elements.push({
+"ELEMENT":"PictureBox",
+"ID":"SinusPic",
+"BackColor": "#404040",
+"Index": 3,
+"ForeColor": "#FF00",
+"Left": 5424,
+"Top": 2304,
+"Width": 1548,
+"Height": 1068,
+"TabIndex": 25,
+"ScaleMode": 1,
+"AutoRedraw": true,
+"FontTransparent": true,
+"FillStyle": 0,
+"ClipControls": 0  ,//false,
+});
+*/
+	e = document.createElement('canvas');
+  e.width = tp(o.Width);
+  e.height = tp(o.Height);
+  e.style.top = tppx(o.Top + pt(50));
+  e.style.left = tppx(o.Left + pt(50));
+  //e.style.height = tppx(o.Height);
+  //e.style.width = tppx(o.Width);
+  e.style.position = "absolute";
+  e.id = o.ID + id;
+  e.style.zIndex = "2";
+  document.getElementById('x').appendChild(e);
+}
+
+function  gCheckBox (o) {
+/*
+elements.push({
+"ELEMENT":"CheckBox",
+"ID":"checkSin",
+"Index": 0,
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 4848,
+"Top": 3936,
+"Width": 204,
+"Height": 300,
+"TabIndex": 70,
+"Value": 1,
+});
+*/
+	e = document.createElement('input');
+  e.setAttribute("type", "checkbox");
+  e.style.top = tppx(o.Top + pt(50));
+  e.style.left = tppx(o.Left + pt(50));
+  e.style.height = tppx(o.Height);
+  e.style.width = tppx(o.Width);
+  e.style.position = "absolute";
+  e.id = o.ID + id;
+  t = document.createTextNode(o.Caption ? o.Caption : '');
+	e.appendChild(t);
+  e.style.zIndex = "2";
+  document.getElementById('x').appendChild(e);
+}
+
+function  gCommandButton (o) {
+  /*
+  elements.push({
+  "ELEMENT":"CommandButton",
+  "ID":"cmdQuit",
+  "Caption": "qUiT!",
+  "Left": 6192,
+  "Top": 5232,
+  "Width": 876,
+  "Height": 300,
+  "TabIndex": 81,
+  });
+  */
+	e = document.createElement('BUTTON');
+  e.style.top = tppx(o.Top + pt(50));
+  e.style.left = tppx(o.Left + pt(50));
+  e.style.height = tppx(o.Height);
+  e.style.width = tppx(o.Width);
+  e.style.position = "absolute";
+  e.id = o.ID + id;
+  t = document.createTextNode(o.Caption ? o.Caption : '');
+	e.appendChild(t);
+  e.style.zIndex = "2";
+  document.getElementById('x').appendChild(e);
+}
+function gTextBox (o) {
+  /*
+      elements.push({
+      "ELEMENT":"TextBox",
+      "ID":"txtSinSpeed",
+      "Index": 2,
+      "Left": 5376,
+      "Top": 4704,
+      "Width": 588,
+      "Height": 300,
+      "Text": "5",
+      "TabIndex": 76,
+      "Alignment": 1,//Right Justify,
+      });
+  */
+  e = document.createElement('input');
+  e.style.color = o.ForeColor ? o.ForeColor : '#000000';
+  e.style.backgroundColor = o.BackColor ? o.BackColor : '#ffffff';
+  e.style.top = tppx(o.Top + pt(50));
+  e.style.left = tppx(o.Left + pt(50));
+  e.style.height = tppx(o.Height - 100);
+  e.style.width = tppx(o.Width);
+  e.value = o.Text ? o.Text : '';
+  e.style.position = "absolute";
+  e.id = o.ID + id;
+  e.style.zIndex = "2";
+  document.getElementById('x').appendChild(e);
+}
+
+function gLabel (o) {
+/*
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label31",
+"Caption": "Sin1",
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 4464,
+"Top": 3984,
+"Width": 300,
+"Height": 204,
+"TabIndex": 34,
+});
+*/
+  e = document.createElement('span');
+  e.style.color = o.ForeColor;
+  e.style.backgroundColor = o.BackColor;
+  e.style.top = tppx(o.Top + pt(50));
+  e.style.left = tppx(o.Left + pt(50));
+  e.style.height = tppx(o.Height);
+  e.style.width = tppx(o.Width);
+  e.innerText = o.Caption ? o.Caption : '';
+  e.style.position = "absolute";
+  e.id = o.ID;
+  e.style.zIndex = "2";
+  document.getElementById('x').appendChild(e);
+}
+function tp (twip) {
+	return twip * 0.066666667;
+}
+function pt (px) {
+	return px / 0.066666667;
+}
+function tppx (twip) {
+	return (twip * 0.066666667) + "px";
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getElementTypes() {
+  var buf = [];
+  for(i=0;i<elements.length;i++) {
+    element = elements[i];
+    buf.push ( element.ELEMENT );
+  }
+  buf.sort();
+  unique = [...new Set(buf)];
+  return unique;
+}
+
+function init () {
+elements.push({
+"ELEMENT":"VB.Form",
+"ID":"Form1",
+"Caption": "::..                        ..:: GPZ's Sinus Lab V1 (c)'98 by Hitmen ::..                     ..::",
+"BackColor": "#808080",
+"ForeColor": "#404040",
+"ScaleMode": 1,
+"AutoRedraw": true,
+"FontTransparent": false,
+"FillStyle": 0,
+"BorderStyle": 1,//Fixed Single,
+"Icon": "Form1.frx",
+"LinkTopic": "Form1",
+"MaxButton": 0  ,//false,
+"ClipControls": 0  ,//false,
+"ClientLeft": 36,
+"ClientTop": 324,
+"ClientWidth": 7188,
+"ClientHeight": 5736,
+});
+
+elements.push({
+"ELEMENT":"Timer",
+"ID":"Timer1",
+"Interval": 2,
+"Left": 720,
+"Top": 5280,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinRange",
+"Index": 3,
+"Left": 5952,
+"Top": 1632,
+"Width": 700,
+"Height": 300,
+"Text": "0",
+"TabIndex": 66,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinRange",
+"Index": 2,
+"Left": 5952,
+"Top": 1248,
+"Width": 700,
+"Height": 300,
+"Text": "0",
+"TabIndex": 59,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinRange",
+"Index": 1,
+"Left": 5952,
+"Top": 864,
+"Width": 700,
+"Height": 300,
+"Text": "0",
+"TabIndex": 52,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinRange",
+"Index": 0,
+"Left": 5952,
+"Top": 480,
+"Width": 700,
+"Height": 300,
+"Text": "0",
+"TabIndex": 45,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinOrigin",
+"Index": 3,
+"Left": 5088,
+"Top": 1632,
+"Width": 700,
+"Height": 300,
+"Text": "0",
+"TabIndex": 65,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinOrigin",
+"Index": 2,
+"Left": 5088,
+"Top": 1248,
+"Width": 700,
+"Height": 300,
+"Text": "0",
+"TabIndex": 58,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinOrigin",
+"Index": 1,
+"Left": 5088,
+"Top": 864,
+"Width": 700,
+"Height": 300,
+"Text": "0",
+"TabIndex": 51,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinOrigin",
+"Index": 0,
+"Left": 5088,
+"Top": 480,
+"Width": 700,
+"Height": 300,
+"Text": "0",
+"TabIndex": 44,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"CommandButton",
+"ID":"Command3",
+"Caption": "about us",
+"Left": 6192,
+"Top": 4800,
+"Width": 876,
+"Height": 300,
+"TabIndex": 80,
+});
+
+elements.push({
+"ELEMENT":"CommandButton",
+"ID":"Command2",
+"Caption": "about this",
+"Left": 6192,
+"Top": 4368,
+"Width": 876,
+"Height": 300,
+"TabIndex": 79,
+});
+
+elements.push({
+"ELEMENT":"CommandButton",
+"ID":"cmdQuit",
+"Caption": "qUiT!",
+"Left": 6192,
+"Top": 5232,
+"Width": 876,
+"Height": 300,
+"TabIndex": 81,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinSpeed",
+"Index": 3,
+"Left": 5376,
+"Top": 5088,
+"Width": 588,
+"Height": 300,
+"Text": "7",
+"TabIndex": 77,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinSpeed",
+"Index": 2,
+"Left": 5376,
+"Top": 4704,
+"Width": 588,
+"Height": 300,
+"Text": "5",
+"TabIndex": 76,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinSpeed",
+"Index": 1,
+"Left": 5376,
+"Top": 4320,
+"Width": 588,
+"Height": 300,
+"Text": "3",
+"TabIndex": 75,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinSpeed",
+"Index": 0,
+"Left": 5376,
+"Top": 3936,
+"Width": 588,
+"Height": 300,
+"Text": "1",
+"TabIndex": 74,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtPrvXmax",
+"Left": 2976,
+"Top": 5280,
+"Width": 588,
+"Height": 300,
+"Text": "256",
+"TabIndex": 67,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtPrvYmin",
+"Left": 3648,
+"Top": 4224,
+"Width": 588,
+"Height": 300,
+"Text": "-255",
+"TabIndex": 68,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtPrvYmax",
+"Left": 3648,
+"Top": 4752,
+"Width": 588,
+"Height": 300,
+"Text": "255",
+"TabIndex": 69,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"CheckBox",
+"ID":"checkSin",
+"Index": 3,
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 4848,
+"Top": 5088,
+"Width": 204,
+"Height": 300,
+"TabIndex": 73,
+"Value": 1,
+});
+
+elements.push({
+"ELEMENT":"CheckBox",
+"ID":"checkSin",
+"Index": 2,
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 4848,
+"Top": 4704,
+"Width": 204,
+"Height": 300,
+"TabIndex": 72,
+"Value": 1,
+});
+
+elements.push({
+"ELEMENT":"CheckBox",
+"ID":"checkSin",
+"Index": 1,
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 4848,
+"Top": 4320,
+"Width": 204,
+"Height": 300,
+"TabIndex": 71,
+"Value": 1,
+});
+
+elements.push({
+"ELEMENT":"CheckBox",
+"ID":"checkSin",
+"Index": 0,
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 4848,
+"Top": 3936,
+"Width": 204,
+"Height": 300,
+"TabIndex": 70,
+"Value": 1,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinWaves",
+"Index": 3,
+"Left": 2496,
+"Top": 1632,
+"Width": 700,
+"Height": 300,
+"Text": "8",
+"TabIndex": 62,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinWaves",
+"Index": 2,
+"Left": 2496,
+"Top": 1248,
+"Width": 700,
+"Height": 300,
+"Text": "4",
+"TabIndex": 55,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinWaves",
+"Index": 1,
+"Left": 2496,
+"Top": 864,
+"Width": 700,
+"Height": 300,
+"Text": "2",
+"TabIndex": 48,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinWaves",
+"Index": 0,
+"Left": 2496,
+"Top": 480,
+"Width": 700,
+"Height": 300,
+"Text": "1",
+"TabIndex": 41,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinOffs",
+"Index": 3,
+"Left": 1632,
+"Top": 1632,
+"Width": 700,
+"Height": 300,
+"Text": "192",
+"TabIndex": 61,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinOffs",
+"Index": 2,
+"Left": 1632,
+"Top": 1248,
+"Width": 700,
+"Height": 300,
+"Text": "128",
+"TabIndex": 54,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinOffs",
+"Index": 1,
+"Left": 1632,
+"Top": 864,
+"Width": 700,
+"Height": 300,
+"Text": "64",
+"TabIndex": 47,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinOffs",
+"Index": 0,
+"Left": 1632,
+"Top": 480,
+"Width": 700,
+"Height": 300,
+"Text": "0",
+"TabIndex": 40,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinLen",
+"Index": 3,
+"Left": 768,
+"Top": 1632,
+"Width": 700,
+"Height": 300,
+"Text": "64",
+"TabIndex": 60,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinLen",
+"Index": 2,
+"Left": 768,
+"Top": 1248,
+"Width": 700,
+"Height": 300,
+"Text": "128",
+"TabIndex": 53,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinLen",
+"Index": 1,
+"Left": 768,
+"Top": 864,
+"Width": 700,
+"Height": 300,
+"Text": "256",
+"TabIndex": 46,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinMin",
+"Index": 3,
+"Left": 3360,
+"Top": 1632,
+"Width": 700,
+"Height": 300,
+"Text": "112",
+"TabIndex": 63,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinMax",
+"Index": 3,
+"Left": 4224,
+"Top": 1632,
+"Width": 700,
+"Height": 300,
+"Text": "144",
+"TabIndex": 64,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinMin",
+"Index": 2,
+"Left": 3360,
+"Top": 1248,
+"Width": 700,
+"Height": 300,
+"Text": "96",
+"TabIndex": 56,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinMax",
+"Index": 2,
+"Left": 4224,
+"Top": 1248,
+"Width": 700,
+"Height": 300,
+"Text": "160",
+"TabIndex": 57,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinMin",
+"Index": 1,
+"Left": 3360,
+"Top": 864,
+"Width": 700,
+"Height": 300,
+"Text": "64",
+"TabIndex": 49,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinMax",
+"Index": 1,
+"Left": 4224,
+"Top": 864,
+"Width": 700,
+"Height": 300,
+"Text": "196",
+"TabIndex": 50,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"PictureBox",
+"ID":"SinusPic",
+"BackColor": "#404040",
+"Index": 3,
+"ForeColor": "#FF00",
+"Left": 5424,
+"Top": 2304,
+"Width": 1548,
+"Height": 1068,
+"TabIndex": 25,
+"ScaleMode": 1,
+"AutoRedraw": true,
+"FontTransparent": true,
+"FillStyle": 0,
+"ClipControls": 0  ,//false,
+});
+
+elements.push({
+"ELEMENT":"PictureBox",
+"ID":"SinusPic",
+"BackColor": "#404040",
+"Index": 2,
+"ForeColor": "#FF00",
+"Left": 3696,
+"Top": 2304,
+"Width": 1548,
+"Height": 1068,
+"TabIndex": 26,
+"ScaleMode": 1,
+"AutoRedraw": true,
+"FontTransparent": true,
+"FillStyle": 0,
+"FillColor": "#FF00",
+"ClipControls": 0  ,//false,
+});
+
+elements.push({
+"ELEMENT":"PictureBox",
+"ID":"SinusPic",
+"BackColor": "#404040",
+"Index": 1,
+"ForeColor": "#FF00",
+"Left": 1968,
+"Top": 2304,
+"Width": 1548,
+"Height": 1068,
+"TabIndex": 27,
+"ScaleMode": 1,
+"AutoRedraw": true,
+"FontTransparent": true,
+"FillStyle": 0,
+"FillColor": "#FF00",
+"ClipControls": 0  ,//false,
+});
+
+elements.push({
+"ELEMENT":"PictureBox",
+"ID":"picPreview",
+"BackColor": "#404040",
+"ForeColor": "#FF00",
+"Left": 192,
+"Top": 4128,
+"Width": 3372,
+"Height": 1068,
+"TabIndex": 82,
+"ScaleMode": 0,
+"ScaleLeft": 0,
+"ScaleTop": -512,
+"ScaleWidth": 519.394,
+"ScaleHeight": 1072.188,
+"AutoRedraw": false,
+"FontTransparent": false,
+"FillColor": "#FF00",
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinLen",
+"Index": 0,
+"Left": 768,
+"Top": 480,
+"Width": 700,
+"Height": 300,
+"Text": "512",
+"TabIndex": 39,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"CommonDialog",
+"ID":"CommonDialog",
+});
+
+elements.push({
+"ELEMENT":"CommandButton",
+"ID":"Command1",
+"Caption": "write file",
+"Left": 6192,
+"Top": 3936,
+"Width": 876,
+"Height": 300,
+"TabIndex": 78,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinMax",
+"Index": 0,
+"Left": 4224,
+"Top": 480,
+"Width": 700,
+"Height": 300,
+"Text": "255",
+"TabIndex": 43,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"TextBox",
+"ID":"txtSinMin",
+"Index": 0,
+"Left": 3360,
+"Top": 480,
+"Width": 700,
+"Height": 300,
+"Text": "0",
+"TabIndex": 42,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"PictureBox",
+"ID":"SinusPic",
+"BackColor": "#404040",
+"Index": 0,
+"ForeColor": "#FF00",
+"Left": 240,
+"Top": 2304,
+"Width": 1548,
+"Height": 1068,
+"TabIndex": 28,
+"ScaleMode": 1,
+"AutoRedraw": true,
+"FontTransparent": true,
+"FillStyle": 0,
+"FillColor": "#FF00",
+"ClipControls": 0  ,//false,
+});
+
+elements.push({
+"ELEMENT":"Line",
+"ID":"Line13",
+"X1": 192,
+"Y1": 4128,
+"X2": 3552,
+"Y2": 4128,
+"BorderWidth": 2,
+});
+
+elements.push({
+"ELEMENT":"Line",
+"ID":"Line12",
+"X1": 192,
+"Y1": 4128,
+"X2": 192,
+"Y2": 5184,
+"BorderWidth": 2,
+});
+
+elements.push({
+"ELEMENT":"Line",
+"ID":"Line11",
+"X1": 5424,
+"Y1": 2304,
+"X2": 5424,
+"Y2": 3360,
+"BorderWidth": 2,
+});
+
+elements.push({
+"ELEMENT":"Line",
+"ID":"Line10",
+"X1": 3696,
+"Y1": 2304,
+"X2": 3696,
+"Y2": 3360,
+"BorderWidth": 2,
+});
+
+elements.push({
+"ELEMENT":"Line",
+"ID":"Line9",
+"X1": 1968,
+"Y1": 2304,
+"X2": 1968,
+"Y2": 3360,
+"BorderWidth": 2,
+});
+
+elements.push({
+"ELEMENT":"Line",
+"ID":"Line8",
+"X1": 240,
+"Y1": 2304,
+"X2": 240,
+"Y2": 3360,
+"BorderWidth": 2,
+});
+
+elements.push({
+"ELEMENT":"Line",
+"ID":"Line7",
+"X1": 5424,
+"Y1": 2304,
+"X2": 6960,
+"Y2": 2304,
+"BorderWidth": 2,
+});
+
+elements.push({
+"ELEMENT":"Line",
+"ID":"Line6",
+"X1": 3696,
+"Y1": 2304,
+"X2": 5232,
+"Y2": 2304,
+"BorderWidth": 2,
+});
+
+elements.push({
+"ELEMENT":"Line",
+"ID":"Line5",
+"X1": 240,
+"Y1": 2304,
+"X2": 1776,
+"Y2": 2304,
+"BorderWidth": 2,
+});
+
+elements.push({
+"ELEMENT":"Line",
+"ID":"Line4",
+"X1": 1968,
+"Y1": 2304,
+"X2": 3504,
+"Y2": 2304,
+"BorderWidth": 2,
+});
+
+elements.push({
+"ELEMENT":"Line",
+"ID":"Line3",
+"X1": 0,
+"Y1": 288,
+"X2": 7200,
+"Y2": 288,
+});
+
+elements.push({
+"ELEMENT":"Line",
+"ID":"Line2",
+"X1": 0,
+"Y1": 3744,
+"X2": 7200,
+"Y2": 3744,
+});
+
+elements.push({
+"ELEMENT":"Line",
+"ID":"Line1",
+"X1": 0,
+"Y1": 3552,
+"X2": 7200,
+"Y2": 3552,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label33",
+"Left": -96,
+"Top": -48,
+"Width": 7284,
+"Height": 156,
+"TabIndex": 11,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label32",
+"Caption": "On",
+"Left": 4176,
+"Top": 3552,
+"Width": 876,
+"Height": 204,
+"TabIndex": 14,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label31",
+"Caption": "Sin1",
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 4464,
+"Top": 3984,
+"Width": 300,
+"Height": 204,
+"TabIndex": 34,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label30",
+"Caption": "Sin2",
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 4464,
+"Top": 4368,
+"Width": 300,
+"Height": 204,
+"TabIndex": 33,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label29",
+"Caption": "Sin3",
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 4464,
+"Top": 4752,
+"Width": 300,
+"Height": 204,
+"TabIndex": 32,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label28",
+"Caption": "Sin4",
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 4464,
+"Top": 5136,
+"Width": 300,
+"Height": 204,
+"TabIndex": 31,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label27",
+"Caption": "x4",
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 5184,
+"Top": 5136,
+"Width": 204,
+"Height": 204,
+"TabIndex": 38,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label26",
+"Caption": "x3",
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 5184,
+"Top": 4752,
+"Width": 204,
+"Height": 204,
+"TabIndex": 37,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label25",
+"Caption": "x2",
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 5184,
+"Top": 4368,
+"Width": 204,
+"Height": 204,
+"TabIndex": 36,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label24",
+"Caption": "x1",
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 5184,
+"Top": 3984,
+"Width": 204,
+"Height": 204,
+"TabIndex": 35,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label23",
+"Caption": "Tables",
+"Left": -144,
+"Top": 96,
+"Width": 828,
+"Height": 204,
+"TabIndex": 2,
+"Alignment": 1,//Right Justify,
+/*,
+"Font,
+"Name": "MS Sans Serif",
+"Size": 7.8,
+"Charset": 0,
+"Weight": 700,
+"Underline": 0,//false,
+"Italic": 0,//false,
+"Strikethrough": 0,//false,
+*/
+
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label22",
+"Left": 5856,
+"Top": 3552,
+"Width": 1332,
+"Height": 204,
+"TabIndex": 16,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label9",
+"Caption": "Range",
+"Left": 768,
+"Top": 3552,
+"Width": 3420,
+"Height": 204,
+"TabIndex": 13,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label8",
+"Caption": "Preview ",
+"Left": 0,
+"Top": 3552,
+"Width": 780,
+"Height": 204,
+"TabIndex": 12,
+"Alignment": 1,//Right Justify,
+/*,
+"Font,
+"Name": "MS Sans Serif",
+"Size": 7.8,
+"Charset": 0,
+"Weight": 700,
+"Underline": 0,//false,
+"Italic": 0,//false,
+"Strikethrough": 0,//false,
+*/
+
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label21",
+"Caption": "Steps:",
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 2448,
+"Top": 5328,
+"Width": 492,
+"Height": 204,
+"TabIndex": 30,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label20",
+"Caption": "Range",
+"Left": 5616,
+"Top": 96,
+"Width": 924,
+"Height": 204,
+"TabIndex": 9,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label19",
+"Caption": "Origin",
+"Left": 4896,
+"Top": 96,
+"Width": 732,
+"Height": 204,
+"TabIndex": 8,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label18",
+"Caption": "Sin4",
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 192,
+"Top": 1680,
+"Width": 300,
+"Height": 204,
+"TabIndex": 17,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label17",
+"Caption": "Sin3",
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 192,
+"Top": 1296,
+"Width": 300,
+"Height": 204,
+"TabIndex": 18,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label16",
+"Caption": "Sin2",
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 192,
+"Top": 912,
+"Width": 300,
+"Height": 204,
+"TabIndex": 19,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label15",
+"Caption": "Sin1",
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 192,
+"Top": 528,
+"Width": 300,
+"Height": 204,
+"TabIndex": 20,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label14",
+"Caption": "Sin4",
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 5424,
+"Top": 2112,
+"Width": 300,
+"Height": 204,
+"TabIndex": 24,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label13",
+"Caption": "Sin3",
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 3696,
+"Top": 2112,
+"Width": 300,
+"Height": 204,
+"TabIndex": 23,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label12",
+"Caption": "Sin2",
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 2016,
+"Top": 2112,
+"Width": 300,
+"Height": 204,
+"TabIndex": 22,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label11",
+"Caption": "Sin1",
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 240,
+"Top": 2112,
+"Width": 300,
+"Height": 204,
+"TabIndex": 21,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label10",
+"Left": 6528,
+"Top": 96,
+"Width": 660,
+"Height": 204,
+"TabIndex": 10,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"lblpeaklow",
+"Caption": "peak",
+"BackColor": "#808080",
+"ForeColor": "#FF",
+"Left": 3648,
+"Top": 5088,
+"Width": 540,
+"Height": 240,
+"TabIndex": 0,
+"AutoSize": -1 ,//true,
+/*,
+"Font,
+"Name": "Terminal",
+"Size": 10.8,
+"Charset": 255,
+"Weight": 700,
+"Underline": 0,//false,
+"Italic": 0,//false,
+"Strikethrough": 0,//false,
+*/
+
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"lblpeakhigh",
+"Caption": "peak",
+"BackColor": "#808080",
+"ForeColor": "#FF",
+"Left": 3648,
+"Top": 3960,
+"Width": 540,
+"Height": 240,
+"TabIndex": 1,
+"AutoSize": -1 ,//true,
+/*,
+"Font,
+"Name": "Terminal",
+"Size": 10.8,
+"Charset": 255,
+"Weight": 700,
+"Underline": 0,//false,
+"Italic": 0,//false,
+"Strikethrough": 0,//false,
+*/
+
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label7",
+"Caption": "f(x)=sin1(x+x1)+sin2(x+x2)+sin3(x+x3)+sin4(x+x4)",
+"BackColor": "#808080",
+"ForeColor": "#C0C0C0",
+"Left": 192,
+"Top": 3840,
+"Width": 3372,
+"Height": 204,
+"TabIndex": 29,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label6",
+"Caption": "Periods",
+"Left": 2208,
+"Top": 96,
+"Width": 924,
+"Height": 204,
+"TabIndex": 5,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label5",
+"Caption": "Offset ",
+"Left": 1344,
+"Top": 96,
+"Width": 876,
+"Height": 204,
+"TabIndex": 4,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label4",
+"Caption": "Maximum",
+"Left": 3984,
+"Top": 96,
+"Width": 924,
+"Height": 204,
+"TabIndex": 7,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label3",
+"Caption": "Minimum",
+"Left": 3120,
+"Top": 96,
+"Width": 876,
+"Height": 204,
+"TabIndex": 6,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"label2",
+"Caption": "Length",
+"Left": 672,
+"Top": 96,
+"Width": 684,
+"Height": 204,
+"TabIndex": 3,
+"Alignment": 1,//Right Justify,
+});
+
+elements.push({
+"ELEMENT":"Label",
+"ID":"Label1",
+"Caption": "Add",
+/*"BackColor": "#C0C0C0",*/
+"Left": 5040,
+"Top": 3552,
+"Width": 828,
+"Height": 204,
+"TabIndex": 15,
+"Alignment": 1,//Right Justify,
+});
+}
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <div id=x></div>
+
+<!-- This bg pattern is downloaded from www.subtlepatterns.com -->
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "zhn3zqgo"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

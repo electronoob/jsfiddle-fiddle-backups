@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    canvas#iconcanvas {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 10;
+  border: 20px solid blue;
+  background-color: black;
+}
+img#iconsource {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 9;
+}
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+var ctx = iconcanvas.getContext('2d');
+
+var icons = {
+  1: {'x': 20,'y':-5},
+  2: {'x': 220,'y':-5},
+  3: {'x': 420,'y':-5},
+  4: {'x': 20,'y':190},
+  5: {'x': 220,'y':190},
+  6: {'x': 420,'y':190},
+  7: {'x': 20,'y':385},
+  8: {'x': 220,'y':385},
+  9: {'x': 420,'y':385},
+};
+
+function showIcon(x) {
+	ctx.drawImage(i, icons[x]['x'],icons[x]['y'],200,200,0,0,200,200);
+}
+
+showIcon(3);
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <img src=http://i.imgur.com/UOcKU33.png id=iconsource>
+<canvas id=iconcanvas width=200 height=200>
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "m0upx4mx"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

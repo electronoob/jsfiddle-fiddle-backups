@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+var wave_header_8bit_unsigned_stereo = '52 49 46 46 68 AC 00 00 57 41 56 45 66 6D 74 20 10 00 00 00 01 00 01 00 44 AC 00 00 44 AC 00 00 01 00 08 00 64 61 74 61 44 AC 00 00';
+var w = wave_header_8bit_unsigned_stereo.split(' ');
+var h = Array();
+w.forEach(function(val, index, arr){
+  h.push(String.fromCharCode(parseInt(val,16)));
+});
+var p3 = String();
+var offset = 1,c=0;
+var timer = setInterval(function(){
+  var i,p=Array(),p2=new Uint8Array();
+  for(i=1;i<=(2);i+=0.01){
+   tmp=Math.round(Math.sin(i*(offset/4))*100);
+   tmp2=Math.round(Math.cos(i/2+offset+c/10000)*100);
+   p3+=String.fromCharCode(127+(
+      (tmp+c-tmp2)
+      /3
+      ));
+   p3+=String.fromCharCode(127+(
+      (tmp+c-tmp2)
+      /3
+      ));
+    offset-=0.1;
+  }
+  c++;
+  if (c >200){clearInterval(timer);}
+  var temp = btoa(h.join('') + p3);
+  var data = 'data:audio/wav;base64,'+temp;
+  new Audio(data).play();
+},10);
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  
+<audio id=a ></audio><br><center>beam me up scotty<br><br>
+<iframe src="//giphy.com/embed/nYaRWwyG9qAH6" width="480" height="199" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "rtcd5tx4"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

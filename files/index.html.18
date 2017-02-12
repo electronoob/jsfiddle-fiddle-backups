@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    
+textarea#x {
+  position:absolute; 
+  top: 10px;
+  left:440px;
+  width: 500px;
+  height: 580px;
+}
+
+textarea#y {
+  position:absolute; 
+  top: 10px;
+  left: 0px;
+  width: 430px;
+  height: 580px;
+}
+
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+var input = x.value;
+//
+
+input = input.replace(/StartUpPosition = 2 'CenterScreen/, "});\n");
+
+
+input = input.replace(/BeginProperty/g, "/*\n");
+input = input.replace(/EndProperty/g, "fucksakeman\n");
+input = input.replace(/End/g, "});\n");
+input = input.replace(/ '/g, ",//");
+input = input.replace(/ = /g, "\": ");
+input = input.replace(/\":0/g, "\"");
+
+
+input = input.replace(/&H/g, "\"#");
+
+
+input = input.split("\n");
+input = input.join(",\n");
+input = input.split("\n");
+
+
+for(i=0;i<input.length;i++) {
+	input[i] = input[i].trim();
+  switch (input[i][0]) {
+  	case ",":
+    	input[i] = "";
+    break;
+  	case "}":
+  	case "/":
+    case "*":
+    	//
+    break;
+    case "B":
+    	s = input[i].split(" ");
+      if(s[0] == "Begin") {
+      	tmp =  "elements.push({\n";
+        tmp += "\"ELEMENT\":\""+s[1]+"\",\n";
+        tmp += "\"ID\":\""+s[2].substr(0,s[2].length-1)+"\",";
+        input[i] = tmp;
+        break;
+      }
+    default:
+    	input[i] = "\"" + input[i];
+  }
+}
+input = input.join("\n");
+
+input = input.replace(/&,/g, "\",");
+
+input = input.replace(/{,/g, "{");
+input = input.replace(/},/g, "}");
+input = input.replace(/;,/g, ";");
+
+input = input.replace(/"fucksakeman,/g, "*/");
+input = input.replace(/True/g, "true");
+input = input.replace(/False/g, "false");
+
+input = "var elements = [];\n" + input;
+
+input = input +  "\nconsole.log(JSON.stringify(elements));\n";
+
+
+y.value = input;
+
+
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  
+<textarea id=y></textarea>
+
+<textarea id=x>
+Begin VB.Form Form1
+  Caption = "::..                        ..:: GPZ's Sinus Lab V1 (c)'98 by Hitmen ::..                     ..::"
+  BackColor = &H808080&
+  ForeColor = &H404040&
+  ScaleMode = 1
+  AutoRedraw = True
+  FontTransparent = False
+  FillStyle = 0
+  BorderStyle = 1 'Fixed Single
+  Icon = "Form1.frx":0
+  LinkTopic = "Form1"
+  MaxButton = 0   'False
+  ClipControls = 0   'False
+  ClientLeft = 36
+  ClientTop = 324
+  ClientWidth = 7188
+  ClientHeight = 5736
+  StartUpPosition = 2 'CenterScreen
+  Begin Timer Timer1
+    Interval = 2
+    Left = 720
+    Top = 5280
+  End
+  Begin TextBox txtSinRange
+    Index = 3
+    Left = 5952
+    Top = 1632
+    Width = 700
+    Height = 300
+    Text = "0"
+    TabIndex = 66
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinRange
+    Index = 2
+    Left = 5952
+    Top = 1248
+    Width = 700
+    Height = 300
+    Text = "0"
+    TabIndex = 59
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinRange
+    Index = 1
+    Left = 5952
+    Top = 864
+    Width = 700
+    Height = 300
+    Text = "0"
+    TabIndex = 52
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinRange
+    Index = 0
+    Left = 5952
+    Top = 480
+    Width = 700
+    Height = 300
+    Text = "0"
+    TabIndex = 45
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinOrigin
+    Index = 3
+    Left = 5088
+    Top = 1632
+    Width = 700
+    Height = 300
+    Text = "0"
+    TabIndex = 65
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinOrigin
+    Index = 2
+    Left = 5088
+    Top = 1248
+    Width = 700
+    Height = 300
+    Text = "0"
+    TabIndex = 58
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinOrigin
+    Index = 1
+    Left = 5088
+    Top = 864
+    Width = 700
+    Height = 300
+    Text = "0"
+    TabIndex = 51
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinOrigin
+    Index = 0
+    Left = 5088
+    Top = 480
+    Width = 700
+    Height = 300
+    Text = "0"
+    TabIndex = 44
+    Alignment = 1 'Right Justify
+  End
+  Begin CommandButton Command3
+    Caption = "about us"
+    Left = 6192
+    Top = 4800
+    Width = 876
+    Height = 300
+    TabIndex = 80
+  End
+  Begin CommandButton Command2
+    Caption = "about this"
+    Left = 6192
+    Top = 4368
+    Width = 876
+    Height = 300
+    TabIndex = 79
+  End
+  Begin CommandButton cmdQuit
+    Caption = "qUiT!"
+    Left = 6192
+    Top = 5232
+    Width = 876
+    Height = 300
+    TabIndex = 81
+  End
+  Begin TextBox txtSinSpeed
+    Index = 3
+    Left = 5376
+    Top = 5088
+    Width = 588
+    Height = 300
+    Text = "7"
+    TabIndex = 77
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinSpeed
+    Index = 2
+    Left = 5376
+    Top = 4704
+    Width = 588
+    Height = 300
+    Text = "5"
+    TabIndex = 76
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinSpeed
+    Index = 1
+    Left = 5376
+    Top = 4320
+    Width = 588
+    Height = 300
+    Text = "3"
+    TabIndex = 75
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinSpeed
+    Index = 0
+    Left = 5376
+    Top = 3936
+    Width = 588
+    Height = 300
+    Text = "1"
+    TabIndex = 74
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtPrvXmax
+    Left = 2976
+    Top = 5280
+    Width = 588
+    Height = 300
+    Text = "256"
+    TabIndex = 67
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtPrvYmin
+    Left = 3648
+    Top = 4224
+    Width = 588
+    Height = 300
+    Text = "-255"
+    TabIndex = 68
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtPrvYmax
+    Left = 3648
+    Top = 4752
+    Width = 588
+    Height = 300
+    Text = "255"
+    TabIndex = 69
+    Alignment = 1 'Right Justify
+  End
+  Begin CheckBox checkSin
+    Index = 3
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 4848
+    Top = 5088
+    Width = 204
+    Height = 300
+    TabIndex = 73
+    Value = 1
+  End
+  Begin CheckBox checkSin
+    Index = 2
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 4848
+    Top = 4704
+    Width = 204
+    Height = 300
+    TabIndex = 72
+    Value = 1
+  End
+  Begin CheckBox checkSin
+    Index = 1
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 4848
+    Top = 4320
+    Width = 204
+    Height = 300
+    TabIndex = 71
+    Value = 1
+  End
+  Begin CheckBox checkSin
+    Index = 0
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 4848
+    Top = 3936
+    Width = 204
+    Height = 300
+    TabIndex = 70
+    Value = 1
+  End
+  Begin TextBox txtSinWaves
+    Index = 3
+    Left = 2496
+    Top = 1632
+    Width = 700
+    Height = 300
+    Text = "8"
+    TabIndex = 62
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinWaves
+    Index = 2
+    Left = 2496
+    Top = 1248
+    Width = 700
+    Height = 300
+    Text = "4"
+    TabIndex = 55
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinWaves
+    Index = 1
+    Left = 2496
+    Top = 864
+    Width = 700
+    Height = 300
+    Text = "2"
+    TabIndex = 48
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinWaves
+    Index = 0
+    Left = 2496
+    Top = 480
+    Width = 700
+    Height = 300
+    Text = "1"
+    TabIndex = 41
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinOffs
+    Index = 3
+    Left = 1632
+    Top = 1632
+    Width = 700
+    Height = 300
+    Text = "192"
+    TabIndex = 61
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinOffs
+    Index = 2
+    Left = 1632
+    Top = 1248
+    Width = 700
+    Height = 300
+    Text = "128"
+    TabIndex = 54
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinOffs
+    Index = 1
+    Left = 1632
+    Top = 864
+    Width = 700
+    Height = 300
+    Text = "64"
+    TabIndex = 47
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinOffs
+    Index = 0
+    Left = 1632
+    Top = 480
+    Width = 700
+    Height = 300
+    Text = "0"
+    TabIndex = 40
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinLen
+    Index = 3
+    Left = 768
+    Top = 1632
+    Width = 700
+    Height = 300
+    Text = "64"
+    TabIndex = 60
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinLen
+    Index = 2
+    Left = 768
+    Top = 1248
+    Width = 700
+    Height = 300
+    Text = "128"
+    TabIndex = 53
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinLen
+    Index = 1
+    Left = 768
+    Top = 864
+    Width = 700
+    Height = 300
+    Text = "256"
+    TabIndex = 46
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinMin
+    Index = 3
+    Left = 3360
+    Top = 1632
+    Width = 700
+    Height = 300
+    Text = "112"
+    TabIndex = 63
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinMax
+    Index = 3
+    Left = 4224
+    Top = 1632
+    Width = 700
+    Height = 300
+    Text = "144"
+    TabIndex = 64
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinMin
+    Index = 2
+    Left = 3360
+    Top = 1248
+    Width = 700
+    Height = 300
+    Text = "96"
+    TabIndex = 56
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinMax
+    Index = 2
+    Left = 4224
+    Top = 1248
+    Width = 700
+    Height = 300
+    Text = "160"
+    TabIndex = 57
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinMin
+    Index = 1
+    Left = 3360
+    Top = 864
+    Width = 700
+    Height = 300
+    Text = "64"
+    TabIndex = 49
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinMax
+    Index = 1
+    Left = 4224
+    Top = 864
+    Width = 700
+    Height = 300
+    Text = "196"
+    TabIndex = 50
+    Alignment = 1 'Right Justify
+  End
+  Begin PictureBox SinusPic
+    BackColor = &H404040&
+    Index = 3
+    ForeColor = &HFF00&
+    Left = 5424
+    Top = 2304
+    Width = 1548
+    Height = 1068
+    TabIndex = 25
+    ScaleMode = 1
+    AutoRedraw = True
+    FontTransparent = True
+    FillStyle = 0
+    ClipControls = 0   'False
+  End
+  Begin PictureBox SinusPic
+    BackColor = &H404040&
+    Index = 2
+    ForeColor = &HFF00&
+    Left = 3696
+    Top = 2304
+    Width = 1548
+    Height = 1068
+    TabIndex = 26
+    ScaleMode = 1
+    AutoRedraw = True
+    FontTransparent = True
+    FillStyle = 0
+    FillColor = &HFF00&
+    ClipControls = 0   'False
+  End
+  Begin PictureBox SinusPic
+    BackColor = &H404040&
+    Index = 1
+    ForeColor = &HFF00&
+    Left = 1968
+    Top = 2304
+    Width = 1548
+    Height = 1068
+    TabIndex = 27
+    ScaleMode = 1
+    AutoRedraw = True
+    FontTransparent = True
+    FillStyle = 0
+    FillColor = &HFF00&
+    ClipControls = 0   'False
+  End
+  Begin PictureBox picPreview
+    BackColor = &H404040&
+    ForeColor = &HFF00&
+    Left = 192
+    Top = 4128
+    Width = 3372
+    Height = 1068
+    TabIndex = 82
+    ScaleMode = 0
+    ScaleLeft = 0
+    ScaleTop = -512
+    ScaleWidth = 519.394
+    ScaleHeight = 1072.188
+    AutoRedraw = False
+    FontTransparent = False
+    FillColor = &HFF00&
+  End
+  Begin TextBox txtSinLen
+    Index = 0
+    Left = 768
+    Top = 480
+    Width = 700
+    Height = 300
+    Text = "512"
+    TabIndex = 39
+    Alignment = 1 'Right Justify
+  End
+  Begin CommonDialog CommonDialog
+  End
+  Begin CommandButton Command1
+    Caption = "write file"
+    Left = 6192
+    Top = 3936
+    Width = 876
+    Height = 300
+    TabIndex = 78
+  End
+  Begin TextBox txtSinMax
+    Index = 0
+    Left = 4224
+    Top = 480
+    Width = 700
+    Height = 300
+    Text = "255"
+    TabIndex = 43
+    Alignment = 1 'Right Justify
+  End
+  Begin TextBox txtSinMin
+    Index = 0
+    Left = 3360
+    Top = 480
+    Width = 700
+    Height = 300
+    Text = "0"
+    TabIndex = 42
+    Alignment = 1 'Right Justify
+  End
+  Begin PictureBox SinusPic
+    BackColor = &H404040&
+    Index = 0
+    ForeColor = &HFF00&
+    Left = 240
+    Top = 2304
+    Width = 1548
+    Height = 1068
+    TabIndex = 28
+    ScaleMode = 1
+    AutoRedraw = True
+    FontTransparent = True
+    FillStyle = 0
+    FillColor = &HFF00&
+    ClipControls = 0   'False
+  End
+  Begin Line Line13
+    X1 = 192
+    Y1 = 4128
+    X2 = 3552
+    Y2 = 4128
+    BorderWidth = 2
+  End
+  Begin Line Line12
+    X1 = 192
+    Y1 = 4128
+    X2 = 192
+    Y2 = 5184
+    BorderWidth = 2
+  End
+  Begin Line Line11
+    X1 = 5424
+    Y1 = 2304
+    X2 = 5424
+    Y2 = 3360
+    BorderWidth = 2
+  End
+  Begin Line Line10
+    X1 = 3696
+    Y1 = 2304
+    X2 = 3696
+    Y2 = 3360
+    BorderWidth = 2
+  End
+  Begin Line Line9
+    X1 = 1968
+    Y1 = 2304
+    X2 = 1968
+    Y2 = 3360
+    BorderWidth = 2
+  End
+  Begin Line Line8
+    X1 = 240
+    Y1 = 2304
+    X2 = 240
+    Y2 = 3360
+    BorderWidth = 2
+  End
+  Begin Line Line7
+    X1 = 5424
+    Y1 = 2304
+    X2 = 6960
+    Y2 = 2304
+    BorderWidth = 2
+  End
+  Begin Line Line6
+    X1 = 3696
+    Y1 = 2304
+    X2 = 5232
+    Y2 = 2304
+    BorderWidth = 2
+  End
+  Begin Line Line5
+    X1 = 240
+    Y1 = 2304
+    X2 = 1776
+    Y2 = 2304
+    BorderWidth = 2
+  End
+  Begin Line Line4
+    X1 = 1968
+    Y1 = 2304
+    X2 = 3504
+    Y2 = 2304
+    BorderWidth = 2
+  End
+  Begin Line Line3
+    X1 = 0
+    Y1 = 288
+    X2 = 7200
+    Y2 = 288
+  End
+  Begin Line Line2
+    X1 = 0
+    Y1 = 3744
+    X2 = 7200
+    Y2 = 3744
+  End
+  Begin Line Line1
+    X1 = 0
+    Y1 = 3552
+    X2 = 7200
+    Y2 = 3552
+  End
+  Begin Label Label33
+    Left = -96
+    Top = -48
+    Width = 7284
+    Height = 156
+    TabIndex = 11
+  End
+  Begin Label Label32
+    Caption = "On"
+    Left = 4176
+    Top = 3552
+    Width = 876
+    Height = 204
+    TabIndex = 14
+    Alignment = 1 'Right Justify
+  End
+  Begin Label Label31
+    Caption = "Sin1"
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 4464
+    Top = 3984
+    Width = 300
+    Height = 204
+    TabIndex = 34
+  End
+  Begin Label Label30
+    Caption = "Sin2"
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 4464
+    Top = 4368
+    Width = 300
+    Height = 204
+    TabIndex = 33
+  End
+  Begin Label Label29
+    Caption = "Sin3"
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 4464
+    Top = 4752
+    Width = 300
+    Height = 204
+    TabIndex = 32
+  End
+  Begin Label Label28
+    Caption = "Sin4"
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 4464
+    Top = 5136
+    Width = 300
+    Height = 204
+    TabIndex = 31
+  End
+  Begin Label Label27
+    Caption = "x4"
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 5184
+    Top = 5136
+    Width = 204
+    Height = 204
+    TabIndex = 38
+  End
+  Begin Label Label26
+    Caption = "x3"
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 5184
+    Top = 4752
+    Width = 204
+    Height = 204
+    TabIndex = 37
+  End
+  Begin Label Label25
+    Caption = "x2"
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 5184
+    Top = 4368
+    Width = 204
+    Height = 204
+    TabIndex = 36
+  End
+  Begin Label Label24
+    Caption = "x1"
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 5184
+    Top = 3984
+    Width = 204
+    Height = 204
+    TabIndex = 35
+  End
+  Begin Label Label23
+    Caption = "Tables"
+    Left = -144
+    Top = 96
+    Width = 828
+    Height = 204
+    TabIndex = 2
+    Alignment = 1 'Right Justify
+    BeginProperty Font
+      Name = "MS Sans Serif"
+      Size = 7.8
+      Charset = 0
+      Weight = 700
+      Underline = 0 'False
+      Italic = 0 'False
+      Strikethrough = 0 'False
+    EndProperty
+  End
+  Begin Label Label22
+    Left = 5856
+    Top = 3552
+    Width = 1332
+    Height = 204
+    TabIndex = 16
+  End
+  Begin Label Label9
+    Caption = "Range"
+    Left = 768
+    Top = 3552
+    Width = 3420
+    Height = 204
+    TabIndex = 13
+    Alignment = 1 'Right Justify
+  End
+  Begin Label Label8
+    Caption = "Preview "
+    Left = 0
+    Top = 3552
+    Width = 780
+    Height = 204
+    TabIndex = 12
+    Alignment = 1 'Right Justify
+    BeginProperty Font
+      Name = "MS Sans Serif"
+      Size = 7.8
+      Charset = 0
+      Weight = 700
+      Underline = 0 'False
+      Italic = 0 'False
+      Strikethrough = 0 'False
+    EndProperty
+  End
+  Begin Label Label21
+    Caption = "Steps:"
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 2448
+    Top = 5328
+    Width = 492
+    Height = 204
+    TabIndex = 30
+  End
+  Begin Label Label20
+    Caption = "Range"
+    Left = 5616
+    Top = 96
+    Width = 924
+    Height = 204
+    TabIndex = 9
+    Alignment = 1 'Right Justify
+  End
+  Begin Label Label19
+    Caption = "Origin"
+    Left = 4896
+    Top = 96
+    Width = 732
+    Height = 204
+    TabIndex = 8
+    Alignment = 1 'Right Justify
+  End
+  Begin Label Label18
+    Caption = "Sin4"
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 192
+    Top = 1680
+    Width = 300
+    Height = 204
+    TabIndex = 17
+  End
+  Begin Label Label17
+    Caption = "Sin3"
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 192
+    Top = 1296
+    Width = 300
+    Height = 204
+    TabIndex = 18
+  End
+  Begin Label Label16
+    Caption = "Sin2"
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 192
+    Top = 912
+    Width = 300
+    Height = 204
+    TabIndex = 19
+  End
+  Begin Label Label15
+    Caption = "Sin1"
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 192
+    Top = 528
+    Width = 300
+    Height = 204
+    TabIndex = 20
+  End
+  Begin Label Label14
+    Caption = "Sin4"
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 5424
+    Top = 2112
+    Width = 300
+    Height = 204
+    TabIndex = 24
+  End
+  Begin Label Label13
+    Caption = "Sin3"
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 3696
+    Top = 2112
+    Width = 300
+    Height = 204
+    TabIndex = 23
+  End
+  Begin Label Label12
+    Caption = "Sin2"
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 2016
+    Top = 2112
+    Width = 300
+    Height = 204
+    TabIndex = 22
+  End
+  Begin Label Label11
+    Caption = "Sin1"
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 240
+    Top = 2112
+    Width = 300
+    Height = 204
+    TabIndex = 21
+  End
+  Begin Label Label10
+    Left = 6528
+    Top = 96
+    Width = 660
+    Height = 204
+    TabIndex = 10
+  End
+  Begin Label lblpeaklow
+    Caption = "peak"
+    BackColor = &H808080&
+    ForeColor = &HFF&
+    Left = 3648
+    Top = 5088
+    Width = 540
+    Height = 240
+    TabIndex = 0
+    AutoSize = -1  'True
+    BeginProperty Font
+      Name = "Terminal"
+      Size = 10.8
+      Charset = 255
+      Weight = 700
+      Underline = 0 'False
+      Italic = 0 'False
+      Strikethrough = 0 'False
+    EndProperty
+  End
+  Begin Label lblpeakhigh
+    Caption = "peak"
+    BackColor = &H808080&
+    ForeColor = &HFF&
+    Left = 3648
+    Top = 3960
+    Width = 540
+    Height = 240
+    TabIndex = 1
+    AutoSize = -1  'True
+    BeginProperty Font
+      Name = "Terminal"
+      Size = 10.8
+      Charset = 255
+      Weight = 700
+      Underline = 0 'False
+      Italic = 0 'False
+      Strikethrough = 0 'False
+    EndProperty
+  End
+  Begin Label Label7
+    Caption = "f(x)=sin1(x+x1)+sin2(x+x2)+sin3(x+x3)+sin4(x+x4)"
+    BackColor = &H808080&
+    ForeColor = &HC0C0C0&
+    Left = 192
+    Top = 3840
+    Width = 3372
+    Height = 204
+    TabIndex = 29
+  End
+  Begin Label Label6
+    Caption = "Periods"
+    Left = 2208
+    Top = 96
+    Width = 924
+    Height = 204
+    TabIndex = 5
+    Alignment = 1 'Right Justify
+  End
+  Begin Label Label5
+    Caption = "Offset "
+    Left = 1344
+    Top = 96
+    Width = 876
+    Height = 204
+    TabIndex = 4
+    Alignment = 1 'Right Justify
+  End
+  Begin Label Label4
+    Caption = "Maximum"
+    Left = 3984
+    Top = 96
+    Width = 924
+    Height = 204
+    TabIndex = 7
+    Alignment = 1 'Right Justify
+  End
+  Begin Label Label3
+    Caption = "Minimum"
+    Left = 3120
+    Top = 96
+    Width = 876
+    Height = 204
+    TabIndex = 6
+    Alignment = 1 'Right Justify
+  End
+  Begin Label label2
+    Caption = "Length"
+    Left = 672
+    Top = 96
+    Width = 684
+    Height = 204
+    TabIndex = 3
+    Alignment = 1 'Right Justify
+  End
+  Begin Label Label1
+    Caption = "Add"
+    BackColor = &HC0C0C0&
+    Left = 5040
+    Top = 3552
+    Width = 828
+    Height = 204
+    TabIndex = 15
+    Alignment = 1 'Right Justify
+  End
+,</textarea>
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "g14Ln34r"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

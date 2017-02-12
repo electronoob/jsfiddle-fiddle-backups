@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+var i=new Image(),ic,id;
+var round=Math.round,sqrt=Math.sqrt;
+var dd = function () {
+  c.getContext('2d').clearRect(0,0,400,400);
+  for(d=1;d<50;d++) {
+    for(j=1;j<360;j++) {
+      theta = j*Math.PI/180;
+      x = d * Math.sin(theta);
+      y = d * Math.cos(theta);
+      if(ic)c.getContext('2d').drawImage(ic,x+100,y+100,5,5);
+    }
+  }
+  window.requestAnimationFrame(dd);  
+}
+imgsrc='//connect.agariomods.com/img_electronoob.png';
+i.src=imgsrc;
+i.crossOrigin = "Anonymous";
+i.onload=function(){
+console.log('loaded image');
+ic=document.createElement('canvas');
+ic.getContext('2d').width = 300;
+ic.getContext('2d').height= 300;
+ic.getContext('2d').drawImage(this,0,0,300,300);
+id=ic.getContext('2d').getImageData(0,0,300,300);
+};
+dd();
+
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <canvas id=c width=400 height=400></canvas>
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "sb90u4oa"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

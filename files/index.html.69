@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+
+var servers = {amsterdam: 'Enhanced Teams',frankfurt: 'Zombie Team',london: 'Enhanced Teams',paris: 'Rainbow FFA',quebec: 'Experimental Team',atlanta: 'Experimental Team',chicago: 'Experimental Team',dallas: 'Free For All',losangeles: 'Teams',miami: 'Hardcore Free For All',newjersey: 'Enhanced Teams',seattle: 'Experimental Team',siliconvalley: 'Zombie Team',sydney: 'Zombie Team',tokyo: '[Arenas] Hunger Games',atlantabeta: '[Arenas] Experimental Hunger Games',londonbeta: '[Arenas] Hunger Games',siliconvalleybeta: '[Arenas] Hunger Games',sydneybeta: '[Arenas] Hunger Games'}
+
+Object.keys(servers).forEach(function(val,index,arr){
+  var option = document.createElement('option');
+  option.text = String(val).replace('.iomods.com','').toUpperCase() + ' - ' + servers[val];
+  option.value = val;
+  document.getElementById('servers').add (option,-1);
+});
+
+
+
+
+
+
+
+
+
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <select id="servers" name="servers"></select>
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "ehb8aoes"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    canvas {
+  background: #5e7999;
+background: -moz-linear-gradient(top,  #5e7999 13%, #2989d8 32%, #2989d8 56%, #207cca 86%, #442525 100%);
+background: -webkit-linear-gradient(top,  #5e7999 13%,#2989d8 32%,#2989d8 56%,#207cca 86%,#442525 100%);
+background: linear-gradient(to bottom,  #5e7999 13%,#2989d8 32%,#2989d8 56%,#207cca 86%,#442525 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5e7999', endColorstr='#442525',GradientType=0 );
+
+}
+  </style>
+
+  <title>jetpack by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+var ctx = c.getContext('2d');
+var kb = {l:0,r:0,u:0,d:0};
+var ai = {x: 0, y:330};
+var jp = new Image();
+jp.src= "https://i.imgur.com/NmYNH5d.png";
+
+function draw () {
+  ctx.clearRect(0,0,400,400);
+  ctx.drawImage(jp, ai.x,ai.y, 64,64);
+  debris.forEach(function(d, i, a){
+    //ctx.drawImage(d.canvas, d.x, d.y);
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.fillRect(d.x,d.y,d.z,d.z);
+  });
+  window.requestAnimationFrame(draw);
+}
+
+function getRandomIntInclusive(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+var debris = [];
+newDebris();
+
+function newDebris() {
+  var nc = newContext(50,50);
+  var fpvx = getRandomIntInclusive(1,10);
+  var fpvy = getRandomIntInclusive(1,10);
+  //nc.ctx.drawImage(fpv, fpvx * 50, fpvy * 50);
+  nc.x = getRandomIntInclusive(400,600);
+  nc.y = getRandomIntInclusive(10,390);
+  nc.z = getRandomIntInclusive(2,15);
+  nc.v = getRandomIntInclusive(1,3);
+  debris.push(nc);
+}
+
+function clrDebris(){
+}
+
+function newContext(width, height) {
+  var nc = document.createElement('canvas');
+  nc.width = width;
+  nc.height = height;
+  return {canvas: nc, ctx: nc.getContext("2d"), x: 0, y:0, z:0, v:2};
+}
+
+window.requestAnimationFrame(draw);
+
+window.onkeydown = function (e) {
+  switch(e.keyCode) {
+    case 38:
+      kb.u = 1;
+      e.preventDefault();
+      break;
+    case 40:
+      kb.d = 1;
+      e.preventDefault();
+      break;
+    case 37:
+      kb.l = 1;
+      e.preventDefault();
+      break;
+    case 39:
+      kb.r = 1;
+      e.preventDefault();
+      break;
+  }
+};
+window.onkeyup = function (e) {
+  switch(e.keyCode) {
+    case 38:
+      kb.u = 0;
+      e.preventDefault();
+      break;
+    case 40:
+      kb.d = 0;
+      e.preventDefault();
+      break;
+    case 37:
+      kb.l = 0;
+      e.preventDefault();
+      break;
+    case 39:
+      kb.r = 0;
+      e.preventDefault();
+      break;
+  }
+};
+window.setInterval(function (){
+  newDebris();
+},3000);
+window.setInterval(function (){
+  newDebris();
+},1000);
+window.setInterval(function (){
+  if (kb.u) ai.y = ai.y-3;
+  if (kb.d) ai.y = ai.y+3;
+  if (kb.l) ai.x = ai.x-3;
+  if (kb.r) ai.x = ai.x+3;
+
+  if(ai.x<-10) ai.x=-10;
+  if(ai.x>340) ai.x=340;
+  if(ai.y<-10) ai.y=-10;
+  if(ai.y>340) ai.y=340;
+  debris.forEach(function(d, i, a){
+    a[i].x -= a[i].v;
+    if(a[i].x < -30) {
+      debris.splice(i,1);
+      if(debris.length<30) {
+      	newDebris();
+      }
+    }
+  });
+},2);
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <canvas id=c width=400 height=400></canvas>
+<br>
+<img id="fpv" src="http://www.designbolts.com/wp-content/uploads/2015/12/250-Free-Premium-Vector-Social-Media-Icons-2016-3.png">
+<p>
+images stolen from http://www.designbolts.com/wp-content/uploads/2015/12/250-Free-Premium-Vector-Social-Media-Icons-2016-3.png
+</p>
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "0r4nxqtv"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

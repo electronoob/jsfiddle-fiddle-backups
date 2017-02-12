@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    canvas {
+  padding: 0px; margin:-10px;
+}
+body {
+  text-align: center;
+  background-color: #000;
+}
+  </style>
+
+  <title> by Chromaryu</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+var ctx = x.getContext('2d');
+var cty = y.getContext('2d');
+var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+var analyser = audioCtx.createAnalyser();
+var notes = [0,0,0,0,195.998, 220, 246.942, 261.626, 293.665, 329.628, 369.994];
+//G, A, B, C, D, E, and F♯.
+var haus = new Image();
+haus.onload = function() {
+  cty.drawImage(this,0,0,512,300);
+  draw();
+};
+
+haus.src = "https://i.imgur.com/t0LhxeB.jpg";
+
+var sinea = audioCtx.createOscillator();
+sinea.frequency.value = 261.626;
+sinea.type = "sine";
+sinea.start();
+sinea.connect(analyser);
+analyser.connect(audioCtx.destination);
+
+analyser.fftSize = 512;
+var bufferLength = analyser.frequencyBinCount;
+var dataArray = new Uint8Array(bufferLength);
+analyser.getByteTimeDomainData(dataArray);
+
+setInterval (function () {
+	var j = r(0, notes.length -1);
+  sinea.frequency.value = notes[j] * r(1,3);
+},512)
+
+function draw(){
+  ctx.clearRect(0,0,600,200);
+  analyser.getByteTimeDomainData(dataArray);
+  for(k=0;k<100;k+=2)
+  for(i=0;i<bufferLength*2;i+=4) {
+    ctx.drawImage(y, i, (dataArray[i]), 1, 1, i*2, k, 8, 2);
+  }
+  window.requestAnimationFrame(draw);
+}
+function r(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <canvas id=x width=600 height=80></canvas><br>
+<canvas id=y width=600 height=300 ></canvas>
+
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "a171rz8u"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

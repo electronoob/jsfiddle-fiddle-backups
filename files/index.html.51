@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+//var webp = canvas.toDataURL("image/webp");
+//http://api.giphy.com/v1/gifs/search?q=funny+cat&api_key=dc6zaTOxFJmzC
+
+
+i.src = 'https://media2.giphy.com/media/FiGiRei2ICzzG/giphy.webp';
+
+var c = cs.getContext('2d');
+
+var draw = function () {
+  c.drawImage(i,0,0);
+}
+setInterval(draw, 1000);
+
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <img id=i>
+
+<canvas id=cs></canvas>
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "86Lscjt5"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

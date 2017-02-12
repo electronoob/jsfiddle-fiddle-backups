@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+var json={
+  "id": "C0LAO",
+  "account_id": "20587515",
+  "title": "MyCustard - The Pi Zero Cluster",
+  "title_clean": "C0LAO",
+  "description": null,
+  "privacy": "0",
+  "cover": "vuEvccC",
+  "order": "0",
+  "layout": "b",
+  "num_images": "24",
+  "datetime": "2016-08-30 13:50:42",
+  "views": 0,
+  "isAd": false,
+  "hash": "C0LAO",
+  "album_cover": "vuEvccC",
+  "album_privacy": "0",
+  "album_description": null,
+  "album_layout": "b",
+  "starting_score": 0,
+  "is_album": true,
+  "operation": null,
+  "favorited": false,
+  "account_url": "agariomods",
+  "cover_deletehash": "",
+  "album_images": {
+    "count": 24,
+    "images": [
+      {
+        "hash": "vuEvccC",
+        "title": "Pi Clustered",
+        "description": "I stole this image without permission from: http:\/\/www.paulaq.com\/.\n\nThis gallery is for http:\/\/mycustard.com.",
+        "width": 600,
+        "height": 400,
+        "size": 127458,
+        "ext": ".jpg",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 13:55:46"
+      },
+      {
+        "hash": "OHjpQ9W",
+        "title": "Yay, my project is starting to take shape",
+        "description": "It's such a massive nightmare to collect this many Pi Zero boards.",
+        "width": 5184,
+        "height": 3456,
+        "size": 2835200,
+        "ext": ".jpg",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 13:58:20"
+      },
+      {
+        "hash": "OIXsf6z",
+        "title": "",
+        "description": null,
+        "width": 5184,
+        "height": 3456,
+        "size": 3784830,
+        "ext": ".jpg",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 13:58:37"
+      },
+      {
+        "hash": "bvoeOo9",
+        "title": "",
+        "description": null,
+        "width": 5184,
+        "height": 3456,
+        "size": 3593029,
+        "ext": ".jpg",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 13:58:32"
+      },
+      {
+        "hash": "aS3Dah4",
+        "title": "Pretty Cluster Photo",
+        "description": "Shame about the spacing apart, I need to get some better suited and uniform spacers and bolts to keep things together more neatly.",
+        "width": 5184,
+        "height": 3456,
+        "size": 3705276,
+        "ext": ".jpg",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 13:58:16"
+      },
+      {
+        "hash": "f3dPbk0",
+        "title": "",
+        "description": null,
+        "width": 3456,
+        "height": 5184,
+        "size": 1142236,
+        "ext": ".jpg",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 13:58:29"
+      },
+      {
+        "hash": "BrBydbl",
+        "title": "Mmmmm delicious, Pi clustered. My fav!",
+        "description": null,
+        "width": 3456,
+        "height": 5184,
+        "size": 807836,
+        "ext": ".jpg",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 13:57:55"
+      },
+      {
+        "hash": "vb0biAH",
+        "title": "USB Hubs, 4-port.",
+        "description": "I have more hubs than I know what to do with.",
+        "width": 5184,
+        "height": 3456,
+        "size": 4652260,
+        "ext": ".jpg",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 13:58:00"
+      },
+      {
+        "hash": "cOzwVPA",
+        "title": "Crusty looking USB hub PCB",
+        "description": "I will be losing those connectors anyway.",
+        "width": 5184,
+        "height": 3456,
+        "size": 2586572,
+        "ext": ".jpg",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 13:58:06"
+      },
+      {
+        "hash": "1p3sLQx",
+        "title": "USB Hub PCB again",
+        "description": "This is me pretending that I know how to make awesome photos.",
+        "width": 5184,
+        "height": 3456,
+        "size": 5238791,
+        "ext": ".jpg",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 13:58:09"
+      },
+      {
+        "hash": "nESKRSy",
+        "title": "More USB hub and Pi Zero comparison",
+        "description": null,
+        "width": 3000,
+        "height": 2057,
+        "size": 789264,
+        "ext": ".jpg?1",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 13:57:58"
+      },
+      {
+        "hash": "4YQrTGG",
+        "title": "USB Hub PCB Moneyshot",
+        "description": "Seems the hub without plastic enclosure fits quite nicely against a Pi Zero board, I intend on removing those USB sockets of course and soldering wires direct to the PCB.",
+        "width": 5184,
+        "height": 3456,
+        "size": 4884557,
+        "ext": ".jpg",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 13:58:02"
+      },
+      {
+        "hash": "Gbl4r85",
+        "title": "PCB of USB Hub compared against the Pi Zero",
+        "description": "Even with USB connectors the PCB is comparable to the Zero. Interesting.",
+        "width": 5184,
+        "height": 3456,
+        "size": 4457442,
+        "ext": ".jpg",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 13:57:52"
+      },
+      {
+        "hash": "OmgUemr",
+        "title": "",
+        "description": null,
+        "width": 3456,
+        "height": 5184,
+        "size": 1088013,
+        "ext": ".jpg",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 13:58:34"
+      },
+      {
+        "hash": "s2H0Qxy",
+        "title": "",
+        "description": null,
+        "width": 5184,
+        "height": 3456,
+        "size": 3045086,
+        "ext": ".jpg",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 13:58:40"
+      },
+      {
+        "hash": "uCuTJVW",
+        "title": "",
+        "description": null,
+        "width": 5184,
+        "height": 3456,
+        "size": 3057651,
+        "ext": ".jpg",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 13:58:46"
+      },
+      {
+        "hash": "0JOiT8X",
+        "title": "",
+        "description": null,
+        "width": 3000,
+        "height": 3000,
+        "size": 732074,
+        "ext": ".jpg?1",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 13:58:43"
+      },
+      {
+        "hash": "u19HV81",
+        "title": "",
+        "description": null,
+        "width": 3000,
+        "height": 1044,
+        "size": 317648,
+        "ext": ".jpg?1",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 15:51:29"
+      },
+      {
+        "hash": "QD90c5e",
+        "title": "",
+        "description": null,
+        "width": 4032,
+        "height": 3024,
+        "size": 1892231,
+        "ext": ".jpg",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 15:51:32"
+      },
+      {
+        "hash": "5Nc6nl4",
+        "title": "",
+        "description": null,
+        "width": 2839,
+        "height": 1426,
+        "size": 428510,
+        "ext": ".jpg?1",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 15:51:24"
+      },
+      {
+        "hash": "64slbns",
+        "title": "Mobile phone, pi2, and pi zero cluster idea.",
+        "description": null,
+        "width": 2613,
+        "height": 1250,
+        "size": 295537,
+        "ext": ".jpg?1",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 15:51:27"
+      },
+      {
+        "hash": "2mxnIKc",
+        "title": "Mobile phone, pi2, and pi zero cluster idea.",
+        "description": null,
+        "width": 2237,
+        "height": 1044,
+        "size": 255723,
+        "ext": ".jpg?1",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 15:51:34"
+      },
+      {
+        "hash": "WrImtB9",
+        "title": "Mobile phone, pi2, and pi zero cluster idea.",
+        "description": "I think it would be neat to use this cheap android phone as a display for the cluster's status.",
+        "width": 2043,
+        "height": 2377,
+        "size": 283956,
+        "ext": ".jpg?1",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 15:51:38"
+      },
+      {
+        "hash": "xnWsu3V",
+        "title": "Mobile phone, pi2, and pi zero cluster idea.",
+        "description": null,
+        "width": 2406,
+        "height": 1979,
+        "size": 420559,
+        "ext": ".jpg?1",
+        "animated": false,
+        "prefer_video": false,
+        "looping": false,
+        "datetime": "2016-08-30 15:51:22"
+      }
+    ]
+  }
+};
+
+var i = 0, b='';
+for (i=0;i<json.album_images.images.length;i+=1)
+{
+  b+='<a href="//i.imgur.com/' + json.album_images.images[i].hash + '.jpg">';
+  b+='<img src="//i.imgur.com/' + json.album_images.images[i].hash + 'b.jpg">';
+  b+='</a>';
+}
+d.innerHTML = b;
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <div id=d>
+</div>
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "fsm00y21"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

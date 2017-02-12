@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    
+  </style>
+
+  <title>test your wits by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+var gctx = document.getElementById('c').getContext('2d');
+var lives = 25;
+var press = 0;
+var starttime = Date.now();
+var totaltime = -1;
+function draw() {
+  gctx.clearRect(0, 0, 400, 400);
+  if(lives == 25) {
+    gctx.fillStyle = 'rgba(0,0,0,1)';
+    gctx.fillRect(0, 0, 400, 400);
+    gctx.fillStyle = 'rgba(255,255,255,1)';
+  } else {
+    gctx.fillStyle = 'rgba(0,0,0,1)';
+  }
+      gctx.font="10px Arial";
+gctx.fillText('electronoob', 300,180);
+  gctx.strokeRect(20,20,360,100);
+  var str = '';
+  if(totaltime == -1) {
+    gctx.font="20px Arial";
+    str = 'One button to test your wits';
+    gctx.fillText(str, 50,80);
+  } else {
+    gctx.font="30px Arial";
+    str = 'Reflex time: ' + totaltime ;
+    gctx.fillText(str, 50,80);
+    gctx.font="10px Arial";
+    str = '(lowest number wins)';
+    gctx.fillText(str, 50,90);
+  }
+
+  lifes = lives;
+  while (lifes > 0) {
+    gctx.beginPath();
+    gctx.strokeStyle='rgba('+(250-(lives*10))+',0,0,1)';
+    gctx.strokeRect((lifes * 14)+10, 24, 10, 10);
+    gctx.stroke();
+    lifes--;
+  }
+  window.requestAnimationFrame(draw);
+}
+window.setInterval(function() {
+if(press == true) {return;}
+lives--;
+if(lives==0) {lives = 25; starttime=Date.now();}
+},20);
+  window.requestAnimationFrame(draw);
+  
+window.onkeydown = function(e) {
+  press = false;
+}
+window.onkeyup = function(e) {
+    totaltime = Date.now() - starttime;
+    press = true;
+}
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <canvas id=c width=400 height=200></canvas>
+
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "ms1th0uf"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    canvas {
+  margin-top: 100px;
+  border: 2px solid white;
+}
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+//morsecode dictionary test
+/*****
+I stole the lookup table from morsemidi
+******/
+ctx = can.getContext("2d");
+var font = "\"Courier New\", Courier, monospace";
+var size = 64;
+var charpad = size / 2;
+var currentWord;
+var currentWordWidths = [];
+var currentWordMorse;
+var tightness = 3;
+var blur = 4;
+var find =  ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","1","2","3","4","5","6","7","8","9","0",".",",",":","?","'","-","/","(",")","\"","=","_","%",";","{FRC}","{SN}","{ERR}","{AS}","{COM}","{AR}","{SK}","{SOS}"];
+
+
+var replace = [".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--..",".----","..---","...--","....-",".....","-....","--...","---..","----.","-----",".-.-.-","--..--","---...","..--..",".----.","-....-","-..-.","-.--.","-.--.-",".-..-.","-...-","..--.-",".--.-.-.","-.-.-.",".-..-","...-.","........",".-...","-.-.-",".-.-.","...-.-","...---..."];
+
+var words = ["ably","ablation","abler","ablest","abloom","ablution","ablutions","ablution's","abnegate","abnegation","abnegating","abnegation","abnegations","abnegated","abnegates","abnegation","abnegation's","abnormal","abnormally","abnormality","abnormalities","abnormality's","aboard","abode","abode's","abodes","abolish","abolished","abolishing","abolishment","abolishments","abolishment's","abolisher","abolishers","abolisher's","abolishes","abolition","abolitionists","abolitionists","abolitionist's","abolition's","abolitions","abolitionism","abolitionisms","abolitionism's","abolitionist","abominable","abominably","abominate","abominated","abomination","abominations","abomination","abominates","abominating","abomination","abomination's","aboriginal","Aboriginals","Aboriginals's","aboriginals","aboriginals's","aborigine","aboriginally","aborigines","aborigine's","abort","aborted","abortive","aborting","abortively","aborts","abortiveness","aborter","abortifacient","abortion","abortionists","abortionists","abortionist's","abortions","abortion's","abortionist","abortive","abortiveness","abortiveness's","abound","abounding","abounded","abounds","about","above","aboveboard","aboveground","abracadabra","abracadabras","abrade","abraded","abrading","abrasive","abrasions","abrasively","abrasiveness","abrasion","abrades","abrader","abrader's","Abraham","Abraham's","Abram","Abram's","Abramovich","Abramovich's","Abrams","Abrams's","abrasion","abrasion's","abrasive","abrasive's","abrasives","abrasiveness","abrasivenesses","abreact","abreacts","abreacting","abreacted","abreaction","abreaction's","abreactions","abreast","abrenunciation","abricotine","abridge","abridgement","abridgements","abridgement's","abridges","abridging","abridged","abridged","unabridged","abridgedly","abridger","abridger's","abroad","abrogate","abrogated","abrogation","abrogation","abrogations","abrogating","abrogates","abrogation","abrogation's","abrogator","abrogator's","abrogators","abrupt","abrupter","abruptest","abruptness","abruptness's","abruptly","abruptness","abruptnesses","abs","abs's","abscess","abscessed","abscesses","abscessing","abscess's","abscissa","abscissa's","abscissas","abscissae","abscission","abscissions","abscission's","abscond","absconded","absconder","absconders","absconder's","absconds","absconding","abseil","abseils","abseiled","abseiling","abseiler","absence","absences","absence's","absent-minded","absent-mindedly","absent-mindedness","absent-mindednesses","absent","absently","absented","absenting","absentee","absentee's","absentees","absenteeism","absenteeisms","absenteeism's","absenter","absentia","absentia's","absinthe","absinthe's","absinthes","absolute","absoluteness","absoluteness's","absoluter","absolutest","absolutely","absolutist","absolutists","absolutist's","absolutes","absoluteness","absolutenesses","absolution","absolution's","absolutions","absolutism","absolutisms","absolutism's","absolve","absolving","absolves","absolved","absolver","absolver's","absorb","absorbing","absorber","absorbers","absorber's","absorptions","absorption","absorptive","absorbingly","absorbance","absorbances"];
+//get random inclusive
+var message = " Greetings!   Welcome to  my  website, home of all things   electronoob.   I  like   javascript,  as   demonistrated  here,  oooh, guess what?  you're  speed  reading  now!    kek ".split(" ");
+var messageIndex=0;
+function gri(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function getRandWord() {
+	return words[gri(0,words.length-1)];
+}
+
+parseWord("");
+function parseWord(word){
+  currentWord = word;
+  currentWordWidths = [];
+  word = word.toUpperCase();
+	i = 0;
+  buffer = "";
+  for(;i<word.length;i++) {
+  	ch = word[i];
+    f = find.indexOf(ch);
+    if (f==-1) return -1;
+    r = replace[f];
+    buffer += r + "    ";
+    ctx.font=size+"px "+font;
+    currentWordWidths[i] = ctx.measureText(ch).width - tightness;
+  }
+  return buffer;
+}
+function draw(){
+  ctx.fillStyle = "rgba(255,255,255,0."+blur+")";
+  ctx.fillRect(0,0,700,300);
+  ctx.fillStyle = "white";
+  //ctx.fillRect(202.5,50, 2, 150);
+  ctx.fillStyle = "silver";
+	//ctx.fillRect(50,50, 650,7);
+  ctx.fillRect(200,50, 2, 20);
+	//ctx.fillRect(50,200, 650,7);
+  ctx.fillRect(200,200-20+2, 2,20);
+  ctx.font=size+"px "+font;
+  k = 0;
+  characterOffset = 0;
+  test = Math.round(currentWord.length/3);
+  test2 = 0;
+  for(k=0;k<test;k++)
+  	test2+=currentWordWidths[k];
+  test2 += charpad;
+  for(k=0;k<currentWord.length;k++) {
+  		if(test == k) {ctx.fillStyle = "red";}else{ctx.fillStyle = "black";}
+      ctx.fillText(currentWord[k], characterOffset+200-test2+(size/4), 150);
+      characterOffset += currentWordWidths[k];
+  }
+  window.requestAnimationFrame(draw);
+}
+
+window.requestAnimationFrame(draw);
+setInterval(function(){
+	 currentWordMorse = parseWord( message[messageIndex] );
+   messageIndex++;
+   if(messageIndex== message.length) messageIndex = 0;
+},130);
+//https://pastebin.com/raw/6KyX6bk2
+ 
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <canvas id=can width=700 height=300></canvas>
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "yc5t66zk"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

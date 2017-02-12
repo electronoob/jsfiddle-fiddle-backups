@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    	canvas {
+	  background: url(https://i.imgur.com/sXyTgON.jpg);
+	}
+
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+var gctx = document.getElementById('c').getContext('2d');
+var skin = new Image();
+
+skin.onload = function() {
+  console.log('loaded my skin');
+};
+skin.src = 'https://i.imgur.com/KGX0l5o.png';
+
+var name = "electronoob";
+var tower = {};
+tower.health = 100;
+tower.x = 250;
+tower.y = 250;
+tower.name = name;
+tower.isProtected = 1;
+//tower.healthStyle = 'pie';
+tower.healthStyle = 'bar';
+tower.radius = 400;
+function draw() {
+  gctx.clearRect(0, 0, 800, 600);
+  gctx.lineWidth = 10;
+  if(tower.isProtected) {
+  	gctx.strokeStyle = 'rgba(255,0,0,1)';
+  }else {
+    gctx.strokeStyle = 'rgba(0,200,255,1)';
+  }
+  gctx.fillStyle = 'rgba(255,200,255,0.5)';
+  
+  gctx.beginPath();
+  gctx.arc(250, 250, tower.radius, 0, 2 * Math.PI);
+  gctx.fill();
+  gctx.stroke();
+  //gctx.strokeStyle = 'rgba(0,200,255,1)';
+  gctx.fillStyle = 'rgba(0,200,255,0.2)';
+  
+  gctx.save();
+  gctx.beginPath();
+  //
+  if(tower.healthStyle == 'pie') {
+    var lifecalc  = (2 * Math.PI) / 100;
+    gctx.arc(250, 250, 60, lifecalc * (100 - tower.health), 2 * Math.PI);
+  } else {
+  	gctx.arc(250, 250, 60, 0, 2 * Math.PI);
+  }
+  gctx.clip();
+  gctx.fill();
+  gctx.drawImage(skin, 200, 200, 100, 100);
+  //gctx.stroke();
+  gctx.closePath();
+  gctx.restore();
+  
+  
+  /* begin health bar */
+   if(tower.healthStyle == 'bar') {
+      gctx.lineWidth = 1;
+      gctx.strokeStyle = 'rgba(0,0,0,1)';
+      gctx.strokeRect(201,271,100,6);
+      gctx.fillStyle = 'rgba(255,0,0,1)';
+      gctx.fillRect(200,270,100,6);
+      gctx.fillStyle = 'rgba(0,255,0,1)';
+      gctx.fillRect(200,270,tower.health,6);
+    }
+  /* end health bar */
+  
+  
+  gctx.lineWidth = 1;
+  gctx.strokeStyle = 'rgba(0,0,0,1)';
+  gctx.beginPath();
+    gctx.arc(250, 250, 60, 0, 2 * Math.PI);
+  gctx.stroke();
+    gctx.closePath();
+
+  gctx.fillStyle = 'rgba(255,255,255,1)';
+  gctx.font = "20px Georgia";
+  gctx.lineWidth = 4;
+  gctx.strokeStyle = 'rgba(100,0,0,1)';
+  gctx.strokeText(name, 250 - (gctx.measureText(name).width / 2),
+    250 + 15
+  );
+  gctx.fillText(name, 250 - (gctx.measureText(name).width / 2),
+    250 + 15
+  );
+
+
+drawPoly (150,200,5,30,1,( (2*Math.PI) / 4) * 0  );
+
+
+  window.requestAnimationFrame(draw);
+}
+
+
+function drawPoly(x, y, sides, radius, fill, DRAW_ROT) {
+  gctx.beginPath();
+  for (var i = 0; i < sides; i++) {
+    var lx = (radius * Math.cos(DRAW_ROT + (2 * Math.PI) * i / (sides))) + x;
+    var ly = (radius * Math.sin(DRAW_ROT + (2 * Math.PI) * i / (sides))) + y;
+    gctx.lineTo(lx, ly);
+  }
+  gctx.closePath();
+  if (fill) {
+    gctx.fill();
+  }
+  gctx.stroke();
+}
+setInterval (function(){
+	tower.isProtected = !tower.isProtected;
+  if (tower.health < 1) tower.health = 100;
+}, 600);
+setInterval (function(){
+  tower.health = tower.health -0.1;
+}, 100);
+
+
+gctx.scale(0.7,0.7);
+draw();
+
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <canvas id=c width=800 height=600 style="z-index:1;"></canvas>
+
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "0twqbttx"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

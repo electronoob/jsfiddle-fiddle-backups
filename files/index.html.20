@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    @import url('https://fonts.googleapis.com/css?family=Poiret+One');
+
+canvas {
+  border: 1px solid #fff;
+  width: 320px;
+  height: 288px;
+      image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+    image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
+}
+textarea#x {
+  position:absolute; 
+  top: 10px;
+  left:340px;
+  width: 500px;
+  height: 580px;
+}
+canvas#gbtile {
+  width: 1600px;
+  height: 144px;
+}
+p {
+  font-family: 'Poiret One', cursive;
+}
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+var ctx = gb.getContext('2d');
+var ctxpost = gbpost.getContext('2d');
+var ctxpost2 = gbpost2.getContext('2d');
+var ctxtile = gbtile.getContext('2d');
+
+var r1 = 0;
+var r2 = 0;
+var fps = 0;
+var f = 0;
+var pc = 0; //count post processed frames
+
+render();
+function render() {
+	ctx.clearRect(0,0,160,144);
+  ctx.fillStyle = "#fff";
+  ctx.strokeStyle = "#fff";
+  ctx.lineWidth = 14;
+  drawPoly (160/2, 144/2 + 10, 3, 40, 0,r1);
+
+  ctx.fillStyle = "#000";
+  ctx.strokeStyle = "#000";
+  ctx.lineWidth = 3;
+  drawPoly (160/2, 144/2 + 10, 3, 40, 0,r2);
+
+  ctx.fillStyle = "#fff";
+  ctx.strokeStyle = "#fff";
+  ctx.font = "32px 'Poiret One'";
+  ctx.fillText("electronoob", 0,25);
+    ctx.fillStyle = "#0c0";
+      ctx.font = "10px 'Poiret One'";
+	ctx.fillText(fps, 20,50);
+	postProcess();
+	window.requestAnimationFrame(render);
+}
+setInterval(function() {
+	r1+=0.01;
+  r2-=0.01;
+},3);
+setInterval(function () {
+	fps = f;
+	f = 0;
+},1000);
+function postProcess() {
+	pc++;
+  if(pc % 200) { return; };
+  f++;
+  var imageData = ctx.getImageData(0,0,160, 144);
+	var data = imageData.data;
+	  for (var i = 0; i < data.length; i += 4) {
+      var average = (data[i] + data[i+1] + data[i+2]) /3;
+     // if(DO_POST_PROCESS)
+			if(average > 254) 	{
+          data[i]     = 0;
+          data[i + 1] = 0;
+          data[i + 2] = 0;
+          data[i + 3] = 255;
+      } else {
+      	data[i] = 0;
+        data[i + 1] = 0; 
+        data[i + 2] = 0;
+        data[i + 3] = 0;
+      }
+    }
+    ctxpost.putImageData(imageData, 0, 0);
+    // copy this new image as a tile
+    if(f==1) { ctxtile.clearRect(0,0,1600,144); x.value = "";}
+    //ctxtile.drawImage(gbpost, f*160 - 160,0);
+    var buf = [];
+    for (j=0;j<2;j++)
+      for (i=0;i<22;i++) {
+        ctxpost2.drawImage(gbpost, i*8,j*8+8,8,8,i*8,j*8,8,8);
+        //i*8,j*8
+        //
+        q = ctxpost2.getImageData(i*8,j*8,8,8);
+        	data = q.data;
+					buf.push(t8x8x4 ( data) );
+      }
+      //x.value = buf;
+      x.value=`
+;*
+;* 8x8 electronoob logo test
+;* 2x20 sprites
+
+
+        IF      !DEF(ELECTRO_INC)
+ELECTRO_INC  SET  1
+
+
+chr_IBMPC1: MACRO
+
+
+        PUSHO
+        ; Define . and X to be 0 and 1
+        OPT     b.X
+`;
+      for(i=0;i<buf.length;i++) {
+      	x.value += "\n" + buf[i];
+      }
+      x.value+=`
+              ENDC
+
+        POPO
+
+        ENDM
+
+        ENDC    ;ELECTRO_INC
+
+      `;
+      
+}
+function t8x8x4 (data) {
+			var buf = '';
+      var c = 0;
+		  for (var i = 0; i < data.length; i += 4) {
+      	bit = data[i+3] > 0;
+        if(c==0) buf+="\n\tDB\t%";
+        buf += bit ? 'x' : '.';
+        c++;
+        if(c==8) c=0;
+      }
+      
+      return buf;
+}
+function drawPoly(x, y, sides, radius, fill, DRAW_ROT) {
+  ctx.beginPath();
+  for (var i = 0; i < sides; i++) {
+    var lx = (radius * Math.cos(DRAW_ROT + (2 * Math.PI) * i / (sides))) + x;
+    var ly = (radius * Math.sin(DRAW_ROT + (2 * Math.PI) * i / (sides))) + y;
+    ctx.lineTo(lx, ly);
+  }
+  if (fill) {
+    ctx.fill();
+  }
+  ctx.closePath();
+  ctx.stroke();
+}
+
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <canvas id="gbpost" width=160 height=144></canvas>
+<br>
+<canvas id="gbpost2" width=160 height=144></canvas>
+<br>
+<canvas id="gb" width=160 height=144></canvas>
+<br>
+<canvas id="gbtile" width=1600 height=144></canvas>
+<br>
+<textarea id=x></textarea>
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "kn8qn6Lp"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

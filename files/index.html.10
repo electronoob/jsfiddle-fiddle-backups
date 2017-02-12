@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    canvas {
+  border: 1px solid #fff;
+  width: 250px;
+  height: 250px;
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+    image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
+    background-color: #000;
+    border: 1px solid #000;
+}
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+// pixel
+var ctx = omg.getContext("2d");
+
+var h = 50;
+var w = 50;
+var t=0;
+var se = 0;
+function draw () {
+  var d = ctx.getImageData(0, 0, 50, 50);
+  ctx.putImageData(d, -1, 1);
+  d = ctx.getImageData(0, 0, 50, 50);
+  for(i=0;i<50;i+=2) {
+    var s = Math.round( Math.sin(t+i/10) * 20 	);
+    d = put(d,i,s+25);
+  }
+  ctx.putImageData(d, 0, 0);
+	window.requestAnimationFrame(draw);
+}
+
+draw();
+
+setInterval(function() {
+	t+=0.7;
+},10);
+
+
+function put(d,x,y) {
+	x = 4 * (x + (y * 50));
+  d.data[x] = 255;
+  d.data[x+1] = 255;
+  d.data[x+2] = 255;
+  d.data[x+3] += 30;
+  if(d.data[x+3] > 250) d.data[x+3] = 0;
+  return d;
+}
+
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <canvas id=omg width=50 height=50></canvas>
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "hhzbawmt"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

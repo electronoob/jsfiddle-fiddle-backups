@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    canvas {
+  border: 2px solid white;
+  background-color: black;
+  width: 400px;
+  height: 400px;
+}
+
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+//swarm
+function constrain(v, min, max) {
+  return (Math.min(max, Math.max(min, v)));
+}
+
+function Vector(x = 0, y = 0) {
+  this.x = x;
+  this.y = y;
+  this.sub = function(b) {
+    this.x -= b.x;
+    this.y -= b.y;
+  }
+  this.add = function(b) {
+    this.x += b.x;
+    this.y += b.y;
+  }
+  this.mag = function() {
+    return Math.sqrt(Math.abs(this.x) ^ 2 + Math.abs(this.y) ^ 2);
+  }
+  this.magsq = function() {
+    return Math.abs(this.x) ^ 2 + Math.abs(this.y) ^ 2;
+  }
+  this.div = function(value) {
+    this.x /= value;
+    this.y /= value;
+  }
+  this.mul = function(value) {
+    this.x *= value;
+    this.y *= value;
+  }
+  this.setMag = function(value) {
+    /*  Normalize 
+    //github.com/processing/processing/blob/master/core/src/processing/core/PVector.java
+    float m = mag();
+    if (m != 0 && m != 1) {
+      div(m);
+    }
+    */
+    m = this.mag();
+    if (m != 0 && m != 1) {
+      this.div(m);
+    }
+    // multiply by value
+    this.mul(value);
+  }
+}
+var V = new Vector();
+
+var debug = "idle";
+var swarmSize = 4;
+var attractorSize = 1;
+var ROTATION = 0;
+var RADIUS = 30;
+
+function fly() {
+  this.pos = new Vector(gri(500, 1500), gri(500, 1500));
+  this.lpos = new Vector();
+  this.acc = new Vector();
+  this.vel = new Vector();
+  this.update = function() {
+    this.lpos.x = this.pos.x;
+    this.lpos.y = this.pos.y;
+    this.pos.add(this.vel);
+    //this.vel.mul(0);
+    this.vel.add(this.acc);
+    this.acc.mul(0);
+  }
+  this.attract = function(target) {
+    var force = new Vector(target.x, target.y);
+    force.sub(this.pos);
+    distance = force.mag();
+    var G = 2;
+    var strength = G / ((distance ^ 2));
+    //strength = constrain(strength, 0, 1);
+    force.setMag(strength/100);
+    this.acc.add(force);
+  }
+}
+
+function att(x = 1000, y = 1000) {
+  this.pos = new Vector(x, y);
+}
+
+var swarm = [];
+for (i = 0; i < swarmSize; i++) {
+  swarm.push(new fly());
+}
+var attractors = [];
+attractors = getPolyVectors(1000, 1000, attractorSize, RADIUS, ROTATION);
+
+function gri(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+ctx = can.getContext("2d");
+
+
+function draw() {
+  ctx.fillStyle = "rgba(0,0,0,0.01)";
+  ctx.fillRect(0, 0, 2000, 2000);
+  for (i = 0; i < swarmSize; i++) {
+    swarm[i].update();
+    ctx.beginPath();
+    ctx.moveTo(swarm[i].lpos.x, swarm[i].lpos.y);
+    ctx.lineTo(swarm[i].pos.x, swarm[i].pos.y);
+    ctx.strokeStyle = "rgba(255,255,255,0.1)";
+    ctx.lineWidth = 5;
+    ctx.stroke();
+  }
+  ctx.fillStyle = "rgba(0,0,255,1)";
+  for (i = 0; i < attractorSize; i++) {
+    ctx.fillRect(attractors[i].pos.x - 5, attractors[i].pos.y - 5, 10, 10);
+  }
+  /*
+    ctx.fillStyle = "rgba(255,255,255,1)";
+    ctx.font= "120px Arial";
+    ctx.fillText(debug, 50,100);
+    */
+  window.requestAnimationFrame(draw);
+}
+window.requestAnimationFrame(draw);
+
+setInterval(function() {
+  ROTATION += 0.03;
+  attractors = getPolyVectors(1000, 1000, attractorSize, RADIUS, ROTATION);
+  swarm.push(new fly());
+  swarmSize++;
+  if (swarmSize > 400) swarmSize = 400;
+}, 50);
+setInterval(function() {
+  RADIUS++;
+  for (i = 0; i < swarmSize; i++) {
+    for (k = 0; k < attractorSize; k++) {
+      swarm[i].attract(attractors[k].pos);
+    }
+    //swarm[i].update();
+  }
+}, 70);
+setInterval(function() {
+  attractorSize += 1;
+  attractors = getPolyVectors(1000, 1000, attractorSize, RADIUS, ROTATION);
+  if (attractorSize > 20) {
+    attractorSize = 1;
+  }
+}, 10000);
+
+function getPolyVectors(x, y, sides, radius, DRAW_ROT) {
+  var points = [];
+  for (var i = 0; i < sides; i++) {
+    var lx = (radius * Math.cos(DRAW_ROT + (2 * Math.PI) * i / (sides))) + x;
+    var ly = (radius * Math.sin(DRAW_ROT + (2 * Math.PI) * i / (sides))) + y;
+    points.push(new att(lx, ly));
+  }
+  return points;
+}
+
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <canvas id=can width=2000 height=2000></canvas>
+
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "r8zy0nf8"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

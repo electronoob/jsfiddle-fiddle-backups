@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+var s = {"games": {"amsterdam.iomods.com": [{"current_players":20,"alive":17,"spectators":3,"max_players":64,"gamemode":"Enhanced Teams"},{"current_players":29,"alive":18,"spectators":11,"max_players":64,"gamemode":"Experimental"}],"frankfurt.iomods.com": [{"current_players":23,"alive":18,"spectators":5,"max_players":64,"gamemode":"Zombie Team"},{"current_players":33,"alive":22,"spectators":11,"max_players":64,"gamemode":"Rainbow FFA"}],"london.iomods.com": [{"current_players":13,"alive":10,"spectators":3,"max_players":64,"gamemode":"Enhanced Teams"},{"current_players":14,"alive":11,"spectators":3,"max_players":64,"gamemode":"Free For All"}],"paris.iomods.com": [{"current_players":30,"alive":25,"spectators":5,"max_players":64,"gamemode":"Rainbow FFA"},{"current_players":16,"alive":16,"spectators":0,"max_players":64,"gamemode":"Enhanced Teams"}],"quebec.iomods.com": [{"current_players":19,"alive":14,"spectators":5,"max_players":64,"gamemode":"Experimental Team"},{"current_players":14,"alive":10,"spectators":4,"max_players":64,"gamemode":"Hardcore Free For All"}],"atlanta.iomods.com": [{"current_players":25,"alive":17,"spectators":8,"max_players":64,"gamemode":"Experimental Team"},{"current_players":14,"alive":10,"spectators":4,"max_players":64,"gamemode":"Teams"}],"chicago.iomods.com": [{"current_players":23,"alive":18,"spectators":5,"max_players":64,"gamemode":"Experimental Team"},{"current_players":17,"alive":14,"spectators":3,"max_players":64,"gamemode":"Circular FFA"}],"dallas.iomods.com": [{"current_players":34,"alive":23,"spectators":11,"max_players":64,"gamemode":"Free For All"},{"current_players":31,"alive":28,"spectators":3,"max_players":64,"gamemode":"Experimental"}],"losangeles.iomods.com": [{"current_players":23,"alive":19,"spectators":4,"max_players":64,"gamemode":"Teams"},{"current_players":19,"alive":8,"spectators":11,"max_players":64,"gamemode":"Free For All"}],"miami.iomods.com": [{"current_players":43,"alive":8,"spectators":35,"max_players":64,"gamemode":"Hardcore Free For All"},{"current_players":23,"alive":19,"spectators":4,"max_players":64,"gamemode":"Experimental"}],"newjersey.iomods.com": [{"current_players":16,"alive":16,"spectators":0,"max_players":64,"gamemode":"Enhanced Teams"},{"current_players":18,"alive":14,"spectators":4,"max_players":64,"gamemode":"Experimental"}],"seattle.iomods.com": [{"current_players":17,"alive":14,"spectators":3,"max_players":64,"gamemode":"Experimental Team"},{"current_players":17,"alive":14,"spectators":3,"max_players":64,"gamemode":"Free For All"}],"siliconvalley.iomods.com": [{"current_players":9,"alive":8,"spectators":1,"max_players":64,"gamemode":"Zombie Team"},{"current_players":12,"alive":10,"spectators":2,"max_players":64,"gamemode":"Anonymous Free For All"}],"sydney.iomods.com": [{"current_players":9,"alive":7,"spectators":2,"max_players":64,"gamemode":"Zombie Team"},{"current_players":12,"alive":10,"spectators":2,"max_players":64,"gamemode":"Anonymous Free For All"}],"tokyo.iomods.com": [{"current_players":26,"max_players":128,"gamemode":"[Arenas] Hunger Games","start_time":1450742138563},{"current_players":5,"max_players":128,"gamemode":"[Arenas] Hide and Seek","start_time":1450742138563}],"atlantabeta.iomods.com": [{"current_players":91,"max_players":128,"gamemode":"[Arenas] Experimental Hunger Games","start_time":1450742131709},{"current_players":3,"max_players":128,"gamemode":"[Arenas] Hide and Seek","start_time":1450742131718}],"londonbeta.iomods.com": [{"current_players":9,"max_players":128,"gamemode":"[Arenas] Hunger Games","start_time":1450745169199},{"current_players":9,"max_players":128,"gamemode":"[Arenas] Hunger Games","start_time":1450745169201}],"siliconvalleybeta.iomods.com": [{"current_players":119,"max_players":128,"gamemode":"[Arenas] Hunger Games","start_time":1450742134970},{"current_players":1,"max_players":128,"gamemode":"[Arenas] Hide and Seek","start_time":1450742134970}],"sydneybeta.iomods.com": [{"current_players":28,"max_players":128,"gamemode":"[Arenas] Hunger Games","start_time":1450742137328},{"current_players":0,"max_players":128,"gamemode":"[Arenas] Hide and Seek","start_time":1450742137328}],"usaeast.iomods.com": [{},{"error": "timeout"}],"usaeastbeta.iomods.com": [{},{"error": "timeout"}]}}
+;
+
+
+var server_count = 0;
+Object.keys(s.games).forEach(function(val,index,arr){
+  s.games[val].forEach(function (val2, index2, arr2) {
+    var option = document.createElement('option');
+    option.text = String(val).replace('.iomods.com','').toUpperCase() + ' - ' + s.games[val][index2]['gamemode'] + '  (' + s.games[val][index2]['current_players'] + '/' + s.games[val][index2]['max_players'] + ')';
+    option.value = val + ':' + (1501 + index2);
+    option.style.background =  '#33'+(index+5)*2+'44';
+    if(index % 2) { option.style.color =  '#ffffaa'; } else { option.style.color =  '#dddd33'; }
+    if (s.games[val][index2]['current_players'] !== undefined) {
+    	document.getElementById('servers').add (option,-1);
+      server_count++;
+    }
+  });
+});
+document.getElementById('servers').style.padding = '10px';
+document.getElementById('server_status_message').innerHTML = ''+server_count + ' servers available.';
+
+
+
+
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <select id="servers" name="servers"></select><br>
+<div id='server_status_message'></div><br>
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "Lo7vvL3t"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

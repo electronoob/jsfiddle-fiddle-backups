@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    canvas {
+  margin-top: 10px;
+  border: 2px solid white;
+}
+pre {
+  text-shadow: 1px 1px rgba(255,0,0,0.4);
+}
+body {
+  background-color: white;
+  padding: 20px;
+}
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+//speedmorse
+var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+var notes = [195.998, 220, 246.942, 261.626, 293.665, 329.628, 369.994];
+var octave = 1;
+var analyser = audioCtx.createAnalyser();
+var sinea = audioCtx.createOscillator();
+var frequncy = 0;
+var dot  = 1;//dot length
+var dash = 3;//dash length
+var egap = 1;//gap between subsequent dots and dashes
+var cgap = 3;// gap between characters
+var wgap = 7;// gap between words
+var m = 0.03; //multiplier for timing
+var t = 0;
+sinea.frequency.value = 0;
+sinea.type = "sawtooth";
+sinea.connect(audioCtx.destination);
+sinea.start();
+/*****
+I stole the lookup table from morsemidi
+******/
+var ctx = can.getContext("2d");
+var font = "\"Courier New\", Courier, monospace";
+var size = 56;
+var charpad = size / 2;
+var currentWord;
+var currentWordWidths = [];
+var currentWordMorse;
+var tightness = 3;
+var blur = 9;
+var playing = 0;
+var find =  ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","1","2","3","4","5","6","7","8","9","0",".",",",":","?","'","-","/","(",")","\"","=","_","%",";","{FRC}","{SN}","{ERR}","{AS}","{COM}","{AR}","{SK}","{SOS}"];
+
+var replace = [".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--..",".----","..---","...--","....-",".....","-....","--...","---..","----.","-----",".-.-.-","--..--","---...","..--..",".----.","-....-","-..-.","-.--.","-.--.-",".-..-.","-...-","..--.-",".--.-.-.","-.-.-.",".-..-","...-.","........",".-...","-.-.-",".-.-.","...-.-","...---..."];
+
+var words = ["ably","ablation","abler","ablest","abloom","ablution","ablutions","ablution's","abnegate","abnegation","abnegating","abnegation","abnegations","abnegated","abnegates","abnegation","abnegation's","abnormal","abnormally","abnormality","abnormalities","abnormality's","aboard","abode","abode's","abodes","abolish","abolished","abolishing","abolishment","abolishments","abolishment's","abolisher","abolishers","abolisher's","abolishes","abolition","abolitionists","abolitionists","abolitionist's","abolition's","abolitions","abolitionism","abolitionisms","abolitionism's","abolitionist","abominable","abominably","abominate","abominated","abomination","abominations","abomination","abominates","abominating","abomination","abomination's","aboriginal","Aboriginals","Aboriginals's","aboriginals","aboriginals's","aborigine","aboriginally","aborigines","aborigine's","abort","aborted","abortive","aborting","abortively","aborts","abortiveness","aborter","abortifacient","abortion","abortionists","abortionists","abortionist's","abortions","abortion's","abortionist","abortive","abortiveness","abortiveness's","abound","abounding","abounded","abounds","about","above","aboveboard","aboveground","abracadabra","abracadabras","abrade","abraded","abrading","abrasive","abrasions","abrasively","abrasiveness","abrasion","abrades","abrader","abrader's","Abraham","Abraham's","Abram","Abram's","Abramovich","Abramovich's","Abrams","Abrams's","abrasion","abrasion's","abrasive","abrasive's","abrasives","abrasiveness","abrasivenesses","abreact","abreacts","abreacting","abreacted","abreaction","abreaction's","abreactions","abreast","abrenunciation","abricotine","abridge","abridgement","abridgements","abridgement's","abridges","abridging","abridged","abridged","unabridged","abridgedly","abridger","abridger's","abroad","abrogate","abrogated","abrogation","abrogation","abrogations","abrogating","abrogates","abrogation","abrogation's","abrogator","abrogator's","abrogators","abrupt","abrupter","abruptest","abruptness","abruptness's","abruptly","abruptness","abruptnesses","abs","abs's","abscess","abscessed","abscesses","abscessing","abscess's","abscissa","abscissa's","abscissas","abscissae","abscission","abscissions","abscission's","abscond","absconded","absconder","absconders","absconder's","absconds","absconding","abseil","abseils","abseiled","abseiling","abseiler","absence","absences","absence's","absent-minded","absent-mindedly","absent-mindedness","absent-mindednesses","absent","absently","absented","absenting","absentee","absentee's","absentees","absenteeism","absenteeisms","absenteeism's","absenter","absentia","absentia's","absinthe","absinthe's","absinthes","absolute","absoluteness","absoluteness's","absoluter","absolutest","absolutely","absolutist","absolutists","absolutist's","absolutes","absoluteness","absolutenesses","absolution","absolution's","absolutions","absolutism","absolutisms","absolutism's","absolve","absolving","absolves","absolved","absolver","absolver's","absorb","absorbing","absorber","absorbers","absorber's","absorptions","absorption","absorptive","absorbingly","absorbance","absorbances"];
+var messageIndex=0;
+
+
+function qdot() {
+  sinea.frequency.setValueAtTime(frequncy, audioCtx.currentTime + (t*m));
+  t++;
+  sinea.frequency.setValueAtTime(0, audioCtx.currentTime + (t*m));
+  t+=egap;
+}
+function qdash() {
+  sinea.frequency.setValueAtTime(frequncy, audioCtx.currentTime + (t*m));
+  t+=3;
+  sinea.frequency.setValueAtTime(0, audioCtx.currentTime + (t*m));
+  t+=egap;
+}
+function eg() {t+=egap;}
+function cg() {t+=cgap;}
+function wg() {t+=wgap;}
+function gri(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function getRandWord() {
+	return words[gri(0,words.length-1)];
+}
+function parseWord(word){
+  currentWord = word;
+  currentWordWidths = [];
+  word = word.toUpperCase();
+	i = 0;
+  buffer = "";
+  for(;i<word.length;i++) {
+  	ch = word[i];
+    f = find.indexOf(ch);
+    if (f==-1) return -1;
+    r = replace[f];
+    buffer += r + " ";
+    ctx.font=size+"px "+font;
+    currentWordWidths[i] = ctx.measureText(ch).width - tightness;
+  }
+  return buffer;
+}
+function draw(){
+  ctx.fillStyle = "rgba(255,255,255,0."+blur+")";
+  ctx.fillRect(0,0,700,300);
+  ctx.fillStyle = "silver";
+  ctx.fillRect(200,50, 2, 20);
+  ctx.fillRect(200,200-20+2, 2,20);
+  ctx.font=size+"px "+font;
+  k = 0;
+  characterOffset = 0;
+  test = Math.round(currentWord.length/3);
+  test2 = 0;
+  for(k=0;k<test;k++)
+  	test2+=currentWordWidths[k];
+  test2 += charpad;
+  for(k=0;k<currentWord.length;k++) {
+  		if(test == k) {ctx.fillStyle = "red";}else{ctx.fillStyle = "black";}
+      ctx.fillText(currentWord[k], characterOffset+200-test2+(size/4), 150);
+      characterOffset += currentWordWidths[k];
+  } 
+  window.requestAnimationFrame(draw);
+}
+
+setInterval(function(){
+	 if(playing==1) return;
+	 currentWordMorse = parseWord( words[messageIndex] );
+   messageIndex++;
+   if(messageIndex== words.length) messageIndex = 0;
+   if(currentWordMorse == -1) return;
+   playing=1;
+   t=0;
+	 frequncy = notes[gri(0,notes.length-1)] * octave;
+    for(k=0;k<currentWordMorse.length;k++){
+      switch (currentWordMorse[k]) {
+        case '.':
+          qdot();
+        break;
+        case '-':
+          qdash();
+        break;
+        case ' ':
+          cg();
+        break;
+      }
+    }
+    wg();
+		t+=10;
+	setTimeout(function(){
+  	playing = 0;
+  },t*m*1000);
+  
+},100);
+//https://pastebin.com/raw/6KyX6bk2
+
+parseWord("");
+window.requestAnimationFrame(draw);
+
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <pre>                          
+.--------.-----.----.-----.-----.
+|        |  _  |   _|__ --|  -__|
+|__|__|__|_____|__| |_____|_____|
+code trainer by electronoob, '17.                                  
+</pre>              
+                                 
+<canvas id=can width=700 height=300></canvas>
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "ze7Lbq8g"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

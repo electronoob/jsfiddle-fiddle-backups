@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    canvas {
+  border: 6px double #00ff00;
+  position:absolute;
+  top:0px;
+  left:0px;
+}
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+/* end of live coding live stream */
+
+var ctx = c.getContext('2d');
+var screen = 'splash';
+var levelBGImg = new Image();
+var carSprite = new Image();
+var camx = -100;
+var camy = -100;
+var caroffsetx = 0;
+var caroffsety = 0;
+var carx = 0;
+var cary = 0;
+var carspeed = 0;
+var topspeedf = 1;
+var topspeedr = -0.8;
+//
+var mX = 0;
+var mY = 0;
+var screenContext = document.getElementById('c2').getContext('2d');
+//
+var kb = {l:0,r:0,u:0,d:0};
+//
+var imageObj = {
+  red: 255,
+  green: 255,
+  blue: 255
+};
+document.getElementById('c2').addEventListener('mousemove', function(evt) {
+   var mousePos = getMousePos(document.getElementById('c2'), evt);
+   mX = mousePos.x;
+   mY = mousePos.y;
+ }, false);
+
+ function getMousePos(c2, evt) {
+   var rect = document.getElementById('c2').getBoundingClientRect();
+   return {
+     x: evt.clientX - rect.left,
+     y: evt.clientY - rect.top
+   };
+ }
+window.onkeydown = function (e) {
+  switch(e.keyCode) {
+    case 38:
+      kb.u = 1;
+      e.preventDefault();
+      break;
+    case 40:
+      kb.d = 1;
+      e.preventDefault();
+      break;
+    case 37:
+      kb.l = 1;
+      e.preventDefault();
+      break;
+    case 39:
+      kb.r = 1;
+      e.preventDefault();
+      break;
+  }
+};
+window.onkeyup = function (e) {
+  switch(e.keyCode) {
+    case 38:
+      kb.u = 0;
+      e.preventDefault();
+      break;
+    case 40:
+      kb.d = 0;
+      e.preventDefault();
+      break;
+    case 37:
+      kb.l = 0;
+      e.preventDefault();
+      break;
+    case 39:
+      kb.r = 0;
+      e.preventDefault();
+      break;
+  }
+};
+
+levelBGImg.loaded = false;
+levelBGImg.onload = function() {
+  levelBGImg.loaded = true;
+  console.log('loaded level bg');
+};
+//levelBGImg.src = "http://www.spriters-resource.com/resources/sheets/60/62776.png";
+levelBGImg.src = "http://i.imgur.com/uXVGma9.png";
+carSprite.loaded = false;
+carSprite.onload = function() {
+  carSprite.loaded = true;
+  console.log('loaded car sprite');
+};
+carSprite.src = "http://i.imgur.com/0Fm3uk5.png";
+//carSprite.src = "http://i.imgur.com/SmGPpja.png";
+
+var draw = function() {
+  ctx.clearRect(0,0,300,300);
+  if (screen == 'splash') {
+    ctx.font='30px verdana';
+    ctx.fillText('electronoob', 290 - ctx.measureText('electronoob').width,40);
+    ctx.font='14px verdana';
+    ctx.fillText('presents', 290 - ctx.measureText('presents').width,50);
+    ctx.font='40px verdana';
+    ctx.strokeText("broom", 20+(Math.random()*1) ,120+(Math.random()*4));
+    ctx.strokeText("broom", 60+(Math.random()*2) ,150+(Math.random()*3));
+    ctx.strokeText("broom", 100+(Math.random()*3) ,180+(Math.random()*2));
+  }
+  if(screen == 'level') {
+      ctx.fillStyle = 'rgba('+Math.round(carspeed.toFixed(4) * 255)+',0,'+Math.round(carspeed.toFixed(4) * 255)+',1)';
+
+    ctx.drawImage(levelBGImg, camx+carx, camy+cary);
+    ctx.drawImage(carSprite, caroffsetx+150, caroffsety+100,100/6,210/6);
+    ctx.fillRect(260, 195, Number(carspeed.toFixed(2)) * 40, 5);
+
+  }
+  draw_mouse_overlay();
+  window.requestAnimationFrame(draw);
+
+};
+var level = function() {
+  screen = 'level';
+  window.setInterval(demo,4);
+};
+var demo = function () {
+  if ((kb.u && !kb.d) || (!kb.u && kb.d)) {
+      if (kb.u) carspeed+=0.02;
+    	if (kb.d) carspeed-=0.01;
+      if(carspeed > topspeedf) carspeed=topspeedf;
+      if(carspeed < topspeedr) carspeed=topspeedr;
+  } else {
+  	if (kb.u && kb.d) {
+    	if(carspeed > 0) carspeed-=0.02;
+	    if(carspeed < 0) carspeed+=0.02;				
+		} else {
+    	if(carspeed > 0) carspeed-=0.01;
+	    if(carspeed < 0) carspeed+=0.01;
+		}
+  }
+  
+  cary += carspeed;
+};
+window.requestAnimationFrame(draw);
+window.setTimeout(level, 2500);
+
+
+
+function draw_mouse_overlay() {
+   screenContext.globalCompositeOperation = 'destination-under';
+   screenContext.clearRect(0, 0, 300, 300);
+   screenContext.strokeStyle = 'rgba(' + imageObj.red + ',' + imageObj.green + ',' + imageObj.blue + ',0.4)';
+   screenContext.lineWidth = 5;
+   radians = Math.atan2(150 - mY, 150 - mX) + Math.PI;
+   a = 150 - mX;
+   b = 150 - mY;
+   c = Math.sqrt(a * a + b * b);
+   screenContext.beginPath();
+   screenContext.arc(150, 150, c, 0, Math.PI * 2, false);
+   screenContext.stroke();
+   screenContext.beginPath();
+   screenContext.arc(150,150, 100, 0, radians, false);
+   screenContext.stroke();
+   xx = 150 + c * Math.cos(radians);
+   yy = 150 + c * Math.sin(radians);
+   screenContext.beginPath();
+   screenContext.moveTo(150, 150);
+   screenContext.lineTo(xx, yy);
+   screenContext.stroke();
+ }
+ 
+ 
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  
+<canvas id=c width=300 height=300></canvas>
+<canvas id=c2 width=300 height=300></canvas>
+
+<br><br>
+
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "7jrukfyu"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

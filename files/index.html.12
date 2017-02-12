@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    canvas {
+  border: 1px solid #fff;
+  width: 300px;
+  height: 300px;
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+    image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
+    background-color: #000;
+    border: 1px solid #000;
+}
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+// pixel
+var ctx = omg.getContext("2d");
+var h = 50;
+var w = 50;
+
+var d = ctx.getImageData(0, 0, 50, 50);
+thex = 0;
+they = 0;
+
+x = 4 * (thex + (they * w));
+d.data[x] = 155;
+d.data[x+1] = 255;
+d.data[x+2] = 055;
+d.data[x+3] = 155;
+
+ctx.putImageData(d, 0, 0);
+
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <canvas id=omg width=50 height=50></canvas>
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "jf7ofrj6"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

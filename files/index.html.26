@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    	/*
+  canvas#c {
+	  background: rgb(0, 183, 234);
+	  background: -moz-linear-gradient(top, rgb(0, 183, 234) 0%, rgb(0, 158, 195) 100%);
+	  background: -webkit-linear-gradient(top, rgb(0, 183, 234) 0%, rgb(0, 158, 195) 100%);
+	  background: linear-gradient(to bottom, rgb(0, 183, 234) 0%, rgb(0, 158, 195) 100%);
+	  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#00b7ea', endColorstr='#009ec3', GradientType=0);
+	}
+  */
+  canvas {
+    background-color: black;
+  }
+
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+// polygon generator problem.
+
+myAudio = new Audio('http://www.electronoob.com/jssilly.mp3');
+myAudio.loop = true;
+myAudio.play();
+
+var gctx = document.getElementById('c').getContext('2d');
+
+var  DRAW_SIDES = 6;
+var DRAW_ROT = 0;
+var DRAW_ROT_DIR = 'right';
+var DRAW_RADIUS = 40;
+var decay = 0;
+var DRAW_DECAY = 0;
+	draw();
+  var DRAW_RED = 0;
+  var DRAW_ALPHA = 1;
+  
+	function draw() {
+		if(decay >= DRAW_DECAY)  { gctx.clearRect(0, 0, 800, 400); decay=0;} else {decay++;}
+   /*
+   
+       
+            gctx.fillStyle = '#ff00ff'
+        gctx.fillRect(-20,-20,840,440);
+        gctx.globalCompositeOperation = "destination-out";
+		gctx.drawImage(document.getElementById('c'),0,0);
+    gctx.globalAlpha = 0.5;
+    
+    //gctx.globalCompositeOperation = "source-over";
+    */
+    gctx.globalAlpha = 1;
+		gctx.strokeStyle = 'rgba('+DRAW_RED+',100,100,'+DRAW_ALPHA+')';
+    
+    gctx.lineWidth  =6;
+    var i = 0;
+    for(i=0;i<9;i++) {
+			drawPoly (100*i,100,DRAW_SIDES,30 + DRAW_RADIUS,0);
+    }
+    gctx.lineWidth  =1;
+    var i = 0;
+    for(i=0;i<9;i++) {
+			drawPoly (100*i,200,DRAW_SIDES,30 + DRAW_RADIUS,0);
+    }
+    gctx.lineWidth  =6;
+    var i = 0;
+    for(i=0;i<9;i++) {
+			drawPoly (100*i,300,DRAW_SIDES,30 + DRAW_RADIUS,0);
+    }
+		window.requestAnimationFrame(draw);
+	}
+  window.setInterval(function () {
+    DRAW_SIDES--;
+    DRAW_ROT=0;
+    if (DRAW_SIDES==2) DRAW_SIDES = 6;
+  },1500);
+  window.setInterval(function () {
+    DRAW_DECAY+=2;
+    gctx.globalAlpha = 1;
+    gctx.clearRect(0, 0, 800, 400);
+    DRAW_ALPHA=1;
+  },1500);
+   window.setInterval(function () {
+    DRAW_DECAY = 4;
+    if(DRAW_ROT_DIR == "right") {DRAW_ROT_DIR = "left"} else { DRAW_ROT_DIR = "right" }
+  },12000);
+  
+  
+	window.setInterval(function () {
+		DRAW_RADIUS=40;
+    DRAW_ALPHA-=0.2;
+  },375);
+	window.setInterval(function () {
+		DRAW_RADIUS-=2;
+    DRAW_RED+=10;
+    if (DRAW_RADIUS < 0) DRAW_RADIUS = 0;
+    if (DRAW_RED >= 255) DRAW_RED = 0;
+  },24);
+  
+window.setInterval(function () {
+    var degree = Math.PI/90;
+    if(DRAW_ROT_DIR == "right") {
+    	DRAW_ROT += degree;
+    } else {
+      DRAW_ROT -= degree;
+    }
+  },10);
+
+  function drawPoly (x,y,sides,radius,fill) {
+    gctx.beginPath();
+    for(var i = 0; i < sides; i++) {
+        var lx = (radius * Math.cos(DRAW_ROT + 2*Math.PI * i / (sides))) + x;
+        var ly = (radius * Math.sin(DRAW_ROT + 2*Math.PI * i / (sides))) + y;   
+      gctx.lineTo(lx,ly);
+    }
+    gctx.closePath();
+    if(fill) {gctx.fill();} else {gctx.stroke()};
+  }
+
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <canvas id=c width=800 height=400 style="z-index:1;"></canvas>
+
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "gche0562"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    canvas {
+  border: 2px solid #000;
+  position:absolute;
+  top: 10px;
+  left: 10px;
+}
+canvas#d {
+  opacity: 1;
+  top: 250px;
+}
+canvas#c {
+  opacity:1;
+  top: 250px;
+}
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+var ctx = c.getContext("2d");
+var dtx = d.getContext("2d");
+var stx = s.getContext("2d");
+var cos = Math.cos;
+var sin = Math.sin;
+var r = 120;
+var a = (Math.PI / 180) * 0;
+var x;
+var y;
+var rs = -((Math.PI / 180) * 30);
+var re = (Math.PI / 180) * 30;
+var degree = (Math.PI / 180);
+var i;
+var direction = 0;
+var playerx = 0;
+var playery = 0;
+
+setInterval(function(){
+	playery+=0.2;
+  playerx+=0.2;
+},50);
+
+// generate a map
+for(i=0;i<15;i++) {
+  dtx.fillStyle = 'rgba('+gri(0,255)+','+gri(0,255)+','+gri(0,255)+',255)';
+  dtx.fillRect(gri(0,200),gri(0,200), gri(2,50),gri(2,50));
+}
+var map = dtx.getImageData(0,0,200,200);
+
+draw();
+
+function getMapXY (x,y) {
+	var d = map;
+  ctx.fillStyle = 'white';
+  ctx.fillRect(x,y,3,3);
+	xx = 4 * (x + (y * 200));
+  val = d.data[xx+3];
+  return {'r':d.data[xx], 'g':d.data[xx+1], 'b':d.data[xx+2],'a':d.data[xx+3],'hit':(val == 255)};
+}
+
+function draw() {
+ctx.clearRect(0,0,200,200);
+stx.fillStyle = "blue";
+stx.fillRect(0,0,360,100);
+stx.fillStyle = "grey";
+stx.fillRect(0,100,360,100);
+stx.fillStyle = "black";
+direction = 7;
+  sx = 0;
+  
+  for (i = rs; i < re; i += degree / 2) {
+		
+    var result = checkRayCollision(i + direction, 100 + playerx, 100+playery, r);
+    var wall = 0;
+    if(result != -1)
+    if(result.rgbah.hit) {
+	     wall = result.distance;
+       x = (r - wall) * cos(i + direction) + 100 + playerx;
+       y = (r - wall) * sin(i + direction) + 100 + playery;
+      if(wall > 0)
+          wall = r - wall;
+      		stx.fillRect(sx, 100 - (wall/2), 3, wall);
+      		stx.fillStyle = "rgba("+result.rgbah.r+","+result.rgbah.g+","+result.rgbah.b+",255)";
+    } else {
+    stx.fillStyle = "white";
+    }
+
+    sx+=3;
+  }
+  window.requestAnimationFrame(draw);
+}
+
+function checkRayCollision(theta, originx, originy, length) {
+  var k;
+  for (k = 0; k < length; k+=1) {
+    x = k * cos(theta) + originx;
+    y = k * sin(theta) + originy;
+    var rgbah = getMapXY(Math.floor(x),Math.floor(y));
+		if( rgbah.hit ) {
+    	return {'distance': k, 'rgbah': rgbah};
+    }
+  }
+  return -1;
+}
+
+function gri(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <canvas id="s" width="360" height="200"></canvas>
+<canvas id="c" width="200" height="200"></canvas>
+<canvas id="d" width="200" height="200"></canvas>
+
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "kdusr5vr"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+

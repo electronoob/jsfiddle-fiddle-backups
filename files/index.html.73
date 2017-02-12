@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    body {
+  margin: 0px;
+  padding: 0px;
+}
+
+  </style>
+
+  <title> by electronoob</title>
+
+  
+    
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+ var mX = 0;
+ var mY = 0;
+ var canvas = document.getElementById('canvas');
+ var screenContext = canvas.getContext('2d');
+ var imageObj = {
+   red: 200,
+   green: 10,
+   blue: 88
+ };
+ draw();
+
+
+ document.getElementById('canvas').addEventListener('mousemove', function(evt) {
+   var mousePos = getMousePos(canvas, evt);
+   mX = mousePos.x;
+   mY = mousePos.y;
+ }, false);
+
+ function getMousePos(canvas, evt) {
+   var rect = canvas.getBoundingClientRect();
+   return {
+     x: evt.clientX - rect.left,
+     y: evt.clientY - rect.top
+   };
+ }
+
+
+ function draw() {
+   var ctx = document.getElementById('canvas').getContext('2d');
+   ctx.globalCompositeOperation = 'destination-under';
+   ctx.clearRect(0, 0, 550, 550);
+   screenContext.strokeStyle = 'rgba(' + imageObj.red + ',' + imageObj.green + ',' + imageObj.blue + ',0.4)';
+   screenContext.lineWidth = 1;
+   radians = Math.atan2(275 - mY, 275 - mX) + Math.PI;
+   a = 275 - mX;
+   b = 275 - mY;
+   c = Math.sqrt(a * a + b * b);
+   screenContext.beginPath();
+   screenContext.arc(275, 275, c, 0, Math.PI * 2, false);
+   screenContext.stroke();
+   screenContext.beginPath();
+   screenContext.arc(275, 275, 100, 0, radians, false);
+   screenContext.stroke();
+   xx = 275 + c * Math.cos(radians);
+   yy = 275 + c * Math.sin(radians);
+   screenContext.beginPath();
+   screenContext.moveTo(275, 275);
+   screenContext.lineTo(xx, yy);
+   screenContext.stroke();
+   window.requestAnimationFrame(draw);
+ }
+
+}//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  <canvas id=canvas width=550px height=550px style="background-color:#c0c0c0;"></canvas>
+
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "ra3uuesv"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+
