@@ -13,7 +13,7 @@ Step 1: Export bookmarks from google chrome (bookmark manager, click Organise, E
 
 Step 2: Generate a urls file.
 
-    grep -oh "https://jsfiddle.net/.*/" bookmarks.html | awk '{print (}' | grep -v "user\/dashboard" | sed 's/\"//'  | sed 's/jsfiddle.net/fiddle.jshell.net/' | awk '{print ( "show/light/"}')) > urls
+    grep -oh "https://jsfiddle.net/.*/" bookmarks_06_10_2019.html | grep -v "user\/dashboard" | sed 's/\"//'  | sed 's/jsfiddle.net/fiddle.jshell.net/' | awk '{print $1 "show/light/"}'|sort|uniq>urls
 
 Step 3: Set wget's User-Agent and download from urls list.
 
