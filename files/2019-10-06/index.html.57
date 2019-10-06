@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="//code.jquery.com/jquery-1.6.3.js"
+    
+  ></script>
+    <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      canvas {
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+    image-rendering: pixelated;
+    interpolation-mode: nearest-neighbor;
+    border: 5px solid #ddd;
+}
+canvas#a1hgj { width: 640px; height: 640px; }
+
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    $(window).load(function(){
+      
+var ctx = document.getElementById('a1hgj').getContext("2d");
+
+
+
+var newc = {canvas: document.createElement("canvas"), ctx: null};
+newc.ctx = newc.canvas.getContext("2d");
+newc.ctx.fillStyle = 'yellow'
+newc.ctx.fillRect(0,0,64,64);
+
+var distance = 40;
+const splash = 0, level = 1;
+var mode = splash;
+
+function draw() {
+  ctx.clearRect(0,0,64,64);
+  ctx.fillStyle="rgba(0,0,0,1)";
+  ctx.beginPath();
+  ctx.arc(32,32,distance,0,2*Math.PI);
+  ctx.fill();
+  ctx.stroke();
+  ctx.save();
+  ctx.globalCompositeOperation="source-in";
+  ctx.drawImage(newc.canvas, 0,0);
+  ctx.restore();
+	window.requestAnimationFrame(draw);
+}
+window.requestAnimationFrame(draw);
+
+setInterval(function(){
+  // game loop
+  if (mode == splash) {
+  	distance-=0.5;
+    if (distance<1) {
+    	// 
+      newc.ctx.fillStyle = "black";
+      newc.ctx.font = "8px Arial";
+      newc.ctx.fillText("its complete darkness", 10,0);
+      mode = level;
+     
+    }
+  }
+  if(mode == level) {
+  
+  }
+  
+},32);
+
+    });
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id='a1hgj' width='64' height='64'></canvas>
+
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "g6wnzy9j"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

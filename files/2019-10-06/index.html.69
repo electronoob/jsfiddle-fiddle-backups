@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      @import url('https://fonts.googleapis.com/css?family=Peddana');
+@import url('https://fonts.googleapis.com/css?family=Monoton');
+@import url('https://fonts.googleapis.com/css?family=Sue+Ellen+Francisco');
+
+canvas {
+  background-color: #7f6e00;
+  width: 320px;
+  height: 288px;
+
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: pixelated;
+  image-rendering: optimize-contrast;
+  interpolation-mode: nearest-neighbor;
+}
+
+
+
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+var screen = document.getElementById('screen');
+var sctx = screen.getContext('2d');
+var output = document.getElementById('output');
+var octx = output.getContext('2d');
+
+sctx.fillStyle = '#ff0000';
+sctx.font = "24px Sue Ellen Francisco";
+sctx.fillText('ELECTRONOOB SOFT',6,125);
+
+sctx.font = "20px Peddana";
+sctx.fillText('proudly present',35,138);
+
+sctx.font = "50px Monoton, cursive";
+sctx.fillText('coddddck',0,40);
+
+setTimeout(postProcess,1000);
+
+function postProcess() {
+  var imageData = sctx.getImageData(0,0,160,144);
+  console.log(imageData);
+	var data = imageData.data;
+  if(0)
+	  for (var i = 0; i < data.length; i += 4) {
+      var average = (data[i] + data[i+1] + data[i+2]) /3;
+     // if(DO_POST_PROCESS)
+			if(average > 10) 	{
+          data[i]     = 0;
+          data[i + 1] = 0;
+          data[i + 2] = 0;
+          data[i + 3] = 255;
+      } else {
+      	data[i] = 0;
+        data[i + 1] = 0; 
+        data[i + 2] = 0;
+        data[i + 3] = 0;
+      }
+    }
+    octx.putImageData(imageData, 0, 0);
+    /*
+    // copy this new image as a tile
+    if(f==1) { ctxtile.clearRect(0,0,1600,144); x.value = "";}
+    //ctxtile.drawImage(gbpost, f*160 - 160,0);
+    var buf = [];
+    for (j=0;j<2;j++)
+      for (i=0;i<22;i++) {
+        ctxpost2.drawImage(gbpost, i*8,j*8+8,8,8,i*8,j*8,8,8);
+        //i*8,j*8
+        //
+        q = ctxpost2.getImageData(i*8,j*8,8,8);
+        	data = q.data;
+					buf.push(t8x8x4 ( data) );
+      }
+ */
+      
+}
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id="screen" class="screen" width="160px" height="144px"></canvas>
+<canvas id="output" class="oscreen" width="160px" height="144px"></canvas>
+
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "L59wrzpk"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+
+// queue cue
+let c = [];
+let id = 0;
+c.push({
+	id:id++,
+  start: Date.now(),
+  end:  Date.now() + 500,
+  type: "construction",
+  item: 3
+});
+c.push({
+	id:id++,
+  start: Date.now(),
+  end:  Date.now() + 1000,
+  type: "construction",
+  item: 3
+});
+c.push({
+	id:id++,
+  start: Date.now(),
+  end:  Date.now() + 1500,
+  type: "construction",
+  item: 3
+});
+c.push({
+	id:id++,
+  start: Date.now(),
+  end:  Date.now() + 1800,
+  type: "construction",
+  item: 3
+});
+
+setInterval(()=>{
+	var ts = Date.now();
+	c.forEach((item,index)=>{
+  	console.log(item, ts);
+    if(ts>item.end) {
+    	c=c.slice(index);
+    }
+  })
+  console.log(0);
+}, 1000);
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <div id=q></div>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "4Lzn358v"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

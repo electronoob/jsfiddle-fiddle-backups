@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      canvas {
+  border: 2px solid #000;
+  position:absolute;
+  top: 10px;
+  left: 10px;
+}
+canvas#d {
+  opacity: 1;
+  top: 250px;
+}
+canvas#c {
+  opacity:1;
+  top: 250px;
+}
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+/* new ver ray casting */
+
+var ctx = c.getContext("2d");
+var dtx = d.getContext("2d");
+var stx = s.getContext("2d");
+var cos = Math.cos;
+var sin = Math.sin;
+var r = 100; // radius of ray
+//var a = (Math.PI / 180) * 0;
+var x;
+var y;
+var rs = -((Math.PI / 180) * 30); // ray start
+var re = (Math.PI / 180) * 30;  // ray end
+var degree = (Math.PI / 180);
+var i;
+var direction = 0; // angle of ray 
+var playerx = 0;
+var playery = 0;
+var  kb = {
+    l: 0,
+    r: 0,
+    u: 0,
+    d: 0
+  };
+var  ai = {
+    x: 400,
+    y: 200
+  };
+  
+  
+window.onkeydown = function (e) {
+  switch(e.keyCode) {
+    case 38:
+      kb.u = 1;
+      e.preventDefault();
+      break;
+    case 40:
+      kb.d = 1;
+      e.preventDefault();
+      break;
+    case 37:
+      kb.l = 1;
+      e.preventDefault();
+      break;
+    case 39:
+      kb.r = 1;
+      e.preventDefault();
+      break;
+  }
+};
+window.onkeyup = function (e) {
+  switch(e.keyCode) {
+    case 38:
+      kb.u = 0;
+      e.preventDefault();
+      break;
+    case 40:
+      kb.d = 0;
+      e.preventDefault();
+      break;
+    case 37:
+      kb.l = 0;
+      e.preventDefault();
+      break;
+    case 39:
+      kb.r = 0;
+      e.preventDefault();
+      break;
+  }
+};
+
+window.setInterval(function (){
+  if (kb.u) ai.y = ai.y-1;
+  if (kb.d) ai.y = ai.y+1;
+  if (kb.l) ai.x = ai.x-1;
+  if (kb.r) ai.x = ai.x+1;
+
+  if(ai.x<0) ai.x=0;
+  if(ai.x>200) ai.x=200;
+  if(ai.y<0) ai.y=0;
+  if(ai.y>200) ai.y=200;
+  
+  playerx = ai.x;
+  playery = ai.y;
+},10);
+  
+setInterval(function(){
+	//playery+=0.2;
+  //playerx+=0.2;
+ //direction+=0.01;
+},30);
+
+// generate a map
+for(i=0;i<8;i++) {
+  dtx.fillStyle = 'rgba('+gri(0,255)+','+gri(0,255)+','+gri(0,255)+',255)';
+  dtx.fillRect(gri(0,200),gri(0,200), gri(2,50),gri(2,50));
+}
+var map = dtx.getImageData(0,0,200,200);
+
+draw();
+
+function getMapXY (x,y) {
+if ( (x>200)||(y>200)||(x < 0)||(y<0) ) return {hit:0};
+	var d = map;
+  ctx.fillStyle = 'white';
+  ctx.fillRect(x,y,3,3);
+	xx = 4 * (x + (y * 200));
+  val = d.data[xx+3];
+  return {'r':d.data[xx], 'g':d.data[xx+1], 'b':d.data[xx+2],'a':d.data[xx+3],'hit':(val == 255)};
+}
+
+function draw() {
+ctx.clearRect(0,0,200,200);
+stx.fillStyle = "blue";
+stx.fillRect(0,0,360,100);
+stx.fillStyle = "grey";
+stx.fillRect(0,100,360,100);
+stx.fillStyle = "black";
+
+  sx = 0;
+  
+  for (i = rs; i < re; i += degree / 2) {
+		
+    var result = checkRayCollision(i + direction,  playerx, playery, r);
+    var wall = 0;
+    if(result != -1)
+    if(result.rgbah.hit) {
+	     wall = result.distance;
+       x = (r - wall) * cos(i + direction)  + playerx;
+       y = (r - wall) * sin(i + direction)  + playery;
+      if(wall > 0)
+          wall = r - wall;
+      		stx.fillRect(sx, 100 - (wall/2), 3, wall);
+      		stx.fillStyle = "rgba("+result.rgbah.r+","+result.rgbah.g+","+result.rgbah.b+",255)";
+    } else {
+    stx.fillStyle = "white";
+    }
+
+    sx+=3;
+  }
+  window.requestAnimationFrame(draw);
+
+}
+
+function checkRayCollision(theta, originx, originy, length) {
+  var k;
+  for (k = 0; k < length; k+=1) {
+    x = k * cos(theta) + originx;
+    y = k * sin(theta) + originy;
+    var rgbah = getMapXY(Math.floor(x),Math.floor(y));
+		if( rgbah.hit ) {
+    	return {'distance': k, 'rgbah': rgbah};
+    }
+  }
+  return -1;
+}
+
+function gri(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id="s" width="360" height="200"></canvas>
+<canvas id="c" width="200" height="200"></canvas>
+<canvas id="d" width="200" height="200"></canvas>
+
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "gbxr2dzt"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

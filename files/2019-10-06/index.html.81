@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      canvas {
+  border: 6px double #00ff00;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+//wimpycode
+
+var ctx = c.getContext('2d');
+var screen = 'splash';
+var levelBGImg = new Image();
+var carSprite = new Image();
+var camx = -100;
+var camy = -100;
+var caroffsetx = 0;
+var caroffsety = 0;
+var carx = 0; // its x pos on map
+var cary = 0; // its y pos on map
+var carr = 0; // car angle in radians
+var carx_lastframe = 0; // cache of last frame location
+var cary_lastframe = 0; //
+var carr_lastframe = 0; //
+
+var carwidth = 35;
+var carheight = 50;
+var carspeed = 0;
+var topspeedf = 1;
+var topspeedr = -0.8;
+//
+var mX = 0; // mouse X position 
+var mY = 0; // mouse Y position
+//q
+var mM = 0; // mouse distance from center of screen
+var mR = 0; // mouse angle in radians
+//
+var screenContext = document.getElementById('c2').getContext('2d');
+//
+var kb = {
+  l: 0,
+  r: 0,
+  u: 0,
+  d: 0
+};
+//
+var imageObj = {
+  red: 255,
+  green: 255,
+  blue: 255
+};
+
+document.getElementById('c2').addEventListener('mousemove', function(evt) {
+  var mousePos = getMousePos(document.getElementById('c2'), evt);
+  mX = mousePos.x;
+  mY = mousePos.y;
+  mR = Math.atan2(150 - mY, 150 - mX) + Math.PI;
+  a = 150 - mX;
+  b = 150 - mY;
+  mM = Math.sqrt(a * a + b * b);
+  var PI = Math.PI;
+  carr = ((mR - PI) / 10);
+}, false);
+
+function getMousePos(c2, evt) {
+  var rect = document.getElementById('c2').getBoundingClientRect();
+  return {
+    x: evt.clientX - rect.left,
+    y: evt.clientY - rect.top
+  };
+}
+window.onkeydown = function(e) {
+  switch (e.keyCode) {
+    case 81:
+      kb.u = 1;
+      e.preventDefault();
+      break;
+    case 65:
+      kb.d = 1;
+      e.preventDefault();
+      break;
+    case 37:
+      kb.l = 1;
+      e.preventDefault();
+      break;
+    case 39:
+      kb.r = 1;
+      e.preventDefault();
+      break;
+  }
+};
+window.onkeyup = function(e) {
+  switch (e.keyCode) {
+    case 81:
+      kb.u = 0;
+      e.preventDefault();
+      break;
+    case 65:
+      kb.d = 0;
+      e.preventDefault();
+      break;
+    case 37:
+      kb.l = 0;
+      e.preventDefault();
+      break;
+    case 39:
+      kb.r = 0;
+      e.preventDefault();
+      break;
+  }
+};
+
+levelBGImg.loaded = false;
+levelBGImg.onload = function() {
+  levelBGImg.loaded = true;
+  console.log('loaded level bg');
+};
+
+levelBGImg.src = "https://i.imgur.com/uXVGma9.png";
+carSprite.loaded = false;
+carSprite.onload = function() {
+  carSprite.loaded = true;
+  console.log('loaded car sprite');
+};
+carSprite.src = "https://i.imgur.com/0Fm3uk5.png";
+
+var draw = function() {
+  ctx.clearRect(0, 0, 300, 300);
+  if (screen == 'level') {
+    ctx.translate(-camx, -camy);
+    ctx.fillStyle = 'rgba(' + Math.round(carspeed.toFixed(4) * 255) + ',0,' + Math.round(carspeed.toFixed(4) * 255) + ',1)';
+
+    ctx.drawImage(levelBGImg, camx + carx, camy + cary);
+    ctx.translate(caroffsetx, caroffsety);
+    ctx.rotate(carr);
+    ctx.drawImage(carSprite, 0, 0, carwidth, carheight);
+    ctx.rotate(-carr);
+    ctx.translate(-caroffsetx, -caroffsety);
+    ctx.translate(camx, camy);
+    ctx.fillRect(260, 195, Number(carspeed.toFixed(2)) * 40, 5);
+    ctx.font = "20px ariel";
+    ctx.fillText(carr.toFixed(2) + ' Rads (carr)', 50, 20);
+    ctx.fillText(mR.toFixed(2) + ' Rads (mR)', 50, 60);
+
+  }
+  draw_mouse_overlay();
+  window.requestAnimationFrame(draw);
+};
+var level = function() {
+  screen = 'level';
+  window.setInterval(demo, 6);
+};
+var demo = function() {
+  if ((kb.u && !kb.d) || (!kb.u && kb.d)) {
+    if (kb.u) carspeed += 0.02;
+    if (kb.d) carspeed -= 0.01;
+    if (carspeed > topspeedf) carspeed = topspeedf;
+    if (carspeed < topspeedr) carspeed = topspeedr;
+  } else {
+    if (kb.u && kb.d) {
+      if (carspeed > 0) carspeed -= 0.02;
+      if (carspeed < 0) carspeed += 0.02;
+    } else {
+      if (carspeed > 0) carspeed -= 0.01;
+      if (carspeed < 0) carspeed += 0.01;
+    }
+  }
+
+  cary += carspeed;
+};
+window.requestAnimationFrame(draw);
+window.setTimeout(level, 1);
+
+
+function draw_mouse_overlay() {
+return;
+  screenContext.globalCompositeOperation = 'destination-under';
+  screenContext.clearRect(0, 0, 300, 300);
+  screenContext.strokeStyle = 'rgba(' + imageObj.red + ',' + imageObj.green + ',' + imageObj.blue + ',0.4)';
+  screenContext.lineWidth = 10;
+  radians = mR;
+  c = 70;
+  screenContext.beginPath();
+  screenContext.arc(150, 150, c, 0, Math.PI * 2, false);
+  screenContext.stroke();
+  xx = 150 + c * Math.cos(radians);
+  yy = 150 + c * Math.sin(radians);
+  screenContext.beginPath();
+  screenContext.moveTo(150, 150);
+  screenContext.lineTo(xx, yy);
+  screenContext.stroke();
+}
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id=c width=300 height=300></canvas>
+<canvas id=c2 width=300 height=300></canvas>
+<br>
+<br>
+
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "p4zunqnc"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

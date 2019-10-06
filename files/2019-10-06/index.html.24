@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+var docHeight = $(document).height();
+
+$("body").append("<div id='agariomodsoverlay'><span id='agariomods'>close this popup</span><br><h1>agariomods is currently turned off while we work to fix it.<br><h3>agar.io will be boring for a few days but we promise to be back as soon as possible. In the meantime see the competition information below!</h3><h2>Free giveaway competition</h2><h3>Startng now is the first competition for a chance to win an iPad Air, just need to follow us on twitter, <a href='http://bit.ly/1XJyyDd' target='_blank'>click here</a> for the information.</h3><br><a href='http://bit.ly/1XJyyDd' target='_blank'><img src='http://connect.agariomods.com/compo/compo.png' width='60%'></a><br></div>");
+
+$("#agariomods").click(function(){
+    $( "#agariomodsoverlay" ).toggle();
+});
+$("#agariomodsoverlay")
+  .height(docHeight)
+  .css({
+    'opacity': 1,
+    'position': 'absolute',
+    'top': 0,
+    'left': 0,
+    'background-color': 'rgba(0,0,0,0.4)',
+    'color':'white',
+    'width': '100%',
+    'z-index': 5000,
+    'text-shadow': '1px 1px 3px rgba(0, 0, 0, 1)',
+    'padding': '30px'
+  });
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "6n0w7m13"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

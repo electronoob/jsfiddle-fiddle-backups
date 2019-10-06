@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>mirror 1hgj</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      canvas#c {
+  background: rgb(0, 183, 234);
+  background: -moz-linear-gradient(top, rgb(0, 183, 234) 0%, rgb(0, 158, 195) 100%);
+  background: -webkit-linear-gradient(top, rgb(0, 183, 234) 0%, rgb(0, 158, 195) 100%);
+  background: linear-gradient(to bottom, rgb(0, 183, 234) 0%, rgb(0, 158, 195) 100%);
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#00b7ea', endColorstr='#009ec3', GradientType=0);
+}
+
+canvas {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+
+
+var dead = 0;
+var score = 0;
+var points = 0;
+var lives = 3;
+var laststrike = Date.now();
+var everstrike = 0;
+var ballshow = 1;
+var items = [];
+var debris = [];
+var power = 100;
+var starttime = Date.now();
+var gctx = document.getElementById('c').getContext('2d');
+var kb = {
+  l: 0,
+  r: 0,
+  u: 0,
+  d: 0
+};
+var ai = {
+  x: 400,
+  y: 200
+};
+var jp = new Image();    jp.src = "http://i.imgur.com/cAJaJpt.png";
+var jp2 = new Image();   jp2.src = "http://i.imgur.com/cnGIs2G.png";
+var jp3 = new Image();   jp3.src = "http://i.imgur.com/EibYcdV.png";
+var deb = new Image();   deb.src = "http://i.imgur.com/O3yYl1d.png";
+var nrg = new Image();   nrg.src = "http://i.imgur.com/AzKvlfD.png";
+
+var pickups = [];
+
+newDebris();
+newItem('energy', 96, 0, nrg);
+window.requestAnimationFrame(draw);
+
+
+
+function death() {
+  if((laststrike + 1000) > (Date.now())) {
+    return;
+  }
+  laststrike = Date.now();
+  everstrike++;
+  points -= 150;
+	if (lives > 1) { lives--; return; }
+  score = Math.round((Date.now() - starttime)/1000) + points;
+  dead = 1;
+  alert('you scored: ' + score + ' before you died');
+  console.log(('you scored: ' + score + ' before you died'));
+  location.reload();
+}
+
+
+
+function draw() {
+  if (!dead)
+    score = Math.round((Date.now() - starttime)/1000) + points;
+
+  gctx.clearRect(0, 0, 800, 400);
+  items.forEach(function(d, i, a) {
+    gctx.fillStyle = 'rgba(255,255,255,0.2)';
+    gctx.fillRect(d.x, d.y, 32, 32);
+    gctx.drawImage(d.img, d.x, d.y, 32, 32);
+  });
+  debris.forEach(function(d, i, a) {
+    gctx.drawImage(deb, d.x, d.y, 16, 16);
+  });
+  gctx.drawImage(jp, ai.x, ai.y, 32, 32);
+  gctx.drawImage(jp2, 800 - ai.x - 32, 400 - ai.y - 32, 32, 32);
+
+  if (everstrike) { 
+    if((laststrike + 1000) > Date.now()) {
+      if (ballshow) {
+        gctx.drawImage(jp3, ai.x, ai.y, 32, 32);
+        gctx.drawImage(jp3, 800 - ai.x - 32, 400 - ai.y - 32, 32, 32);
+      } 
+    }
+	}
+  
+  gctx.fillStyle = 'rgba(0,0,0,1)';
+  gctx.fillText(power + ', ' + lives + ' lives, score: '+ score, 2, 10);
+
+  window.requestAnimationFrame(draw);
+}
+
+function getRandomIntInclusive(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+function newItem(t, p, l, i) {
+  // type, points, lives, image
+  var nc = [];
+  nc.x = getRandomIntInclusive(50, 700);
+  nc.y = getRandomIntInclusive(50, 350);
+  nc.type = t;
+  nc.points = p;
+  nc.lives = l;
+  nc.img = i;
+  items.push(nc);
+}
+
+function newDebris() {
+  var nc = [];
+  nc.x = getRandomIntInclusive(820, 900);
+  nc.y = getRandomIntInclusive(0, 390);
+  nc.z = getRandomIntInclusive(2, 15);
+  nc.v = getRandomIntInclusive(1, 5);
+  debris.push(nc);
+}
+
+window.onkeydown = function(e) {
+  switch (e.keyCode) {
+    case 38:
+      kb.u = 1;
+      e.preventDefault();
+      break;
+    case 40:
+      kb.d = 1;
+      e.preventDefault();
+      break;
+    case 37:
+      kb.l = 1;
+      e.preventDefault();
+      break;
+    case 39:
+      kb.r = 1;
+      e.preventDefault();
+      break;
+  }
+};
+window.onkeyup = function(e) {
+  switch (e.keyCode) {
+    case 38:
+      kb.u = 0;
+      e.preventDefault();
+      break;
+    case 40:
+      kb.d = 0;
+      e.preventDefault();
+      break;
+    case 37:
+      kb.l = 0;
+      e.preventDefault();
+      break;
+    case 39:
+      kb.r = 0;
+      e.preventDefault();
+      break;
+  }
+};
+
+window.setInterval(function() {
+  if (dead) {
+    return;
+  }
+  newDebris();
+  power--; // reduce player's power
+}, 500);
+
+window.setInterval(function() {
+  if (dead) {
+    return;
+  }
+  debris.forEach(function(d, i, a) {
+    a[i].x -= a[i].v;
+    if (a[i].x < -60) {
+      debris.splice(i, 1);
+      if (debris.length < 10) {
+        newDebris();
+      }
+    }
+  });
+}, 30);
+
+
+window.setInterval(function() {
+  if (dead) {
+    return;
+  }
+  // collisions
+
+  items.forEach(function(d, i, a) {
+    hitplayer = Math.hypot(d.x - (ai.x + 16 - 16), d.y - (ai.y +16 - 16));
+    hitmirror = Math.hypot(d.x - (800 - ai.x - 32 + 16), d.y - (400 - ai.y - 32 + 16));
+    if ( (hitplayer <= 16) || (hitmirror <= 16) )  {
+      getItem(d);
+    }
+    
+  });
+
+  //player x, y, size, size
+  //ai.x,ai.y, 32, 32
+  //mirror x y size size
+  //800-ai.x-32, 400-ai.y-32, 32 ,32);
+  debris.forEach(function(d, i, a) {
+    hitplayer = Math.hypot(d.x - (ai.x + 16 - 8), d.y - (ai.y +16 - 8));
+    hitmirror = Math.hypot(d.x - (800 - ai.x - 32 + 8), d.y - (400 - ai.y - 32 + 8));
+    if ( (hitplayer <= 16) || (hitmirror <= 16) ) {
+      death();
+    }
+  });
+}, 3);
+window.setInterval(function() {
+  ballshow = !ballshow; 
+}, 10);
+  
+window.setInterval(function() {
+  if (dead) {
+    return;
+  }
+  if (kb.u) ai.y = ai.y - 2;
+  if (kb.d) ai.y = ai.y + 2;
+  if (kb.l) ai.x = ai.x - 2;
+  if (kb.r) ai.x = ai.x + 2;
+
+  if (ai.x < 40) ai.x = 40;
+  if (ai.x > 720) ai.x = 720;
+  if (ai.y < 0) ai.y = 0;
+  if (ai.y > 360) ai.y = 360;
+}, 4);
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id=c width=800 height=400 style="z-index:100;">
+</canvas>
+<canvas id=canvas width=800px height=400px style="z-index:-2;"></canvas>
+
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "4fceg5h1"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

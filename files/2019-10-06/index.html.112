@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      @import url('https://fonts.googleapis.com/css?family=Poiret+One');
+@import url('https://fonts.googleapis.com/css?family=Peddana');
+@import url('https://fonts.googleapis.com/css?family=Monoton');
+@import url('https://fonts.googleapis.com/css?family=Sue+Ellen+Francisco');
+canvas {
+  border: 1px solid #000;
+  width: 320px;
+  height: 288px;
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimize-contrast;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+  background-color: #7f6e00;
+}
+
+textarea#x {
+  position: absolute;
+  top: 10px;
+  left: 340px;
+  width: 500px;
+  height: 580px;
+}
+
+p {
+  font-family: 'Poiret One', cursive;
+}
+
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+var ctx = gb.getContext('2d');
+var ctxpost = gbpost.getContext('2d');
+//var ctxpost2 = gbpost2.getContext('2d');
+
+var r1 = 0;
+var r2 = 0;
+var fps = 0;
+var f = 0;
+var pc = 0; //count post processed frames
+
+render();
+
+function render() {
+  ctx.clearRect(0, 0, 160, 144);
+  ctx.drawImage(gh, 0,0);
+  
+  ctx.fillStyle = "#fff";
+  ctx.strokeStyle = "#fff";
+  ctx.lineWidth =2;
+  
+ // drawPoly(20, 65, 3, 10, 0, r2);
+
+  ctx.fillStyle = "#121212";
+  ctx.strokeStyle = "#000";
+  //ctx.font = "14px 'Poiret One'";
+  //ctx.fillText("electronoob", 45,65);
+  ctx.fillStyle = "#0c0";
+  ctx.font = "12px 'Poiret One'";
+  //ctx.fillText(fps, 20,50);
+
+
+  ctx.fillStyle = '#fff';
+  ctx.font = "24px Sue Ellen Francisco";
+  //ctx.fillText('ELECTRONOOB SOFT', 6, 25);
+
+  ctx.font = "20px Peddana";
+  //ctx.fillText('proudly present', 35, 38);
+
+  ctx.fillStyle = '#fff';
+  ctx.font = "30px Monoton, cursive";
+ // ctx.fillText('dong',12-r2, 90);
+
+  postProcess();
+  window.requestAnimationFrame(render);
+}
+setInterval(function() {
+  r1 += 0.02;
+  r2 = Math.sin(r1)*10;
+}, 3);
+setInterval(function() {
+  fps = f;
+  f = 0;
+}, 1000);
+
+function postProcess() {
+  var colours = [];
+  pc++;
+  if(pc % 20) { return; };
+  f++;
+  var imageData = ctx.getImageData(0, 0, 160, 144);
+  var data = imageData.data;
+  for (var i = 0; i < data.length; i += 4) {
+    var average = (data[i] + data[i + 1] + data[i + 2] + data[i + 3]) / 4;
+
+    data[i] =  Math.round(average / 64) * 64;
+    data[i + 1] = Math.round(average / 64) * 64;
+    data[i + 2] = Math.round(average / 64) * 64;
+
+    if (data[i + 3] < 150) {
+      data[i] = 255;
+      data[i + 1] = 255;
+      data[i + 2] = 255;
+      data[i + 3] = 255;
+    }
+    data[i + 3] = 255;
+    colours.push(data[i] + "," + data[i + 1] + "," + data[i + 2]);
+  }
+  console.log(Array.from(new Set(colours)));
+
+  ctxpost.putImageData(imageData, 0, 0);
+  //ctxpost2.clearRect(0,0,160,144);
+  // copy this new image as a tile
+  //if(f==1) { ctxtile.clearRect(0,0,160,144); x.value = "";}
+
+  return;
+
+  var buf = [];
+  for (j = 0; j < 18; j++)
+    for (i = 0; i < 22; i++) {
+      //ctxpost2.drawImage(gbpost, i*8,j*8,8,8,i*8,j*8,8,8);
+      //i*8,j*8
+      //
+      q = ctxpost.getImageData(i * 8, j * 8, 8, 8);
+      data = q.data;
+      buf.push(t8x8x4(data));
+    }
+  return;
+  //x.value = buf;
+  var buffer = `
+;*
+;* 8x8 electronoob logo test
+;* 2x20 sprites
+
+
+        IF      !DEF(ELECTRO_INC)
+ELECTRO_INC  SET  1
+
+
+chr_IBMPC1: MACRO
+
+
+        PUSHO
+        ; Define . and X to be 0 and 1
+        OPT     b.X
+`;
+  for (i = 0; i < buf.length; i++) {
+    buffer += "\n" + buf[i];
+  }
+  buffer += `
+              ENDC
+
+        POPO
+
+        ENDM
+
+        ENDC    ;ELECTRO_INC
+
+      `;
+
+}
+
+function t8x8x4(data) {
+  var buf = '';
+  var c = 0;
+  for (var i = 0; i < data.length; i += 4) {
+    bit = data[i + 3] > 0;
+    if (c == 0) buf += "\n\tDB\t%";
+    buf += bit ? 'x' : '.';
+    c++;
+    if (c == 8) c = 0;
+  }
+
+  return buf;
+}
+
+function drawPoly(x, y, sides, radius, fill, DRAW_ROT) {
+  ctx.beginPath();
+  for (var i = 0; i < sides; i++) {
+    var lx = (radius * Math.cos(DRAW_ROT + (2 * Math.PI) * i / (sides))) + x;
+    var ly = (radius * Math.sin(DRAW_ROT + (2 * Math.PI) * i / (sides))) + y;
+    ctx.lineTo(lx, ly);
+  }
+  if (fill) {
+    ctx.fill();
+  }
+  ctx.closePath();
+  ctx.stroke();
+}
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id="gbpost" width=160 height=144></canvas>
+<br>
+<!--
+<canvas id="gbpost2" width=160 height=144></canvas>
+-->
+<br>
+<canvas id="gb" width=160 height=144></canvas>
+<br>
+
+<!--
+<textarea id=x></textarea>
+-->
+
+
+<img id="gh"  src="
+data:image/png;base64,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">
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "kn8qn6Lp"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

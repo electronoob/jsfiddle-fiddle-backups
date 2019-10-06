@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      canvas {
+  border: 1px solid #fff;
+  width: 320px;
+  height: 320px;
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+    image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
+    background-color: #000;
+    border: 1px solid #000;
+}
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+/* parses 8x8 4 color sprite and renders */
+var ctx = display.getContext('2d');
+var sprite_8x8x4  = [
+  //grep "DB" en.z80 | sed 's/DB //' | sed 's/\$/0x/g'
+  0x7E,0x7E,0x8F,0xF1,0x8B,0xD1,0x8B,0xF1,
+  0x8B,0xC1,0x8B,0xD1,0x8B,0xF1,0x7E,0x7E
+];
+draw8x8x4 ( parse8x8x4(sprite_8x8x4) );
+function draw8x8x4 (sprite_array) {
+	for(i=0;i<sprite_array.length;i++)
+  	for(k = 0; k<8; k++) {
+    	p = sprite_array[i][k];
+      p = 255- (p*64);
+        ctx.fillStyle="rgb(0,"+p+",0)";
+        ctx.fillRect(7-k,i,1,1);
+    }
+}
+function make8x8x4 () {
+	rgba = ctx.getImageData(0,0,8,8);
+  //rgba
+  bufa = [];
+  bufb = [];
+  for(i=0;i<rgba.data.length;i+=4) {
+  	r = rgba.data[i];
+    g = rgba.data[i+1];
+    b = rgba.data[i+2];
+    a = rgba.data[i+3];
+
+		val = Math.round(g/64) -1;
+    bits = val.toString(2);
+    _b = "00".substr(0, 2 - bits.length) + bits;
+		bufa.push (_b[1]);  //lowbit
+    bufb.push (_b[0]);  //lowbit
+    //console.log(_b[0], _b[1], val, bits, _b);
+	}
+	
+}
+make8x8x4 ();
+function parse8x8x4 (killmepls) {
+	var i = 0, j = 0, sprite=[],bufa="",bufb="",bufr="",a,b,_a,_b,bit_a,bit_b;
+	for(i = 0; i<16;i+=2) {
+  	a = killmepls[i].toString(2);
+    b = killmepls[i+1].toString(2);
+    _a = "00000000".substr(0, 8 - a.length) + a;
+    _b = "00000000".substr(0, 8 - b.length) + b;
+    for(k = 0; k<8; k++) {
+    	bit_a = _a[7-k];
+      bit_b = _b[7-k];
+      bufa += bit_a; //lowbit
+      bufb += bit_b; //highbit
+      bufr += parseInt(bit_b + bit_a, 2);
+    }
+    sprite.push ( bufr );
+    bufr = "", bufa = "", bufb = "";
+  }
+  return sprite;
+}
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id="display" width=8 height=8></canvas>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "xxgoryg6"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

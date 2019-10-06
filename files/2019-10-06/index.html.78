@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <pre style="color:#000000;background:#ffffff;">
+<span style="color:#696969; ">; gb snake</span>
+<span style="color:#696969; ">; by Jeremy Herbert (jeremyherbert.net)</span>
+<span style="color:#696969; ">;</span>
+<span style="color:#696969; ">; I've never written any decent sized assembler programs (nor have I ever written gameboy-style Z80 assembly), this was a learning experience so apologies in advance for any terrible code.</span>
+<span style="color:#696969; ">; You could also argue that this file is over-commented. Yes, it is. Please see above ^</span>
+<span style="color:#696969; ">;</span>
+<span style="color:#696969; ">; started Jan 2011</span>
+<span style="color:#696969; ">;</span>
+<span style="color:#696969; ">; any comments with  ll. 1234-1235 means "see lines 1234-1235 in gbspec.txt"</span>
+
+<span style="color:#004a43; ">INCLUDE</span> <span style="color:#0000e6; ">"gbhw.inc"</span>			<span style="color:#696969; ">; standard header to define the io registers</span>
+<span style="color:#004a43; ">INCLUDE</span> <span style="color:#0000e6; ">"ibmpc1.inc"</span>			<span style="color:#696969; ">; nice ascii tileset from devrs.com</span>
+
+<span style="color:#696969; ">; First we set up the IRQs to return back out (since we aren't making use of them) </span>
+<span style="color:#004a43; ">SECTION</span>	<span style="color:#0000e6; ">"Vblank"</span><span style="color:#808030; ">,</span>HOME<span style="color:#808030; ">[</span><span style="color:#008000; ">$0040</span><span style="color:#808030; ">]</span>
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">$FF80</span>		<span style="color:#696969; ">; DMA code</span>
+<span style="color:#004a43; ">SECTION</span>	<span style="color:#0000e6; ">"LCDC"</span><span style="color:#808030; ">,</span>HOME<span style="color:#808030; ">[</span><span style="color:#008000; ">$0048</span><span style="color:#808030; ">]</span>
+	reti
+<span style="color:#004a43; ">SECTION</span>	<span style="color:#0000e6; ">"Timer_Overflow"</span><span style="color:#808030; ">,</span>HOME<span style="color:#808030; ">[</span><span style="color:#008000; ">$0050</span><span style="color:#808030; ">]</span>
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">timer_interrupt</span>
+<span style="color:#004a43; ">SECTION</span>	<span style="color:#0000e6; ">"Serial"</span><span style="color:#808030; ">,</span>HOME<span style="color:#808030; ">[</span><span style="color:#008000; ">$0058</span><span style="color:#808030; ">]</span>
+	reti
+<span style="color:#004a43; ">SECTION</span>	<span style="color:#0000e6; ">"p1thru4"</span><span style="color:#808030; ">,</span>HOME<span style="color:#808030; ">[</span><span style="color:#008000; ">$0060</span><span style="color:#808030; ">]</span>
+	reti
+
+<span style="color:#004a43; ">SECTION</span> <span style="color:#0000e6; ">"variables"</span><span style="color:#808030; ">,</span>BSS
+<span style="color:#e34adc; ">variables_start:</span>
+<span style="color:#e34adc; ">OamData:</span>		<span style="color:#000080; ">ds</span> <span style="color:#008c00; ">40</span><span style="color:#808030; ">*</span><span style="color:#008c00; ">4</span>		<span style="color:#696969; ">; we need this so that it pushes all of the other variables away from our OAM ram bank (40 sprites, 4 bytes each)</span>
+<span style="color:#e34adc; ">GameState:</span>		<span style="color:#000080; ">ds</span> <span style="color:#008c00; ">1</span>		<span style="color:#696969; ">; a variable to hold the current state of the game</span>
+<span style="color:#e34adc; ">GameStateAscii:</span>		<span style="color:#000080; ">ds</span> <span style="color:#008c00; ">1</span>		<span style="color:#696969; ">; the ascii version of GameState</span>
+
+<span style="color:#e34adc; ">SnakeLength:</span>		<span style="color:#000080; ">ds</span> <span style="color:#008c00; ">1</span>		<span style="color:#696969; ">; the length of the snake</span>
+
+<span style="color:#e34adc; ">SnakePieces:</span>		<span style="color:#000080; ">ds</span> <span style="color:#008c00; ">2</span><span style="color:#808030; ">*</span><span style="color:#008c00; ">100</span>	<span style="color:#696969; ">; snake blocks; 2 bytes per piece (x and y coords), 60 pieces max</span>
+<span style="color:#e34adc; ">SnakePiecesEnd:</span>
+
+<span style="color:#e34adc; ">SnakeHead:</span>		<span style="color:#000080; ">ds</span> <span style="color:#008c00; ">2</span>		<span style="color:#696969; ">; snake head pointer</span>
+<span style="color:#e34adc; ">SnakeTail:</span>		<span style="color:#000080; ">ds</span> <span style="color:#008c00; ">2</span>		<span style="color:#696969; ">; snake tail pointer</span>
+
+<span style="color:#e34adc; ">SnakeDirection:</span>		<span style="color:#000080; ">ds</span> <span style="color:#008c00; ">1</span>		<span style="color:#696969; ">; 00 -&gt; up, 01 -&gt; right, 02-&gt; down, 03 -&gt; left</span>
+<span style="color:#e34adc; ">SnakeNextDirection:</span>	<span style="color:#000080; ">ds</span> <span style="color:#008c00; ">1</span>		<span style="color:#696969; ">; allows us to change the direction of the snake while it is not moving</span>
+
+<span style="color:#e34adc; ">SnakeShouldGrow:</span>	<span style="color:#000080; ">ds</span> <span style="color:#008c00; ">1</span>		<span style="color:#696969; ">; should the snake grow ?</span>
+<span style="color:#e34adc; ">SnakeShouldMove:</span>	<span style="color:#000080; ">ds</span> <span style="color:#008c00; ">1</span>		<span style="color:#696969; ">; triggered by the timer, allows for movement in the main code loop</span>
+
+<span style="color:#e34adc; ">NumberOfFoods:</span>		<span style="color:#000080; ">ds</span> <span style="color:#008c00; ">1</span>		<span style="color:#696969; ">; number of food objects that exist (as sprites)</span>
+
+<span style="color:#e34adc; ">TimerTicks:</span>		<span style="color:#000080; ">ds</span> <span style="color:#008c00; ">1</span>		<span style="color:#696969; ">; count the number of ticks in the timer (to slow down the movement speed)</span>
+
+<span style="color:#e34adc; ">LFSRSeed:</span>		<span style="color:#000080; ">ds</span> <span style="color:#008c00; ">1</span>		<span style="color:#696969; ">; seed value for our lfsr</span>
+
+<span style="color:#e34adc; ">DEBUG_BLANK_DONT_TOUCH:</span> <span style="color:#000080; ">ds</span> <span style="color:#008c00; ">5</span>		<span style="color:#696969; ">; this gets allocated to zeroes, makes it easier to see our ram block in the debugger</span>
+<span style="color:#e34adc; ">variables_end:</span>
+
+<span style="color:#696969; ">; the entry point for all gameboy games is at $0100. We only have enough space for two instructions here, so the standard approach is to nop and jump to our actual code</span>
+<span style="color:#004a43; ">SECTION</span>	<span style="color:#0000e6; ">"start"</span><span style="color:#808030; ">,</span>HOME<span style="color:#808030; ">[</span><span style="color:#008000; ">$0100</span><span style="color:#808030; ">]</span>
+<span style="color:#800000; font-weight:bold; ">nop</span>
+<span style="color:#800000; font-weight:bold; ">jp</span>	<span style="color:#e34adc; ">init</span>
+
+<span style="color:#696969; ">; now we include a special header directive</span>
+	ROM_HEADER	ROM_NOMBC<span style="color:#808030; ">,</span> ROM_SIZE_32KBYTE<span style="color:#808030; ">,</span> RAM_SIZE_0KBYTE
+
+<span style="color:#696969; ">; some macros to make video memory operations easier</span>
+<span style="color:#004a43; ">INCLUDE</span> <span style="color:#0000e6; ">"memory.asm"</span>
+
+<span style="color:#696969; ">; and some other helper macros</span>
+<span style="color:#004a43; ">INCLUDE</span> <span style="color:#0000e6; ">"snake-macros.asm"</span>
+
+<span style="color:#696969; ">; and initialise the ascii tileset</span>
+<span style="color:#e34adc; ">TileData:</span>
+	chr_IBMPC1	<span style="color:#008c00; ">1</span><span style="color:#808030; ">,</span><span style="color:#008c00; ">8</span>
+
+<span style="color:#696969; ">;------------------------------------------------------------------------</span>
+
+<span style="color:#696969; ">; this is where the actual code begins</span>
+<span style="color:#e34adc; ">init:</span>
+	<span style="color:#800000; font-weight:bold; ">nop</span>				<span style="color:#696969; ">; everyone seems to put a nop here, who am I to be any different</span>
+	<span style="color:#000080; ">di</span>				<span style="color:#696969; ">; disable interrupts since we aren't using them</span>
+
+	<span style="color:#696969; ">; first up, we need to init the DMA code</span>
+	<span style="color:#696969; ">;</span>
+	<span style="color:#696969; ">; Why are we using DMA? (and what the hell is it?) (ll. 1639-1689)</span>
+	<span style="color:#696969; ">;	DMA allows very fast and easy copying of data into the OAM (object attribute memory). The reason we don't just dump our data straight into the OAM memory is because  </span>
+	<span style="color:#696969; ">;	if it is currently being read by other parts of the gb then we will do an invalid write and things will break. The DMA code (which we are going to load into HRAM) </span>
+	<span style="color:#696969; ">;	will only run when the memory is not busy. Also, the reason we need to put our code in HRAM (high ram) is because the lower parts of memory are not accessible during a DMA write.</span>
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">setup_dma</span>
+
+	ld <span style="color:#000080; ">sp</span><span style="color:#808030; ">,</span> $FFFF			<span style="color:#696969; ">; set the stack pointer to RAMEND, the stack will grow toward $0</span>
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">%</span><span style="color:#008c00; ">11100100</span>			<span style="color:#696969; ">; load the palette we want to use into a. 11 (darkest), 10 (high-mid dark), 01 (low-mid dark), 00 (light); (ll. 1692-1704)</span>
+	ld <span style="color:#808030; ">[</span>rBGP<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a			<span style="color:#696969; ">; set it as the background palette </span>
+
+	<span style="color:#696969; ">; there are only two sprite palettes on the gameboy (0 and 1), we are going to set both to our standard palette</span>
+	ldh <span style="color:#808030; ">[</span>rOBP0<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a			<span style="color:#696969; ">; set it as the palette for the first sprite palette</span>
+	ldh <span style="color:#808030; ">[</span>rOBP1<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a			<span style="color:#696969; ">; (ll. 1706-1720)</span>
+
+	<span style="color:#696969; ">; now we set the background scroll position registers to zero</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">0</span>		
+	ld <span style="color:#808030; ">[</span>rSCX<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a
+	ld <span style="color:#808030; ">[</span>rSCY<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a
+
+	<span style="color:#696969; ">; we can't do anything (well, shouldn't) while the LCD is still updating, so first we turn it off</span>
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">stoplcd</span>
+
+	<span style="color:#696969; ">; now that the LCD isn't updating, we copy our ascii tileset into vram</span>
+	<span style="color:#696969; ">; using: mem_CopyMono (hl-&gt;pSource, de-&gt;pDest, bc-&gt;bytecount)</span>
+	ld hl<span style="color:#808030; ">,</span> TileData 		<span style="color:#696969; ">; this is the label we set earlier</span>
+	ld de<span style="color:#808030; ">,</span> _VRAM			<span style="color:#696969; ">; send to vram</span>
+	ld bc<span style="color:#808030; ">,</span> <span style="color:#008c00; ">256</span><span style="color:#808030; ">*</span><span style="color:#008c00; ">8</span>			<span style="color:#696969; ">; 256 chars, 8 bytes a piece</span>
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">mem_CopyMono</span>
+
+	<span style="color:#696969; ">; clear out the object attribute memory (OAM)</span>
+	<span style="color:#696969; ">; using: mem_Set (a-&gt;val, hl-&gt;pMem, bc-&gt;byte count)</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">0</span>
+	ld hl<span style="color:#808030; ">,</span> _RAM			<span style="color:#696969; ">; start of ram</span>
+	ld bc<span style="color:#808030; ">,</span> $A0			<span style="color:#696969; ">; the full size of the OAM area: 40 bytes, 4 bytes per sprite</span>
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">mem_Set</span>
+
+	<span style="color:#696969; ">; turn the LCD back on (ll. 1505-1544, gbhw.inc 70-85)</span>
+	<span style="color:#696969; ">; the following flags mean:</span>
+	<span style="color:#696969; ">;	LCDCF_ON		-&gt; turn the LCD on</span>
+	<span style="color:#696969; ">;	LCDCF_BG8000	-&gt; use the area starting at $8000 for the background tiles (same area as the object data; ie ascii)</span>
+	<span style="color:#696969; ">;	LCDCF_BG9800	-&gt; use background 0</span>
+	<span style="color:#696969; ">;	LCDCF_OBJ8		-&gt; sprite size (8x8)</span>
+	<span style="color:#696969; ">;	LCDCF_OBJON		-&gt; sprite display</span>
+	<span style="color:#696969; ">;	LCDCF_BGON		-&gt; background on</span>
+	ld a<span style="color:#808030; ">,</span> LCDCF_ON <span style="color:#808030; ">|</span> LCDCF_BG8<span style="color:#008c00; ">000</span> <span style="color:#808030; ">|</span> LCDCF_BG9<span style="color:#008c00; ">800</span> <span style="color:#808030; ">|</span> LCDCF_OBJ8 <span style="color:#808030; ">|</span> LCDCF_OBJON <span style="color:#808030; ">|</span> LCDCF_BGON
+	ld <span style="color:#808030; ">[</span>rLCDC<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a
+
+	<span style="color:#696969; ">; clear the background tiles</span>
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">clear_bg</span>
+
+	<span style="color:#696969; ">; when the gameboy starts, the ram is filled with random data. we need to zero this out on all of our variables</span>
+	<span style="color:#696969; ">; using: mem_Set (a-&gt;val, hl-&gt;pMem, bc-&gt;byte count)</span>
+<span style="color:#e34adc; ">init_variables:</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">0</span>
+	ld hl<span style="color:#808030; ">,</span> variables_start
+	ld bc<span style="color:#808030; ">,</span> variables_end<span style="color:#808030; ">-</span>variables_start
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">mem_Set</span>
+
+	<span style="color:#696969; ">; we also need to write the SnakePieces to FFs</span>
+	ld a<span style="color:#808030; ">,</span> $FF
+	ld hl<span style="color:#808030; ">,</span> SnakePieces
+	ld bc<span style="color:#808030; ">,</span> SnakePiecesEnd<span style="color:#808030; ">-</span>SnakePieces
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">mem_Set</span>
+
+<span style="color:#696969; ">;------------------------------------------------------------------------</span>
+
+<span style="color:#696969; ">; this code displays the splash screen</span>
+<span style="color:#e34adc; ">splash:</span>
+	
+	<span style="color:#696969; ">; turn on the timer, we need to use its value for our LFSR seed</span>
+	ld a<span style="color:#808030; ">,</span> TACF_START <span style="color:#808030; ">|</span> TACF_262KHZ		<span style="color:#696969; ">; make it super fast to stop people gaming it</span>
+	ld <span style="color:#808030; ">[</span>rTAC<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a
+
+	<span style="color:#696969; ">; we are going to copy across the background tiles from the splash_text label</span>
+	<span style="color:#696969; ">; using: mem_copyVRAM (hl-&gt;pSource, de-&gt;pDest, bc-&gt;byte count)</span>
+	ld hl<span style="color:#808030; ">,</span> splash_text
+	ld de<span style="color:#808030; ">,</span> _SCRN0<span style="color:#808030; ">+</span>SCRN_VY_B<span style="color:#808030; ">*</span><span style="color:#008c00; ">6</span>		<span style="color:#696969; ">; this will move the text down one line (we are adding the length of one line of tiles on)</span>
+	ld bc<span style="color:#808030; ">,</span> splash_text_end<span style="color:#808030; ">-</span>splash_text	<span style="color:#696969; ">; the length of the BSS block, plus an extra 20 because it makes it easier to see in the debugger</span>
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">mem_CopyVRAM</span>
+
+	<span style="color:#696969; ">; now we are getting into actual game code, so let's start the interrupts again</span>
+	ld a<span style="color:#808030; ">,</span> IEF_VBLANK		<span style="color:#696969; ">; enable the vblank interrupt</span>
+	ld <span style="color:#808030; ">[</span>rIE<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a			<span style="color:#696969; ">; store the setting in the register</span>
+	ei				<span style="color:#696969; ">; enable interrupts</span>
+
+	<span style="color:#696969; ">; wait until the A button is pressed (using the P1 register)</span>
+<span style="color:#e34adc; ">splash_wait_for_press:</span>	
+	ld a<span style="color:#808030; ">,</span> P1F_<span style="color:#008c00; ">4</span>			<span style="color:#696969; ">; set bit 5, this means we are selecting the button keys to be read (ll. 999-1072)</span>
+	ld <span style="color:#808030; ">[</span>rP1<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a			<span style="color:#696969; ">; write it into the register</span>
+	
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>rP1<span style="color:#808030; ">]</span>			<span style="color:#696969; ">; pull the button data back out of the register into a</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>rP1<span style="color:#808030; ">]</span>			<span style="color:#696969; ">; ll. 1035 reccommends doing this twice so that the cpu has a few cycles to deal with our earlier write</span>
+	<span style="color:#800000; font-weight:bold; ">and</span> <span style="color:#008000; ">$01</span>				<span style="color:#696969; ">; cut out all the bits except for the LSB (which contains the A button info)</span>
+	cp <span style="color:#008c00; ">1</span>
+	jr z<span style="color:#808030; ">,</span> splash_wait_for_press	<span style="color:#696969; ">; if the a key has not been pressed, the instruction above will set the zero flag and we will jump back	</span>
+
+	<span style="color:#696969; ">; save our LFSR seed</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>rTIMA<span style="color:#808030; ">]</span>			<span style="color:#696969; ">; counter value into a</span>
+	ld <span style="color:#808030; ">[</span>LFSRSeed<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a		<span style="color:#696969; ">; save it!</span>
+
+<span style="color:#696969; ">;------------------------------------------------------------------------</span>
+
+<span style="color:#696969; ">; ok, time to play the game!</span>
+<span style="color:#e34adc; ">init_game:</span>
+	<span style="color:#696969; ">; once the key has been pressed, clear the background tiles</span>
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">clear_bg</span>	
+
+	<span style="color:#696969; ">; update the game state</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">1</span>
+	ld <span style="color:#808030; ">[</span>GameState<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a
+
+	<span style="color:#696969; ">; draw the initial snake</span>
+<span style="color:#e34adc; ">init_snake:</span>
+	ld hl<span style="color:#808030; ">,</span> SnakePieces		<span style="color:#696969; ">; grab the starting address of our array</span>
+
+	<span style="color:#696969; ">; now we load a pointer to the tail of the snake into SnakeTail</span>
+	WRITE_<span style="color:#008c00; ">16</span> SnakeTail<span style="color:#808030; ">,</span> SnakePieces
+	<span style="color:#696969; ">; and put the head 4 bytes up (2 bytes for x and y coords)</span>
+	WRITE_16_WITH_ADD SnakeHead<span style="color:#808030; ">,</span> SnakePieces<span style="color:#808030; ">,</span> <span style="color:#008c00; ">2</span><span style="color:#808030; ">*</span><span style="color:#008c00; ">2</span>
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">3</span>
+	ld <span style="color:#808030; ">[</span>SnakeLength<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a		<span style="color:#696969; ">; set the initial snake length</span>
+
+	<span style="color:#696969; ">; now we need to set the x,y bytes for the three snake pieces we have just created</span>
+	<span style="color:#696969; ">; we are going to put them at (9,8), (9,10) and (9,11) </span>
+	<span style="color:#696969; ">; we could do this with mem_Set and db, but I think this better demonstrates how to load stuff into memory</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>SnakeTail<span style="color:#808030; ">]</span>		<span style="color:#696969; ">; put the address to start writing in hl </span>
+	ld l<span style="color:#808030; ">,</span> a
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>SnakeTail<span style="color:#808030; ">+</span><span style="color:#008c00; ">1</span><span style="color:#808030; ">]</span>
+	ld h<span style="color:#808030; ">,</span> a
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">9</span>				<span style="color:#696969; ">; piece 0, x</span>
+	ld <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">+</span><span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a			<span style="color:#696969; ">; load it in to memory at hl (which is SnakeTail) and then increment hl</span>
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">10</span>
+	ld <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">+</span><span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a			<span style="color:#696969; ">; piece 0, y is also 8</span>
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">9</span>
+	ld <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">+</span><span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a			<span style="color:#696969; ">; piece 1, x is also 10</span>
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">9</span>				<span style="color:#696969; ">; piece 1, y</span>
+	ld <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">+</span><span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a			
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">9</span>				<span style="color:#696969; ">; piece 2, x</span>
+	ld <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">+</span><span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">8</span>				<span style="color:#696969; ">; piece 2, y</span>
+	ld <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">+</span><span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a
+
+	<span style="color:#696969; ">; draw our initial snake</span>
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">draw_snake</span>
+
+	<span style="color:#696969; ">; now we start the timer interrupts (ll. 828-852)</span>
+	<span style="color:#696969; ">; start the timer, we need this for our LIFR</span>
+	ld a<span style="color:#808030; ">,</span> TACF_START <span style="color:#808030; ">|</span> TACF_4KHZ	<span style="color:#696969; ">; turn on, set to 4khz (timer will interrupt every [255 * 1/4000] = 63.75ms)</span>
+	ld <span style="color:#808030; ">[</span>rTAC<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a
+
+	ld a<span style="color:#808030; ">,</span> IEF_VBLANK <span style="color:#808030; ">|</span> IEF_TIMER <span style="color:#808030; ">|</span> IEF_HILO	<span style="color:#696969; ">; enable vblank, timer, joypad interrupts</span>
+	ld <span style="color:#808030; ">[</span>rIE<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a			<span style="color:#696969; ">; save the register</span>
+
+<span style="color:#696969; ">;;;;;;;;;;;;;;;;;; DEBUG (make the snake grow by default)</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">10</span>
+	ld <span style="color:#808030; ">[</span>SnakeShouldGrow<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a
+<span style="color:#696969; ">;;;;;;;;;;;;;;;;;; DEBUG</span>
+
+<span style="color:#696969; ">; finally, our main code loop!</span>
+<span style="color:#e34adc; ">main:</span>
+<span style="color:#696969; ">;	halt				; sleep the cpu until an interrupt fires</span>
+<span style="color:#696969; ">;	nop				; a bug in the cpu means that the instruction after a halt might get skipped</span>
+	ei
+
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">lfsr_generate</span>		<span style="color:#696969; ">; so we get nice random numbers</span>
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>GameState<span style="color:#808030; ">]</span>
+	cp <span style="color:#008c00; ">2</span>				<span style="color:#696969; ">; does GameState == 2? (the gameover state)</span>
+	jr z<span style="color:#808030; ">,</span> gameover			<span style="color:#696969; ">; show a nice message</span>
+
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">read_joypad</span>		<span style="color:#696969; ">; read the joypad in for movement</span>
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>SnakeShouldMove<span style="color:#808030; ">]</span>
+	<span style="color:#800000; font-weight:bold; ">or</span> a				<span style="color:#696969; ">; is a 0 ?</span>
+	jr z<span style="color:#808030; ">,</span> main			<span style="color:#696969; ">; if it is, skip the move</span>
+	
+	<span style="color:#696969; ">; but if it isn't</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">0</span>				<span style="color:#696969; ">; to reset SnakeShouldMove</span>
+	ld <span style="color:#808030; ">[</span>SnakeShouldMove<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a		<span style="color:#696969; ">; save it</span>
+	
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">move_snake</span>			<span style="color:#696969; ">; move the snake!</span>
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">draw_snake</span>
+
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">main</span>				<span style="color:#696969; ">; loop</span>
+
+<span style="color:#e34adc; ">gameover:</span>
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">draw_gameover</span>
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">main</span>
+
+<span style="color:#696969; ">;	jr main</span>
+
+<span style="color:#696969; ">;------------------------------------------------------------------------</span>
+<span style="color:#696969; ">;--------------- </span>
+<span style="color:#696969; ">; lfsr_generate</span>
+<span style="color:#696969; ">;	generate a random number and put it in LFSRSeed</span>
+<span style="color:#696969; ">;	see http://en.wikipedia.org/wiki/Linear_feedback_shift_register for info on how this works</span>
+<span style="color:#696969; ">;	uses taps at 8, 6, 5, 4 </span>
+<span style="color:#696969; ">;---------------</span>
+<span style="color:#e34adc; ">lfsr_generate:</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>LFSRSeed<span style="color:#808030; ">]</span>		<span style="color:#696969; ">; load up the seed</span>
+	ld e<span style="color:#808030; ">,</span> a				<span style="color:#696969; ">; e will store our seed value</span>
+
+<span style="color:#e34adc; ">lfsr_generate_loop:</span>
+	ld d<span style="color:#808030; ">,</span> a
+
+	rr d				<span style="color:#696969; ">; roll four times</span>
+	rr d
+	rr d
+	rr d
+	<span style="color:#800000; font-weight:bold; ">xor</span> d				<span style="color:#696969; ">; xor it</span>
+
+	rr d				<span style="color:#696969; ">; five rolls in total</span>
+	<span style="color:#800000; font-weight:bold; ">xor</span> d
+
+	rr d				<span style="color:#696969; ">; up to 6 rolls</span>
+	<span style="color:#800000; font-weight:bold; ">xor</span> d				<span style="color:#696969; ">; xor it in</span>
+
+	rr d
+	rr d				<span style="color:#696969; ">; 8 rolls, this is our fourth and last tap</span>
+	<span style="color:#800000; font-weight:bold; ">xor</span> d
+	
+	<span style="color:#696969; ">; not really sure if secure crypto allows me to do this, but frankly if you would like to game my system then go for it</span>
+	ld b<span style="color:#808030; ">,</span> a
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>rDIV<span style="color:#808030; ">]</span>			<span style="color:#696969; ">; source of some more random</span>
+	<span style="color:#800000; font-weight:bold; ">xor</span> b				<span style="color:#696969; ">; add it in</span>
+
+	cp e
+	jr z<span style="color:#808030; ">,</span> lfsr_generate_loop	<span style="color:#696969; ">; make sure it is different</span>
+
+	<span style="color:#696969; ">; save it</span>
+	ld <span style="color:#808030; ">[</span>LFSRSeed<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a
+
+	<span style="color:#800000; font-weight:bold; ">ret</span>
+
+<span style="color:#696969; ">;--------------- </span>
+<span style="color:#696969; ">; tail_collision_scan</span>
+<span style="color:#696969; ">;	scan the array for any tail collisions </span>
+<span style="color:#696969; ">;---------------</span>
+<span style="color:#e34adc; ">tail_collision_scan:</span>
+	<span style="color:#800000; font-weight:bold; ">push</span> hl
+	<span style="color:#800000; font-weight:bold; ">push</span> bc
+	<span style="color:#800000; font-weight:bold; ">push</span> de
+	<span style="color:#696969; ">; first, we grab the snake head data</span>
+	LOAD_16_INTO_HL	SnakeHead	<span style="color:#696969; ">; load it</span>
+
+	<span style="color:#696969; ">;ld bc, hl (can't do this, grr nintendo)</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">+</span><span style="color:#808030; ">]</span>
+	ld b<span style="color:#808030; ">,</span> a
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">+</span><span style="color:#808030; ">]</span>
+	ld <span style="color:#004a43; ">c</span><span style="color:#808030; ">,</span> a				<span style="color:#696969; ">; save it so we can use hl</span>
+
+	ld e<span style="color:#808030; ">,</span> SnakePiecesEnd<span style="color:#808030; ">-</span>SnakePieces<span style="color:#808030; ">-</span><span style="color:#008c00; ">2</span> <span style="color:#696969; ">; this is the max number of pieces</span>
+	
+<span style="color:#e34adc; ">tail_collision_scan_loop:</span>
+
+	<span style="color:#696969; ">; we need to test for array wrapping</span>
+	<span style="color:#800000; font-weight:bold; ">push</span> hl
+	<span style="color:#800000; font-weight:bold; ">push</span> de
+	
+	ld de<span style="color:#808030; ">,</span> SnakePiecesEnd		<span style="color:#696969; ">; we are going to compare hl</span>
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">subtract_16bit</span>		<span style="color:#696969; ">; hl - de</span>
+
+	jr nc<span style="color:#808030; ">,</span> tail_collision_wrap_ptr
+
+	<span style="color:#800000; font-weight:bold; ">pop</span> de
+	<span style="color:#800000; font-weight:bold; ">pop</span> hl
+
+	jr tail_collision_skip_wrap
+
+<span style="color:#e34adc; ">tail_collision_wrap_ptr:</span>
+	<span style="color:#800000; font-weight:bold; ">pop</span> de
+	<span style="color:#800000; font-weight:bold; ">pop</span> hl
+
+	ld hl<span style="color:#808030; ">,</span> SnakePieces 
+
+<span style="color:#e34adc; ">tail_collision_skip_wrap:</span>
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">+</span><span style="color:#808030; ">]</span>			<span style="color:#696969; ">; get the x coord</span>
+
+	cp b				<span style="color:#696969; ">; is it the same as the current head x coord</span>
+
+	jr nz<span style="color:#808030; ">,</span> tail_collision_continue_loop	<span style="color:#696969; ">; they didn't match</span>
+	jr z<span style="color:#808030; ">,</span> tail_collision_check_y	<span style="color:#696969; ">; the x matched, check y</span>
+
+<span style="color:#e34adc; ">tail_collision_continue_loop:</span>
+	<span style="color:#800000; font-weight:bold; ">inc</span> hl
+	jr tail_collision_dec
+
+<span style="color:#e34adc; ">tail_collision_check_y:</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">+</span><span style="color:#808030; ">]</span> 			<span style="color:#696969; ">; load in the y value</span>
+	
+	cp <span style="color:#004a43; ">c</span>				<span style="color:#696969; ">; and is it the same</span>
+	jr z<span style="color:#808030; ">,</span> tail_collision_die	<span style="color:#696969; ">; uh oh, snake is dead</span>
+	
+<span style="color:#e34adc; ">tail_collision_dec:</span>
+	<span style="color:#800000; font-weight:bold; ">dec</span> e				<span style="color:#696969; ">; decrement e</span>
+	<span style="color:#800000; font-weight:bold; ">dec</span> e				<span style="color:#696969; ">; do it twice because x and y take a byte each</span>
+	ld a<span style="color:#808030; ">,</span> e				<span style="color:#696969; ">; </span>
+	cp <span style="color:#008c00; ">0</span>				<span style="color:#696969; ">; see if we are done</span>
+	jr nz<span style="color:#808030; ">,</span> tail_collision_scan_loop <span style="color:#696969; ">; if we aren't, go back</span>
+
+	jr tail_collision_end		<span style="color:#696969; ">; if we get here, there have been no collisions</span>
+
+<span style="color:#e34adc; ">tail_collision_die:</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">2</span>
+	ld <span style="color:#808030; ">[</span>GameState<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a		<span style="color:#696969; ">; game over</span>
+
+<span style="color:#e34adc; ">tail_collision_end:</span>
+	<span style="color:#800000; font-weight:bold; ">pop</span> de
+	<span style="color:#800000; font-weight:bold; ">pop</span> bc
+	<span style="color:#800000; font-weight:bold; ">pop</span> hl
+	<span style="color:#800000; font-weight:bold; ">ret</span>
+
+<span style="color:#696969; ">;--------------- </span>
+<span style="color:#696969; ">; subtract_16bit</span>
+<span style="color:#696969; ">;	implements hl = hl - de</span>
+<span style="color:#696969; ">;---------------</span>
+<span style="color:#e34adc; ">subtract_16bit:</span>
+	scf			
+	ccf				<span style="color:#696969; ">; clear the carry flag</span>
+
+	ld a<span style="color:#808030; ">,</span> l				<span style="color:#696969; ">; grab the lower bit </span>
+	<span style="color:#800000; font-weight:bold; ">sub</span> e				<span style="color:#696969; ">; and subtract from it</span>
+	ld l<span style="color:#808030; ">,</span> a				<span style="color:#696969; ">; save it back</span>
+
+	ld a<span style="color:#808030; ">,</span> h				<span style="color:#696969; ">; load the higher bit</span>
+	sbc a<span style="color:#808030; ">,</span> d			<span style="color:#696969; ">; subtract d plus any carry</span>
+	ld h<span style="color:#808030; ">,</span> a				<span style="color:#696969; ">; save it</span>
+
+	<span style="color:#800000; font-weight:bold; ">ret</span>
+
+<span style="color:#696969; ">;--------------- </span>
+<span style="color:#696969; ">; timer_interrupt</span>
+<span style="color:#696969; ">;	handles the timer overflow interrupt</span>
+<span style="color:#696969; ">;---------------</span>
+<span style="color:#e34adc; ">timer_interrupt:</span>
+	<span style="color:#800000; font-weight:bold; ">push</span> af				<span style="color:#696969; ">; save af so we can use it</span>
+	<span style="color:#696969; ">; we want to only move the snake every 8 interrupts (~ half a second)</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>TimerTicks<span style="color:#808030; ">]</span>		<span style="color:#696969; ">; load our tick number in</span>
+	cp a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">8</span>				<span style="color:#696969; ">; is a == 8 ?</span>
+	jr z<span style="color:#808030; ">,</span> timer_interrupt_equal	<span style="color:#696969; ">; if they are the same, jump</span>
+
+	<span style="color:#696969; ">; or if they aren't the same</span>
+	<span style="color:#800000; font-weight:bold; ">inc</span> a				<span style="color:#696969; ">; increment and save TimerTicks</span>
+	ld <span style="color:#808030; ">[</span>TimerTicks<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">timer_interrupt_end</span>
+	
+<span style="color:#e34adc; ">timer_interrupt_equal:</span>
+	<span style="color:#696969; ">; first let's reset the ticker</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">0</span>
+	ld <span style="color:#808030; ">[</span>TimerTicks<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a
+
+	<span style="color:#696969; ">; and tell our main loop that the snake should move</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">1</span>
+	ld <span style="color:#808030; ">[</span>SnakeShouldMove<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a
+	
+<span style="color:#e34adc; ">timer_interrupt_end:</span>
+	<span style="color:#800000; font-weight:bold; ">pop</span> af				<span style="color:#696969; ">; restore af</span>
+	reti				<span style="color:#696969; ">; interrupt escape</span>
+
+<span style="color:#696969; ">;------------------------------------------------------------------------</span>
+
+<span style="color:#696969; ">;--------------- </span>
+<span style="color:#696969; ">; read_joypad</span>
+<span style="color:#696969; ">;	reads the keys from the joypad into a (ll. 999-1072)</span>
+<span style="color:#696969; ">;---------------</span>
+<span style="color:#e34adc; ">read_joypad:</span>
+	<span style="color:#800000; font-weight:bold; ">push</span> bc
+	ld a<span style="color:#808030; ">,</span> P1F_<span style="color:#008c00; ">5</span>			<span style="color:#696969; ">; select the joypad</span>
+	ld <span style="color:#808030; ">[</span>rP1<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a			<span style="color:#696969; ">; save it into the register</span>
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>rP1<span style="color:#808030; ">]</span>			<span style="color:#696969; ">; read the keypress register in</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>rP1<span style="color:#808030; ">]</span>			<span style="color:#696969; ">; apparently you are supposed to do this a bunch of times to allow for the hardware</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>rP1<span style="color:#808030; ">]</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>rP1<span style="color:#808030; ">]</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>rP1<span style="color:#808030; ">]</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>rP1<span style="color:#808030; ">]</span>
+	
+	cpl				<span style="color:#696969; ">; invert all the bits</span>
+	ld b<span style="color:#808030; ">,</span> a				<span style="color:#696969; ">; backup our read value into b</span>
+	
+	<span style="color:#696969; ">; test for the right key</span>
+	<span style="color:#800000; font-weight:bold; ">and</span> <span style="color:#008000; ">$01</span>				<span style="color:#696969; ">; cut out all the bits except the one we want</span>
+	cp <span style="color:#008000; ">$01</span>				<span style="color:#696969; ">; and see if ours is left over</span>
+	jr z<span style="color:#808030; ">,</span> read_joypad_right		<span style="color:#696969; ">; if it is, the button has been pressed</span>
+<span style="color:#e34adc; ">read_joypad_right_return:</span>		<span style="color:#696969; ">; need to jump back so we can detect all key presses (ie up and right, etc)</span>
+
+	<span style="color:#696969; ">; test for the left key</span>
+	ld a<span style="color:#808030; ">,</span> b
+	<span style="color:#800000; font-weight:bold; ">and</span> <span style="color:#008000; ">$02</span>
+	cp <span style="color:#008000; ">$02</span>
+	jr z<span style="color:#808030; ">,</span> read_joypad_left
+<span style="color:#e34adc; ">read_joypad_left_return:</span>
+
+	<span style="color:#696969; ">; test for up key</span>
+	ld a<span style="color:#808030; ">,</span> b
+	<span style="color:#800000; font-weight:bold; ">and</span> <span style="color:#008000; ">$04</span>
+	cp <span style="color:#008000; ">$04</span>
+	jr z<span style="color:#808030; ">,</span> read_joypad_up
+<span style="color:#e34adc; ">read_joypad_up_return:</span>
+
+	<span style="color:#696969; ">; test for down key</span>
+	ld a<span style="color:#808030; ">,</span> b
+	<span style="color:#800000; font-weight:bold; ">and</span> <span style="color:#008000; ">$08</span>
+	cp <span style="color:#008000; ">$08</span>
+	jr z<span style="color:#808030; ">,</span> read_joypad_down
+<span style="color:#e34adc; ">read_joypad_down_return:</span>
+	
+	<span style="color:#800000; font-weight:bold; ">pop</span> bc
+	<span style="color:#696969; ">;jp read_joypad_end		; we are done here!</span>
+	<span style="color:#800000; font-weight:bold; ">ret</span>				<span style="color:#696969; ">; all done</span>
+
+	<span style="color:#696969; ">; the major problem here is that we don't want the snake to be able to move back in on itself.</span>
+	<span style="color:#696969; ">; we need to test against SnakeDirection to make sure that this won't happen</span>
+<span style="color:#e34adc; ">read_joypad_up:</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>SnakeDirection<span style="color:#808030; ">]</span>
+	
+	cp a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">2</span>				<span style="color:#696969; ">; is the snake moving down?</span>
+	jr z<span style="color:#808030; ">,</span> read_joypad_up_return	<span style="color:#696969; ">; if it is, we don't update the direction</span>
+
+	<span style="color:#696969; ">; but if it isn't, write the new direction in</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">0</span>				<span style="color:#696969; ">; up = 0</span>
+	ld <span style="color:#808030; ">[</span>SnakeNextDirection<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a	<span style="color:#696969; ">; write it!</span>
+
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">read_joypad_up_return</span>	<span style="color:#696969; ">; we are done here!</span>
+	
+<span style="color:#e34adc; ">read_joypad_right:</span>			<span style="color:#696969; ">; these follow the same format as above, see the comments there for explanations</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>SnakeDirection<span style="color:#808030; ">]</span>
+
+	cp a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">3</span>				<span style="color:#696969; ">; is the snake moving left?</span>
+	jr z<span style="color:#808030; ">,</span> read_joypad_right_return
+	
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">1</span>				<span style="color:#696969; ">; right = 1</span>
+	ld <span style="color:#808030; ">[</span>SnakeNextDirection<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a
+
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">read_joypad_right_return</span>
+
+<span style="color:#e34adc; ">read_joypad_down:</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>SnakeDirection<span style="color:#808030; ">]</span>
+
+	cp a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">0</span>				<span style="color:#696969; ">; is the snake moving up?</span>
+	jr z<span style="color:#808030; ">,</span> read_joypad_down_return
+	
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">2</span>				<span style="color:#696969; ">; down = 3</span>
+	ld <span style="color:#808030; ">[</span>SnakeNextDirection<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a
+
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">read_joypad_down_return</span>
+
+<span style="color:#e34adc; ">read_joypad_left:</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>SnakeDirection<span style="color:#808030; ">]</span>
+
+	cp a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">1</span>				<span style="color:#696969; ">; is the snake moving left?</span>
+	jr z<span style="color:#808030; ">,</span> read_joypad_left_return
+	
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">3</span>				<span style="color:#696969; ">; right = 1</span>
+	ld <span style="color:#808030; ">[</span>SnakeNextDirection<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a
+
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">read_joypad_left_return</span>
+
+<span style="color:#696969; ">;--------------- </span>
+<span style="color:#696969; ">; draw_gameover</span>
+<span style="color:#696969; ">;	draws the gameover message</span>
+<span style="color:#696969; ">;---------------</span>
+<span style="color:#e34adc; ">draw_gameover:</span>
+	<span style="color:#800000; font-weight:bold; ">push</span> af
+	<span style="color:#800000; font-weight:bold; ">push</span> hl
+	<span style="color:#800000; font-weight:bold; ">push</span> de
+
+	<span style="color:#696969; ">; time to copy our gameover tiles to the screen</span>
+	<span style="color:#696969; ">; using: mem_CopyVRAM (hl-&gt;pSource, de-&gt;pDest, bc-&gt;byte count)</span>
+	ld hl<span style="color:#808030; ">,</span> gameover_text
+	ld de<span style="color:#808030; ">,</span> _SCRN0<span style="color:#808030; ">+</span>SCRN_VY_B<span style="color:#808030; ">*</span><span style="color:#008c00; ">8</span><span style="color:#008c00; ">+5</span> <span style="color:#696969; ">; 3 lines down, 4 along</span>
+	ld bc<span style="color:#808030; ">,</span> gameover_text_end<span style="color:#808030; ">-</span>gameover_text
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">mem_CopyVRAM</span>
+
+	<span style="color:#800000; font-weight:bold; ">pop</span> de
+	<span style="color:#800000; font-weight:bold; ">pop</span> hl
+	<span style="color:#800000; font-weight:bold; ">pop</span> af
+	<span style="color:#800000; font-weight:bold; ">ret</span>
+	
+<span style="color:#696969; ">;--------------- </span>
+<span style="color:#696969; ">; move_snake</span>
+<span style="color:#696969; ">;	moves the snake one step forward by SnakeNextDirection (and grows if SnakeShouldGrow is set)</span>
+<span style="color:#696969; ">;---------------</span>
+<span style="color:#e34adc; ">move_snake:</span>
+	<span style="color:#000080; ">di</span>				<span style="color:#696969; ">; we don't want any joypad or timer interrupts going off during this</span>
+	
+	<span style="color:#696969; ">; first let's update SnakeDirection</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>SnakeNextDirection<span style="color:#808030; ">]</span>
+	ld <span style="color:#808030; ">[</span>SnakeDirection<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a
+
+	LOAD_16_INTO_HL SnakeHead	<span style="color:#696969; ">; put the pointer to SnakeHead into hl</span>
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">+</span><span style="color:#808030; ">]</span>			<span style="color:#696969; ">; grab the x coord</span>
+	ld d<span style="color:#808030; ">,</span> a
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">+</span><span style="color:#808030; ">]</span>			<span style="color:#696969; ">; and now grab the y coord</span>
+	ld e<span style="color:#808030; ">,</span> a
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>SnakeNextDirection<span style="color:#808030; ">]</span>
+	
+	cp <span style="color:#008c00; ">0</span>				<span style="color:#696969; ">; compare a with 0</span>
+	jr z<span style="color:#808030; ">,</span> move_snake_up		<span style="color:#696969; ">; if they are the same, we want to move the snake upwards</span>
+	
+	cp <span style="color:#008c00; ">1</span>				<span style="color:#696969; ">; these are all the same as above but with different jump targets</span>
+	jr z<span style="color:#808030; ">,</span> move_snake_right		<span style="color:#696969; ">; this is equivalent to a C switch() statement</span>
+
+	cp <span style="color:#008c00; ">2</span>
+	jr z<span style="color:#808030; ">,</span> move_snake_down
+
+	cp <span style="color:#008c00; ">3</span>
+	jr z<span style="color:#808030; ">,</span> move_snake_left
+
+	
+<span style="color:#e34adc; ">move_snake_up:</span>
+	<span style="color:#696969; ">; we are moving up, so decrement the y coord</span>
+	<span style="color:#800000; font-weight:bold; ">dec</span> e
+
+	ld a<span style="color:#808030; ">,</span> e
+	cp <span style="color:#008c00; ">255</span>				<span style="color:#696969; ">; if the register overflowed</span>
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">z</span><span style="color:#808030; ">,</span> move_snake_die		<span style="color:#696969; ">; snake is dead!</span>
+
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">move_snake_write</span>		<span style="color:#696969; ">; otherwise write our new snake block</span>
+
+<span style="color:#e34adc; ">move_snake_right:</span>
+	<span style="color:#696969; ">; we are moving right, so increment the x coord</span>
+	<span style="color:#800000; font-weight:bold; ">inc</span> d
+
+	ld a<span style="color:#808030; ">,</span> d				<span style="color:#696969; ">; put d into a so we can compare with it</span>
+	cp <span style="color:#008c00; ">20</span>				<span style="color:#696969; ">; is the coord 20 ?</span>
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">z</span><span style="color:#808030; ">,</span> move_snake_die		<span style="color:#696969; ">; if it is, snake is dead!</span>
+	
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">move_snake_write</span>
+
+<span style="color:#e34adc; ">move_snake_down:</span>
+	<span style="color:#696969; ">; we are moving down, so increment the y coord</span>
+	<span style="color:#800000; font-weight:bold; ">inc</span> e
+
+	ld a<span style="color:#808030; ">,</span> e				<span style="color:#696969; ">; put e into a so we can compare</span>
+	cp <span style="color:#008c00; ">18</span>				<span style="color:#696969; ">; is the y coord 18</span>
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">z</span><span style="color:#808030; ">,</span> move_snake_die		<span style="color:#696969; ">; if it is, snake is dead!</span>
+
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">move_snake_write</span>
+
+<span style="color:#e34adc; ">move_snake_left:</span>
+	<span style="color:#696969; ">; we are moving left, so decrement the x coord</span>
+	<span style="color:#800000; font-weight:bold; ">dec</span> d
+	
+	ld a<span style="color:#808030; ">,</span> d
+	cp <span style="color:#008c00; ">255</span>				<span style="color:#696969; ">; did we get an overflow ?</span>
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">z</span><span style="color:#808030; ">,</span> move_snake_die		<span style="color:#696969; ">; we are off the screen, so die</span>
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">move_snake_write</span>
+
+<span style="color:#e34adc; ">move_snake_write:</span>
+	<span style="color:#696969; ">; we need to test if hl is larger than SnakePiecesEnd</span>
+	<span style="color:#800000; font-weight:bold; ">push</span> hl
+	<span style="color:#800000; font-weight:bold; ">push</span> de
+
+	ld de<span style="color:#808030; ">,</span> SnakePiecesEnd
+	
+	
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">subtract_16bit</span>		<span style="color:#696969; ">; 16 bit subtract, hl = hl - bc</span>
+					<span style="color:#696969; ">; larger hl means positive result</span>
+	
+	<span style="color:#800000; font-weight:bold; ">pop</span> de				<span style="color:#696969; ">; restore de</span>
+	
+	<span style="color:#696969; ">; if we have an underflow (ie result is negative), the carry will be set</span>
+	<span style="color:#696969; ">; if the carry is not set, then the result was positive and we need to fix the address (because our hl is out of bounds)</span>
+	jr nc<span style="color:#808030; ">,</span> move_snake_wrap_ptr
+	
+	<span style="color:#800000; font-weight:bold; ">pop</span> hl
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">move_snake_continue</span>
+
+<span style="color:#e34adc; ">move_snake_wrap_ptr:</span>
+	<span style="color:#800000; font-weight:bold; ">pop</span> hl				<span style="color:#696969; ">; needed for stack sync</span>
+	ld hl<span style="color:#808030; ">,</span> SnakePieces		<span style="color:#696969; ">; load in the start address of snake pieces to wrap the scan</span>
+	
+<span style="color:#e34adc; ">move_snake_continue:</span>
+
+	WRITE_16_WITH_HL SnakeHead
+
+	<span style="color:#696969; ">; d and e have been updated with our new values, so lets put them in memory</span>
+	ld a<span style="color:#808030; ">,</span> d
+	ld <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">+</span><span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a
+	
+	ld a<span style="color:#808030; ">,</span> e
+	ld <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">+</span><span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a
+
+	<span style="color:#696969; ">; we have moved the head up two blocks, so we need to update the pointer</span>
+	LOAD_16_INTO_HL SnakeHead
+
+	<span style="color:#696969; ">; now we need to test if the snake should grow</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>SnakeShouldGrow<span style="color:#808030; ">]</span>
+	cp <span style="color:#008c00; ">0</span>				<span style="color:#696969; ">; should the snake stay the same length?</span>
+	jr z<span style="color:#808030; ">,</span> move_snake_cut_tail	<span style="color:#696969; ">; if SnakeShouldGrow == 0, don't grow</span>
+
+	<span style="color:#696969; ">; if we get here, the snake needs to grow</span>
+	<span style="color:#696969; ">; to do this, we are going to skip the tail erase and reset our grow flag</span>
+	<span style="color:#800000; font-weight:bold; ">dec</span> a
+	ld <span style="color:#808030; ">[</span>SnakeShouldGrow<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a		<span style="color:#696969; ">; write it to zero</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>SnakeLength<span style="color:#808030; ">]</span>		<span style="color:#696969; ">; load in the snake length</span>
+	<span style="color:#800000; font-weight:bold; ">inc</span> a				<span style="color:#696969; ">; crank it up</span>
+	ld <span style="color:#808030; ">[</span>SnakeLength<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a		<span style="color:#696969; ">; and save</span>
+
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">tail_collision_scan</span>	<span style="color:#696969; ">; scan for tail collision</span>
+
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">move_snake_end</span>		<span style="color:#696969; ">; skip the tail shift</span>
+
+<span style="color:#e34adc; ">move_snake_cut_tail:</span>
+	<span style="color:#696969; ">; erase the old tail piece that we don't want anymore</span>
+	LOAD_16_INTO_HL SnakeTail
+	<span style="color:#800000; font-weight:bold; ">push</span> hl				<span style="color:#696969; ">; save the pointer</span>
+
+	<span style="color:#696969; ">; check if SnakeTail is out of bounds</span>
+	ld de<span style="color:#808030; ">,</span> SnakePiecesEnd
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">subtract_16bit</span>		<span style="color:#696969; ">; do the subtract</span>
+
+	jr nc<span style="color:#808030; ">,</span> move_snake_cut_tail_wrap_ptr <span style="color:#696969; ">; if we are out of bounds</span>
+
+	<span style="color:#800000; font-weight:bold; ">pop</span> hl
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">move_snake_cut_tail_continue</span>
+
+<span style="color:#e34adc; ">move_snake_cut_tail_wrap_ptr:</span>
+	<span style="color:#800000; font-weight:bold; ">pop</span> hl
+	ld hl<span style="color:#808030; ">,</span> SnakePieces
+
+<span style="color:#e34adc; ">move_snake_cut_tail_continue:</span>
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">]</span>			<span style="color:#696969; ">; load x</span>
+	ld d<span style="color:#808030; ">,</span> a
+	ld a<span style="color:#808030; ">,</span> $FF
+	ld <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">+</span><span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a			<span style="color:#696969; ">; erase (to fix the collision detect)</span>
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">]</span>			<span style="color:#696969; ">; load y</span>
+	ld e<span style="color:#808030; ">,</span> a	
+	ld a<span style="color:#808030; ">,</span> $FF
+	ld <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">+</span><span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a			<span style="color:#696969; ">; erase </span>
+
+	<span style="color:#696969; ">; we need to save the new snake tail pointer</span>
+	WRITE_16_WITH_HL SnakeTail
+
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">tail_collision_scan</span>	<span style="color:#696969; ">; scan for tail collision</span>
+
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>GameState<span style="color:#808030; ">]</span>
+	cp <span style="color:#008c00; ">2</span>				<span style="color:#696969; ">; if GameState == 2</span>
+	jr z<span style="color:#808030; ">,</span> move_snake_end		<span style="color:#696969; ">; snake died</span>
+
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">convert_xy_to_screen_addr</span>	<span style="color:#696969; ">; convert hl to a memory address on the screen</span>
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">32</span>			<span style="color:#696969; ">; ASCII blank space</span>
+	ld bc<span style="color:#808030; ">,</span> <span style="color:#008c00; ">1</span>			<span style="color:#696969; ">; only set one byte</span>
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">mem_SetVRAM</span>		<span style="color:#696969; ">; write it</span>
+	
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">move_snake_end</span>
+
+<span style="color:#e34adc; ">move_snake_die:</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">2</span>				<span style="color:#696969; ">; this is the game state for dead</span>
+	ld <span style="color:#808030; ">[</span>GameState<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a		<span style="color:#696969; ">; write it</span>
+
+<span style="color:#e34adc; ">move_snake_end:</span>
+	ei				<span style="color:#696969; ">; turn interrupts back on</span>
+	<span style="color:#800000; font-weight:bold; ">ret</span>
+
+<span style="color:#696969; ">;--------------- </span>
+<span style="color:#696969; ">; draw_snake</span>
+<span style="color:#696969; ">;	draws all of the snake tiles between SnakeTail and SnakeHead</span>
+<span style="color:#696969; ">;---------------</span>
+<span style="color:#e34adc; ">draw_snake:</span>
+	<span style="color:#800000; font-weight:bold; ">push</span> af				<span style="color:#696969; ">; save all of the registers to the stack so we can do what we want with them</span>
+	<span style="color:#800000; font-weight:bold; ">push</span> bc
+	<span style="color:#800000; font-weight:bold; ">push</span> de
+	<span style="color:#800000; font-weight:bold; ">push</span> hl
+
+	<span style="color:#696969; ">; first we want to get SnakeTail. This is the address where we are going to start drawing blocks</span>
+	LOAD_16_INTO_HL SnakeTail
+
+	<span style="color:#696969; ">; and we are going to put our SnakePiece counter into b (so that we only draw as many blocks as we need)</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>SnakeLength<span style="color:#808030; ">]</span>
+	ld b<span style="color:#808030; ">,</span> a
+
+	<span style="color:#696969; ">; this is where we draw SnakeLength-many tiles on the bg</span>
+<span style="color:#e34adc; ">draw_snake_loop:</span>
+	<span style="color:#000080; ">di</span>				<span style="color:#696969; ">; we don't want a vblank occuring while we are doing this</span>
+
+	<span style="color:#696969; ">; if we reach the bound, we need to start hl again at the end</span>
+	ld de<span style="color:#808030; ">,</span> SnakePiecesEnd		<span style="color:#696969; ">; load in the address on the back end</span>
+	<span style="color:#800000; font-weight:bold; ">push</span> hl
+
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">subtract_16bit</span>		<span style="color:#696969; ">; 16 bit subtract</span>
+
+	<span style="color:#696969; ">; if the carry flag is not set, the result is positive and hl is out of bounds</span>
+	jr nc<span style="color:#808030; ">,</span> draw_snake_wrap_ptr
+	
+	<span style="color:#800000; font-weight:bold; ">pop</span> hl				<span style="color:#696969; ">; restore our old hl</span>
+	<span style="color:#800000; font-weight:bold; ">jp</span> <span style="color:#e34adc; ">draw_snake_continue</span>		<span style="color:#696969; ">; if we get here, we don't need to correct anything</span>
+
+<span style="color:#e34adc; ">draw_snake_wrap_ptr:</span>
+	<span style="color:#800000; font-weight:bold; ">pop</span> hl				<span style="color:#696969; ">; needed so that stack stays in sync</span>
+	ld hl<span style="color:#808030; ">,</span> SnakePieces		<span style="color:#696969; ">; load the address of the starting point into the block</span>
+
+<span style="color:#e34adc; ">draw_snake_continue:</span>
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">+</span><span style="color:#808030; ">]</span>			<span style="color:#696969; ">; get the first byte (this should be the x coord) and put it in d</span>
+	ld d<span style="color:#808030; ">,</span> a
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>hl<span style="color:#808030; ">+</span><span style="color:#808030; ">]</span>			<span style="color:#696969; ">; and the next should be the y coord and it goes in e</span>
+	ld e<span style="color:#808030; ">,</span> a
+
+	<span style="color:#696969; ">; de have the x and y coords, let's get the pointer to the bg tile into hl</span>
+	<span style="color:#800000; font-weight:bold; ">push</span> hl				<span style="color:#696969; ">; save hl first</span>
+	<span style="color:#800000; font-weight:bold; ">push</span> bc				<span style="color:#696969; ">; and bc</span>
+
+	<span style="color:#696969; ">; using: convert_xy_to_screen_addr (d-&gt;xCoord, e-&gt;yCoord): hl-&gt;pBgTile</span>
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">convert_xy_to_screen_addr</span>	
+
+	<span style="color:#696969; ">; we are going to set the background tile to the block character now</span>
+	ld a<span style="color:#808030; ">,</span> $<span style="color:#004a43; ">DB</span>
+	<span style="color:#696969; ">; hl already has the address we want</span>
+	ld bc<span style="color:#808030; ">,</span> <span style="color:#008c00; ">1</span>			<span style="color:#696969; ">; only copying 1 byte</span>
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">mem_SetVRAM</span>
+	
+	<span style="color:#800000; font-weight:bold; ">pop</span> bc
+	<span style="color:#800000; font-weight:bold; ">pop</span> hl				<span style="color:#696969; ">; now restore hl and bc from before just before the multiply</span>
+
+	<span style="color:#800000; font-weight:bold; ">dec</span> b
+
+	ld a<span style="color:#808030; ">,</span> b
+	cp <span style="color:#008c00; ">0</span>				<span style="color:#696969; ">; set the zero bits if b is zero</span>
+	jr nz<span style="color:#808030; ">,</span> draw_snake_loop		<span style="color:#696969; ">; and if it isnt zero, we aren't done drawing yet</span>
+
+	<span style="color:#800000; font-weight:bold; ">pop</span> hl				<span style="color:#696969; ">; load our registers back out in reverse order</span>
+	<span style="color:#800000; font-weight:bold; ">pop</span> de
+	<span style="color:#800000; font-weight:bold; ">pop</span> bc
+	<span style="color:#800000; font-weight:bold; ">pop</span> af
+	
+	ei				<span style="color:#696969; ">; enable interrupts again</span>
+
+	<span style="color:#800000; font-weight:bold; ">ret</span>				<span style="color:#696969; ">; and escape!</span>
+
+<span style="color:#696969; ">;--------------- </span>
+<span style="color:#696969; ">; convert_xy_to_screen_addr</span>
+<span style="color:#696969; ">;	takes x and y coordinates and converts them to the memory address of the bg tile</span>
+<span style="color:#696969; ">;	using: convert_xy_to_screen_addr (d-&gt;xCoord, e-&gt;yCoord): hl-&gt;pBgTile</span>
+<span style="color:#696969; ">;---------------</span>
+<span style="color:#e34adc; ">convert_xy_to_screen_addr:</span>
+	<span style="color:#696969; ">; first thing we need to do is get the y offset of the memory</span>
+	<span style="color:#800000; font-weight:bold; ">push</span> de				<span style="color:#696969; ">; save de so we can get the values back later</span>
+	
+	ld d<span style="color:#808030; ">,</span> SCRN_VY_B			<span style="color:#696969; ">; since e has the y component, load our multiplier into d</span>
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">multiply_to_hl</span>
+
+	<span style="color:#696969; ">; hl now has the y offset, let's add on the x offset</span>
+	<span style="color:#800000; font-weight:bold; ">pop</span> de				<span style="color:#696969; ">; get de back</span>
+	ld e<span style="color:#808030; ">,</span> d				<span style="color:#696969; ">; we don't care about the y coord anymore and we need it in the lower byte</span>
+	ld d<span style="color:#808030; ">,</span> <span style="color:#008c00; ">0</span>				<span style="color:#696969; ">; zero out d</span>
+
+	<span style="color:#800000; font-weight:bold; ">add</span> hl<span style="color:#808030; ">,</span> de			<span style="color:#696969; ">; 16 bit add</span>
+
+	<span style="color:#696969; ">; now we add on the screen offset in memory</span>
+	ld de<span style="color:#808030; ">,</span> _SCRN0
+	<span style="color:#800000; font-weight:bold; ">add</span> hl<span style="color:#808030; ">,</span> de			<span style="color:#696969; ">; 16 bit add again</span>
+
+	<span style="color:#696969; ">; hl now contains the address of our tile!</span>
+	<span style="color:#800000; font-weight:bold; ">ret</span>
+
+<span style="color:#696969; ">;--------------- </span>
+<span style="color:#696969; ">; clear_bg</span>
+<span style="color:#696969; ">;	clears all the background tiles</span>
+<span style="color:#696969; ">;---------------</span>
+<span style="color:#696969; ">; write ascii blanks to all bg tiles</span>
+<span style="color:#696969; ">; using: mem_SetVRAM (a-&gt;value, hl-&gt;pMem, bc-&gt;byte count)</span>
+<span style="color:#e34adc; ">clear_bg:</span>
+	<span style="color:#800000; font-weight:bold; ">push</span> af				<span style="color:#696969; ">; save the registers to the stack</span>
+	<span style="color:#800000; font-weight:bold; ">push</span> hl
+	<span style="color:#800000; font-weight:bold; ">push</span> bc
+
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008c00; ">32</span>
+	ld hl<span style="color:#808030; ">,</span> _SCRN0			<span style="color:#696969; ">; Screen0 address</span>
+	ld bc<span style="color:#808030; ">,</span> SCRN_VX_B <span style="color:#808030; ">*</span> SCRN_VY_B	<span style="color:#696969; ">; virtual screen width * virtual screen height</span>
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">mem_SetVRAM</span>
+
+	<span style="color:#800000; font-weight:bold; ">pop</span> bc				<span style="color:#696969; ">; restore the registers (note the opposite order)</span>
+	<span style="color:#800000; font-weight:bold; ">pop</span> hl
+	<span style="color:#800000; font-weight:bold; ">pop</span> af
+
+	<span style="color:#800000; font-weight:bold; ">ret</span>				<span style="color:#696969; ">; go back to what we were doing</span>
+
+<span style="color:#696969; ">;--------------- </span>
+<span style="color:#696969; ">; splash_text</span>
+<span style="color:#696969; ">;	the text to be displayed on the splash screen (rows are 32 chars wide)</span>
+<span style="color:#696969; ">;---------------</span>
+<span style="color:#e34adc; ">splash_text:</span>
+	<span style="color:#004a43; ">db</span>	<span style="color:#0000e6; ">"       Snake!                   "</span>
+	<span style="color:#004a43; ">db</span>	<span style="color:#0000e6; ">"                                "</span>
+	<span style="color:#004a43; ">db</span>	<span style="color:#0000e6; ">"  By Jeremy Herbert             "</span>
+	<span style="color:#004a43; ">db</span>	<span style="color:#0000e6; ">"   Press A to play              "</span>
+<span style="color:#e34adc; ">splash_text_end:</span>
+
+<span style="color:#e34adc; ">gameover_text:</span>
+	<span style="color:#004a43; ">db</span>	<span style="color:#0000e6; ">"Game over!"</span>
+<span style="color:#e34adc; ">gameover_text_end:</span>
+
+<span style="color:#696969; ">;--------------- </span>
+<span style="color:#696969; ">; stoplcd</span>
+<span style="color:#696969; ">;	a function to wait until the LCD has fully drawn a frame and then turn it off</span>
+<span style="color:#696969; ">;---------------</span>
+<span style="color:#e34adc; ">stoplcd:</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>rLCDC<span style="color:#808030; ">]</span>			<span style="color:#696969; ">; load the lcd control register into a</span>
+	rlca				<span style="color:#696969; ">; roll the highest bit into the carry flag. this is the bit that designates on/off (1=on, 0=off) (ll. 1505-1544)</span>
+	<span style="color:#800000; font-weight:bold; ">ret</span> nc				<span style="color:#696969; ">; this is a special return; return only if the carry bit is not set (ie the lcd is already turned off)</span>
+
+	<span style="color:#696969; ">; we are not allowed to turn the lcd off unless we are in V-blank (ll. 1541-1544). gbspec reccommends that you test to see that LY &gt;= 144 (LCD Y coord)</span>
+<span style="color:#e34adc; ">stoplcd_wait:</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>rLY<span style="color:#808030; ">]</span>			<span style="color:#696969; ">; grab the LY register</span>
+	cp <span style="color:#008c00; ">145</span>				<span style="color:#696969; ">; set the carry bit if a &gt; 145 (called the 'borrow', essentially means underflow). essentially do a-145 and the carry bit will be set to 1 if the result is below zero</span>
+	jr nc<span style="color:#808030; ">,</span> stoplcd_wait		<span style="color:#696969; ">; if the carry bit hasn't been set, we aren't in V-blank yet so we need to jump back to the wait function</span>
+
+	<span style="color:#696969; ">; now we switch off the lcd</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#808030; ">[</span>rLCDC<span style="color:#808030; ">]</span>			<span style="color:#696969; ">; put the LCD control reg back in a</span>
+	res <span style="color:#008c00; ">7</span><span style="color:#808030; ">,</span> a			<span style="color:#696969; ">; (re)sets the 7th bit of a to zero</span>
+	ld <span style="color:#808030; ">[</span>rLCDC<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a			<span style="color:#696969; ">; put our new value back into LCDC</span>
+
+	<span style="color:#800000; font-weight:bold; ">ret</span>				<span style="color:#696969; ">; all done here!</span>
+
+<span style="color:#696969; ">;--------------- </span>
+<span style="color:#696969; ">; multiply_to_hl</span>
+<span style="color:#696969; ">;	implements HL = D * E</span>
+<span style="color:#696969; ">;---------------</span>
+<span style="color:#e34adc; ">multiply_to_hl:</span>
+	<span style="color:#800000; font-weight:bold; ">push</span> bc
+
+	<span style="color:#696969; ">; the following code does HL = D * E</span>
+	ld hl<span style="color:#808030; ">,</span> <span style="color:#008c00; ">0</span>			<span style="color:#696969; ">; clear hl</span>
+	ld a<span style="color:#808030; ">,</span> d				<span style="color:#696969; ">; load e in for multiply</span>
+	
+	<span style="color:#800000; font-weight:bold; ">or</span> a				<span style="color:#696969; ">; same as cp 0</span>
+	<span style="color:#800000; font-weight:bold; ">ret</span> z				<span style="color:#696969; ">; if the value is zero, we are done</span>
+
+	ld b<span style="color:#808030; ">,</span> <span style="color:#008c00; ">0</span>				<span style="color:#696969; ">; setup bc for our looped addition</span>
+	ld <span style="color:#004a43; ">c</span><span style="color:#808030; ">,</span> e
+
+<span style="color:#e34adc; ">multiply_to_hl_loop:</span>
+	<span style="color:#800000; font-weight:bold; ">add</span> hl<span style="color:#808030; ">,</span> bc			<span style="color:#696969; ">; add our value onto hl</span>
+	<span style="color:#800000; font-weight:bold; ">dec</span> a				<span style="color:#696969; ">; and loop until a is zero</span>
+	jr nz<span style="color:#808030; ">,</span> multiply_to_hl_loop
+
+	<span style="color:#800000; font-weight:bold; ">pop</span> bc
+	<span style="color:#800000; font-weight:bold; ">ret</span>
+
+<span style="color:#696969; ">;--------------- </span>
+<span style="color:#696969; ">; init_dma</span>
+<span style="color:#696969; ">;	copies the dma code to HRAM</span>
+<span style="color:#696969; ">;---------------</span>
+
+<span style="color:#e34adc; ">setup_dma:</span>
+	<span style="color:#696969; ">; using: mem_copyVRAM (hl-&gt;pSource, de-&gt;pDest, bc-&gt;byte count)</span>
+	ld hl<span style="color:#808030; ">,</span> dma_copy			<span style="color:#696969; ">; address of our dma code in the code block</span>
+	ld de<span style="color:#808030; ">,</span> $FF8<span style="color:#008c00; ">0</span>			<span style="color:#696969; ">; $FF80 is the start of the HRAM (ll. 1669)</span>
+	ld bc<span style="color:#808030; ">,</span> dma_copy_end<span style="color:#808030; ">-</span>dma_copy	<span style="color:#696969; ">; length of our dma code block</span>
+	<span style="color:#800000; font-weight:bold; ">call</span> <span style="color:#e34adc; ">mem_CopyVRAM</span>
+
+	<span style="color:#800000; font-weight:bold; ">ret</span>				<span style="color:#696969; ">; go back to what we were doing</span>
+
+<span style="color:#696969; ">;--------------- </span>
+<span style="color:#696969; ">; init_dma</span>
+<span style="color:#696969; ">;	copies the dma code to HRAM</span>
+<span style="color:#696969; ">;---------------</span>
+<span style="color:#e34adc; ">dma_copy:</span>
+	<span style="color:#800000; font-weight:bold; ">push</span> af				<span style="color:#696969; ">; store the old a and status reg (f) on the stack so we can use them for our own purposes</span>
+	ld a<span style="color:#808030; ">,</span> $C0			<span style="color:#696969; ">; OamData variable</span>
+	ldh <span style="color:#808030; ">[</span>rDMA<span style="color:#808030; ">]</span><span style="color:#808030; ">,</span> a			<span style="color:#696969; ">; once we put this address into the DMA register, the transfer will begin ($A0 bytes from $C000)</span>
+
+	<span style="color:#696969; ">; now we want to delay for 160us while the data gets copied</span>
+	<span style="color:#696969; ">; this uses a basic countdown-jump back loop</span>
+	ld a<span style="color:#808030; ">,</span> <span style="color:#008000; ">$28</span>			<span style="color:#696969; ">; this is our countdown value ($28 to 0)</span>
+<span style="color:#e34adc; ">dma_copy_wait:</span>
+	<span style="color:#800000; font-weight:bold; ">dec</span> a
+	jr nz<span style="color:#808030; ">,</span> dma_copy_wait		<span style="color:#696969; ">; if a is not 0, jump back to the wait loop</span>
+	
+	<span style="color:#696969; ">; once we are here, the dma is all done</span>
+	<span style="color:#800000; font-weight:bold; ">pop</span> af				<span style="color:#696969; ">; restore af to its old value</span>
+	reti				<span style="color:#696969; ">; and go back to what we were doing</span>
+<span style="color:#e34adc; ">dma_copy_end:</span>
+
+<span style="color:#696969; ">;------------------------------------------------------------------------</span>
+
+
+</pre>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "o62tergq"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

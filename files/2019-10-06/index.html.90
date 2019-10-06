@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      canvas {
+  border: 3px solid #fff;
+  position:absolute;
+  top: 5px;
+  left: 5px;
+}
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+var c = document.getElementById('cc').getContext('2d');
+var c2 = document.getElementById('cc2').getContext('2d');
+var c3 = document.getElementById('cc3').getContext('2d');
+var fov = 60;
+var kb = {l:0,r:0,u:0,d:0};
+var pxy = {x:0,y:0,t:0,m:0};
+var map = [ [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,1,0,1,1,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]  ];
+
+
+pxy.x = pxy.y = 50;
+
+var renderMap = function () {
+  var x = 0;
+  var y = 0;
+  c2.clearRect(0,0,300,300);
+  for (x=0;x<30;x++) {
+    for (y=0;y<30;y++) {
+      largex = x * 10;
+      largey = y * 10;
+      if (map[x][y] > 0) {
+        c2.fillStyle = 'rgba(100,100,255,0.5)';
+      } else {
+        c2.fillStyle = 'rgba(255,255,255,0.5)';
+      }
+      c2.fillRect(largey,largex,10,10);
+    }
+  }
+}
+
+window.setInterval (function(){
+  if(kb.l) pxy.t+=0.2;
+  if(kb.r) pxy.t-=0.2;
+  if(kb.d) {pxy.m+=0.02};
+  if(kb.u) {pxy.m-=0.02};
+  if (!kb.u && !kb.d){
+    pxy.m = 0;
+  } else {
+    if (pxy.m > 1) pxy.m = 1;
+    if (pxy.m < -1) pxy.m = -1;
+  }
+  if(pxy.m !== 0) { 
+    var theta = (pxy.t) * (Math.PI/180);
+    var xx = pxy.x - pxy.m * Math.sin(theta);
+    var yy = pxy.y - pxy.m * Math.cos(theta);
+    pxy.x = xx;
+    pxy.y = yy;
+  } else {pxy.m = 0;}
+  /*
+  var result;
+  if(result = mapRayHit(pxy.x,pxy.y,600,0.1,pxy.t)) {
+    document.getElementById('x').innerHTML = 'hit detected at ' + JSON.stringify(result);
+  }
+  */
+},10);
+window.onkeydown = function (e) {
+  switch(e.keyCode) {
+    case 38:
+      kb.u = 1;
+      e.preventDefault();
+      break;
+    case 40:
+      kb.d = 1;
+      e.preventDefault();
+      break;
+    case 37:
+      kb.l = 1;
+      e.preventDefault();
+      break;
+    case 39:
+      kb.r = 1;
+      e.preventDefault();
+      break;
+  }
+};
+window.onkeyup = function (e) {
+  switch(e.keyCode) {
+    case 38:
+      kb.u = 0;
+      e.preventDefault();
+      break;
+    case 40:
+      kb.d = 0;
+      e.preventDefault();
+      break;
+    case 37:
+      kb.l = 0;
+      e.preventDefault();
+      break;
+    case 39:
+      kb.r = 0;
+      e.preventDefault();
+      break;
+  }
+};
+var draw = function(){
+   c.clearRect(0,0,300,300);
+   arcRay(pxy.x,pxy.y,100,pxy.t,c);
+   oneRay(pxy.x,pxy.y,200,pxy.t,c);
+   renderMap();
+   renderRayMapHit();
+   window.requestAnimationFrame(draw);
+};
+var renderRayMapHit = function () {
+  var result;
+  if(result = mapRayHit(pxy.x,pxy.y,600,0.1,pxy.t)) {
+  
+    c3.clearRect(0,0,300,300);
+    c2.fillStyle = 'rgba(255,100,100,0.5)';
+    c2.fillRect(result.y,result.x,10,10);
+  
+  }
+};
+var arcRay = function (x,y,length,angle,ctx) {
+   ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+   var i;
+   for (i=1;i<=fov;i++) {
+     var degrees = i + angle -(fov/2);
+     var theta = degrees * (Math.PI/180);
+     var xx = x + length * Math.sin(theta);
+     var yy = y + length * Math.cos(theta);
+     ctx.beginPath();
+     ctx.moveTo(x, y);
+     ctx.lineTo(xx, yy);
+     ctx.stroke();
+   }
+}; 
+var oneRay = function (x,y,length,angle,ctx) {
+   ctx.strokeStyle = 'rgba(255,0,0,1)';
+     var degrees = angle;
+     var theta = degrees * (Math.PI/180);
+     var xx = x + length * Math.sin(theta);
+     var yy = y + length * Math.cos(theta);
+     ctx.beginPath();
+     ctx.moveTo(x, y);
+     ctx.lineTo(xx, yy);
+     ctx.stroke();
+};
+var mapRayHit = function (x,y,length,interval, angle) {
+     var degrees = angle;
+     var theta = degrees * (Math.PI/180);
+     var i;
+     length = length / 10;
+     for (i=0;i<length;i+=interval){
+       var xx = x + i * Math.sin(theta);
+       var yy = y + i * Math.cos(theta);
+       var rxx = Math.round(xx/10);
+       var ryy = Math.round(yy/10);
+       if ((rxx < 30) && (ryy <30) && (rxx > 0) && ( ryy > 0)) 
+       if (map[ryy][rxx] > 0) {
+         return {x:rxx*10,y:ryy*10,hit:1,distance:i};
+       }
+     }
+     return 0;
+}; 
+draw();
+
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas width=300 height=300 id='cc2'></canvas>
+<canvas width=300 height=300 id='cc3'></canvas>
+<canvas width=300 height=300 id='cc'></canvas>
+<div id='x'>
+</div>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "r0tzpds2"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

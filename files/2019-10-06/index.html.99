@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+var ctx = e.getContext('2d');
+var x,y;
+x=200;
+y=200;
+
+var seed = 313;
+function random() {
+    var x = Math.sin(seed+=2) * 98900000;
+    return x - Math.floor(x);
+}
+function gri (min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(random() * (max - min + 1)) + min;
+}
+
+setInterval(function(){
+	var k;
+  for(k=0;k<20;k++) {
+   // ctx.fillStyle = "rgba(0,0,0,0.1)";
+    //ctx.fillRect(0,0,400,400);
+    ctx.fillStyle = "rgba("+gri(100,200)+","+gri(100,200)+","+gri(100,200)+",1)";
+		var s = 0.03;
+    var i;
+    for(i=0;i<100/s;i++) {
+        switch (gri(0,3)) {
+          case 0:
+          //up
+          y-=s;
+          break;
+          case 1:
+          //down
+          y+=s;
+          break;
+          case 2:
+          //left
+          x-=s;
+          break;
+          case 3:
+          //right
+          x+=s;
+          break;
+        }
+        if ( ( (0>x) || (x>400) ) || ( (0>y) || (y>400) ) )  
+        {x = y = 200;}
+        ctx.fillRect(x,y,s,s);
+      }
+     // x=gri(0,400);
+     // y=gri(0,400);
+  }
+}, 1);
+
+
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id="e" width=400 height=400 style="background-color:#000;"></canvas>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "t1fk6pwv"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

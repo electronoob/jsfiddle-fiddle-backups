@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+var scale = 1.0;
+var ctx = zap.getContext("2d");
+var x = 20, y = 40;
+var debug = "wait";
+setInterval(function () {
+	ctx.clearRect(0,0,zap.width,zap.height);
+	ctx.fillRect(x,y,10,10);
+  ctx.lineWidth = 1;
+  ctx.font = "32px verdana";
+  ctx.fillText(debug + "/" + scale,300,380);
+},10);
+zap.addEventListener("wheel", function (e) {
+    e.preventDefault();
+		//debug = e.
+    console.log(e);
+    scale += e.deltaY * 0.001;
+    mouse = {};
+    mouse.x = e.clientX - zap.offsetLeft;
+    mouse.y = e.clientY - zap.offsetTop;
+    
+});
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id="zap" width="400" height="400"></canvas>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "6b8tofqy"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

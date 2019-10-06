@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="//code.jquery.com/jquery-1.6.3.js"
+    
+  ></script>
+    <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      canvas {
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+    image-rendering: pixelated;
+    interpolation-mode: nearest-neighbor;
+    border: 5px solid #ddd;
+    
+}
+canvas#a1hgj { width: 640px; height: 640px;filter: }
+
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    $(window).load(function(){
+      
+var ctx = document.getElementById('a1hgj').getContext("2d");
+var newc = {canvas: document.createElement("canvas"), ctx: null};
+var l1 = `
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa                                                           
+a.................................................a                                                           
+a.................................................a                                                           
+a..................bb....f........................a                                                           
+a.......................bb........................a                                                           
+a............b.bbb.f........b.....................a                                                           
+a....ff........................b..................a                                                           
+abbbbbbbbbbb......................................a                                                           
+a.................................bff....f.....g..a                                                           
+a...................................bbbbbbbb...bb.a                                                           
+a.................................................a                                                           
+addddddddddddddddddddddddddddddddddddddddddddddddda                                                           
+`;
+var l1 = l1.replace(/\n|\r/g, "");
+
+  var kb = {u:0, d:0, l:0, r:0};
+  
+newc.ctx = newc.canvas.getContext("2d");
+newc.ctx.fillStyle = 'white'
+newc.ctx.fillRect(0,0,64,64);
+newc.ctx.fillStyle = "black";
+newc.ctx.font = "10px Arial";
+newc.ctx.fillText("its complete", 5,20);
+newc.ctx.fillText("darkness", 15,35);
+
+var block = {ctx:null, canvas: document.createElement('canvas')}
+block.canvas.width = 8;
+block.canvas.height= 8;
+block.ctx = block.canvas.getContext("2d");
+block.ctx.fillStyle="#303030";
+block.ctx.fillRect(0,0,8,8);
+
+var wall = {ctx:null, canvas: document.createElement('canvas')}
+wall.canvas.width = 8;
+wall.canvas.height= 8;
+wall.ctx = wall.canvas.getContext("2d");
+wall.ctx.fillStyle="#c0c0c0";
+wall.ctx.fillRect(0,0,8,8);
+
+var dead = {ctx:null, canvas: document.createElement('canvas')}
+dead.canvas.width = 8;
+dead.canvas.height= 8;
+dead.ctx = dead.canvas.getContext("2d");
+dead.ctx.fillStyle="red";
+dead.ctx.fillRect(0,0,8,8);
+
+var cs = {
+	0: document.createElement("img"),
+	1: document.createElement("img"),
+  fire: document.createElement("img")
+};
+cs[0].src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAjElEQVQ4Ea2RgRGAIAhFsVVcpNEcrZ0cgA4LT9TPZcWdhyY8X0pExDJyiiXreiFfgLeQjdrY28Xz+Rd9rgb5iOXInCIxsxmeS7gvq9ZI8yxCkNIxqoFsyekoENgAULP33QKcV0C/YO4AaarBDGINtHIh/wuYKaoM2oMG0oCaFCoZAtoibw4B/Yv0a4We5GlXJZvpUUAAAAAASUVORK5CYII=";
+cs[1].src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAApElEQVQ4Ea2R6w3CMAyEL4ifMEUHgdEyWgeBKTpA0IXaIcHXqohIkZ/3xXUBoPAuearW4gP2DfgVcsZwljx55pqf7isnrS+3+h3A3MI9SA+gGMDl9mgEACmxLT4npv2V+VvMeincb3wqgCWHxH0S4gCh2033gHUHkUrtoS7RBFvfyp4I0k9gpAP2v4BoRBtG1eQEFCiRQWkl4LNpy5eA8Y+MsUFfNwBEI1Rd8vgAAAAASUVORK5CYII=";
+cs.fire.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gkdFSIDHG2LGwAAAG9JREFUGNOFj7sRgCAQRB9CEYTMOAxt2Abd2A1t2IZDQmhu7JwJPyM3uQ1u7+0pQKjK0eFT6R5g4UembfpUsEH3JIANGipCcnQiInLva585OlGtQ46uJwCu88Gngvmc2wbbokfJmQvAMewHMau9+wIBFCuw2A3szgAAAABJRU5ErkJggg==";
+
+var character = {sprite: 0, x: 10, y:10};
+
+
+var distance = 40;
+const splash = 0, level = 1, deaded = 2;
+var mode = level;
+var map = {x: 0, y:0};
+
+function draw() {
+if(mode == level) {
+    newc.ctx.fillStyle = 'black'
+    newc.ctx.fillRect(0,0,64,64);
+    
+		var x = 0;
+    var y = 0;
+    
+    for(x = 0;x<64/8;x++)
+    for(y = 0;y<64/8;y++)
+    {
+    	//110
+    	var offset = (map.y+y)*110 + (map.x+x);
+
+    	switch (l1[offset])
+      {
+      	case 'b':
+        	newc.ctx.drawImage(block.canvas, x*8, y*8);
+        break;
+      	case 'a':
+        	newc.ctx.drawImage(wall.canvas, x*8, y*8);
+        break;        
+        
+              	case 'd':
+        	newc.ctx.drawImage(dead.canvas, x*8, y*8);
+        break;   
+        case 'f':
+          newc.ctx.drawImage(cs.fire, x*8, y*8);
+        break;
+      }
+    }
+    
+
+	}
+
+
+  ctx.clearRect(0,0,64,64);
+  ctx.fillStyle="rgba(0,0,0,1)";
+  ctx.beginPath();
+  ctx.arc(32,32,distance,0,2*Math.PI);
+  ctx.fill();
+  ctx.stroke();
+  ctx.save();
+  ctx.globalCompositeOperation="source-in";
+  ctx.drawImage(newc.canvas, 0,0);
+  ctx.restore();
+  if(mode == level) {
+  	ctx.drawImage(cs[character.sprite], character.x, character.y);
+  }
+	window.requestAnimationFrame(draw);
+}
+window.requestAnimationFrame(draw);
+
+setInterval(function(){
+  // game loop
+  if (mode == splash) {
+  	distance-=0.5;
+    if (distance<4) {
+      mode = level;
+      newc.ctx.fillStyle = 'black'
+			newc.ctx.fillRect(0,0,64,64);
+      distance = 100;
+    }
+  }
+  if(mode == deaded) {
+        newc.ctx.fillStyle = 'red'
+			newc.ctx.fillRect(0,0,64,64);
+      distance=100;
+  }
+  if(mode == level) {
+  		if(kb.l)character.x--;
+      if(kb.r)character.x++;
+  		var xx = Math.floor(character.x /8);
+      var yy = Math.floor(character.y /8);
+      yy+=2;
+      xx+=1;
+      var offset = (map.y+yy)*110 + (map.x+xx);
+
+    	switch (l1[offset])
+      {
+      	case 'b':
+      	case 'a':
+        break;        
+        case 'd':
+        	mode = deaded;
+        break;   
+        case 'f':
+          distance = 40;
+        break;
+        default:
+        character.y += 1;
+
+      }
+      distance -= 0.1;
+      if (distance < 3) distance  =3;
+  }
+  
+},32);
+
+
+
+window.addEventListener("keydown", moveSomething, false);
+
+function moveSomething(e) {
+		kb = {u:0, d:0, l:0, r:0};
+    switch(e.keyCode) {
+        case 37:
+            // left key pressed
+            kb.l = true;
+            break;
+        case 38:
+            // up key pressed
+            kb.u = true;
+            break;
+        case 39:
+            // right key pressed
+            kb.r = true;
+            break;
+        case 40:
+            // down key pressed
+            kb.d = true;
+            break;  
+    }   
+}     
+
+window.addEventListener("keyup", moveSomethingUp, false);
+
+function moveSomethingUp(e) {
+		kb = {u:0, d:0, l:0, r:0};
+    switch(e.keyCode) {
+        case 37:
+            // left key pressed
+            kb.l = false;
+            break;
+        case 38:
+            // up key pressed
+            kb.u = false;
+            break;
+        case 39:
+            // right key pressed
+            kb.r = false;
+            break;
+        case 40:
+            // down key pressed
+            kb.d = false;
+            break;  
+    }   
+}     
+
+
+
+
+
+
+
+
+
+    });
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id='a1hgj' width='64' height='64'></canvas>
+
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "db7ka0w8"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

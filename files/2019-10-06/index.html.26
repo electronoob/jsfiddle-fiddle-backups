@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+
+
+var kb = {l:0,r:0,u:0,d:0};
+var meow = document.getElementById('meow');
+
+window.setInterval (function(){
+  meow.innerHTML = JSON.stringify(kb);
+},30);
+window.onkeydown = function (e) {
+  switch(e.keyCode) {
+    case 38:
+      kb.u = 1;
+      e.preventDefault();
+      break;
+    case 40:
+      kb.d = 1;
+      e.preventDefault();
+      break;
+    case 37:
+      kb.l = 1;
+      e.preventDefault();
+      break;
+    case 39:
+      kb.r = 1;
+      e.preventDefault();
+      break;
+  }
+};
+window.onkeyup = function (e) {
+  switch(e.keyCode) {
+    case 38:
+      kb.u = 0;
+      e.preventDefault();
+      break;
+    case 40:
+      kb.d = 0;
+      e.preventDefault();
+      break;
+    case 37:
+      kb.l = 0;
+      e.preventDefault();
+      break;
+    case 39:
+      kb.r = 0;
+      e.preventDefault();
+      break;
+  }
+};
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <div id='meow'>
+
+</div>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "6zd2ep4h"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

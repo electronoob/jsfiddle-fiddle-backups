@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      body {
+  margin: 0px;
+  padding: 0px;
+  overflow: hidden;
+}
+
+canvas {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+//snake game 0.3
+
+var curveRadians = 0;
+var curveRadians2 = 0;
+var curveRadians3 = 0;
+var maxrad = 0.2;
+var debug_msg = '';
+var fps = 0;
+var msf = 0; //miliseconds per frame render time
+var msfa = 0; // total miliseconds per 1 second render time / fps;
+var mX = 0;
+var mY = 0;
+var canvas = document.getElementById('canvas');
+var camera = canvas.getContext('2d');
+var screen = document.createElement('canvas');
+var screenContext = screen.getContext('2d');
+var background = document.createElement('canvas');
+var minimap = document.createElement('canvas');
+var minimapContext = minimap.getContext('2d');
+var ticks_snake_move = 0;
+var snake = [];
+var camera_properties = {
+  x: 0,
+  y: 0,
+  z: 1,
+  newz: 0
+};
+var snake_nodes = {
+  x: 0,
+  y: 0,
+  ishead: 0
+};
+snake.nodes = Array();
+snake.length = 4; // min start length 4
+snake.size = 10;
+snake.newsize = 0;
+snake.color = '0,255,0';
+snake.x = 300 * camera_properties.z;
+snake.y = 300 * camera_properties.z;
+snake.add = 0;
+snake.speed = 4;
+snake.skin = new Image();
+snake.skin.src = 'https://connect.agariomods.com/img_electronoob.png';
+screen.width = 3000;
+screen.height = 3000;
+background.width = 1000;
+background.height = 1000;
+minimap.width = 100;
+minimap.height = 100;
+setInterval(camera_z_grow, 2000);
+setInterval(camera_z_change, 30);
+setInterval(snake_grow, 5000);
+setInterval(function() {
+  debug_msg = `
+  x: ${(snake.nodes[0].x).toPrecision(6)}
+  y: ${(snake.nodes[0].y).toPrecision(6)}
+  ${fps.toPrecision(2)} fps.
+  ${(msfa / fps).toPrecision(2)} ms/frame avg.
+  ${(curveRadians3).toPrecision(2)} curve radians 3.
+  `;
+  fps = 0;
+  msfa = 0;
+}, 1000);
+setInterval(function() {
+  snake_move();
+}, 32);
+setTimeout(function() {
+  snake.add = 20;
+}, 10);
+
+function background_do_lines() {
+  var ctx = background.getContext('2d');
+  ctx.strokeStyle = 'rgba(255,255,100,0.2)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.rect(0, 0, background.width, background.height);
+  ctx.fillStyle = 'rgba(20,20,60,1)';
+  ctx.fill();
+  for (i = 0; i < background.width; i += snake.size * 3) {
+    ctx.beginPath();
+    ctx.moveTo(i, 0);
+    ctx.lineTo(i, background.height);
+    ctx.stroke();
+  }
+  for (j = 0; j < background.height; j += snake.size * 3) {
+    ctx.beginPath();
+    ctx.moveTo(0, j);
+    ctx.lineTo(background.width, j);
+    ctx.stroke();
+
+  }
+
+}
+
+function camera_z_grow() {
+  //if (camera_properties.z < 2) return;
+  //camera_properties.newz = camera_properties.z + 1;
+}
+
+function camera_z_change() {
+  if (camera_properties.newz != 0) {
+    var difference = camera_properties.newz - camera_properties.z;
+    var step = difference / 10;
+    camera_properties.z += step;
+  }
+  if (camera_properties.z == camera_properties.newz) {
+    camera_properties.newz = 0;
+  }
+  if (camera_properties.z > 3) {
+    camera_properties.z = 3;
+    camera_properties.newz = 0
+  }
+  if (camera_properties.z < 1) {
+    camera_properties.z = 1;
+    camera_properties.newz = 0
+  }
+  //debug_msg = camera_properties.z;
+}
+
+
+function initsnake() {
+  var i;
+  for (i = 0; i < snake.length; i++) {
+    sn = Object.create(snake_nodes);
+    sn.y = snake.y - (i * (snake.speed * (snake.size / 10)));
+    sn.x = snake.x;
+    if (i == 0) sn.ishead = 1;
+    snake.nodes[i] = sn;
+  }
+
+}
+
+function snake_grow() {
+  //snake.add = +2;
+  //snake.newsize = 1 + snake.size;
+  //snake.speed += 0.01;
+}
+
+function snake_move() {
+  // mouse angle
+  var radians = Math.atan2(275 - mY, 275 - mX) + Math.PI;
+  var radians2= Math.atan2(275 - snake.nodes[0].y, 275 - snake.nodes[0].x)  + Math.PI;
+  
+  
+  
+  
+//  var xx = snake.nodes[0].x + snake.speed * Math.cos(radians);
+//  var yy = snake.nodes[0].y + snake.speed * Math.sin(radians);
+
+
+curveRadians2 =radians2 - radians;
+  if (Math.abs(curveRadians2 - Math.PI) > maxrad) {
+    if (curveRadians2 > 0) {
+      radians = maxrad ;
+      //recalc xx yy
+      xx = snake.nodes[0].x + snake.speed * Math.cos(radians);
+      yy = snake.nodes[0].y + snake.speed * Math.sin(radians);
+    } else {
+      radians = -maxrad ;
+      //recalc xx yy
+      xx = snake.nodes[0].x + snake.speed * Math.cos(radians);
+      yy = snake.nodes[0].y + snake.speed * Math.sin(radians);
+    }
+  }
+
+  snake.nodes[0].x = xx;
+  snake.nodes[0].y = yy;
+  //calc tail segment to smooth it out
+  snake.nodes.length--;
+  radianstail = Math.atan2(snake.nodes[snake.nodes.length - 1].y - snake.nodes[snake.nodes.length - 2].y, snake.nodes[snake.nodes.length - 1].x - snake.nodes[snake.nodes.length - 2].x) + Math.PI;
+  xxtail = snake.nodes[snake.nodes.length - 1].x + snake.speed * Math.cos(radianstail);
+  yytail = snake.nodes[snake.nodes.length - 1].y + snake.speed * Math.sin(radianstail);
+  snake.nodes[snake.nodes.length - 1].x = xxtail;
+  snake.nodes[snake.nodes.length - 1].y = yytail;
+  snake.nodes.length++;
+  if (camera_properties.z == camera_properties.newz) {
+    camera_properties.newz = -1;
+  }
+
+  if (ticks_snake_move > snake.size / 20) {
+    new_head = Object.create(snake_nodes);
+    new_head.x = xx;
+    new_head.y = yy;
+    new_head.ishead = 1;
+    snake.nodes[0].ishead = 0;
+    snake.nodes.splice(0, 0, new_head);
+    ticks_snake_move = 0;
+    if (snake.add > 0) {
+      snake.add--;
+    } else {
+      snake.nodes.pop();
+    }
+  } else {
+    ticks_snake_move++;
+  }
+  if (snake.newsize !== 0) {
+    var difference = snake.newsize - snake.size;
+    var step = difference / 10;
+    snake.size += step;
+  }
+}
+
+
+function getMousePos(canvas, evt) {
+  var rect = canvas.getBoundingClientRect();
+  return {
+    x: evt.clientX - rect.left,
+    y: evt.clientY - rect.top
+  };
+}
+document.getElementById('canvas').addEventListener('mousemove', function(evt) {
+  var mousePos = getMousePos(canvas, evt);
+  mX = mousePos.x;
+  mY = mousePos.y;
+}, false);
+document.getElementById('canvas').addEventListener("mousewheel", function(evt) {
+  var delta = Math.max(-1, Math.min(1, evt.wheelDelta));
+  if (camera_properties.newz == 0) {
+    camera_properties.newz = camera_properties.z - delta;
+  } else {
+    camera_properties.newz = camera_properties.newz - delta;
+  }
+}, false);
+
+function draw() {
+  var begin_timestamp = Date.now();
+  var ctx = document.getElementById('canvas').getContext('2d');
+  screenContext.globalCompositeOperation = 'destination-under';
+  ctx.clearRect(0, 0, 550, 550);
+  screenContext.clearRect(0, 0, 3000, 3000);
+  screenContext.drawImage(background, 0, 0, background.width * camera_properties.z, background.height * camera_properties.z);
+
+  // snake draw
+  i = 0;
+  var lastsn = 0;
+  snake.nodes.reverse();
+
+  snake.nodes.forEach(function(sn, index, array) {
+    i++;
+    screenContext.beginPath();
+    screenContext.lineWidth = (snake.size * camera_properties.z);
+    screenContext.lineCap = "round";
+    screenContext.moveTo(sn.x * camera_properties.z, sn.y * camera_properties.z);
+    if (!sn.ishead) {
+      screenContext.strokeStyle = `rgba(${snake.color},0.8)`;
+      screenContext.quadraticCurveTo(
+        snake.nodes[index].x * camera_properties.z,
+        snake.nodes[index].y * camera_properties.z,
+        lastsn.x * camera_properties.z,
+        lastsn.y * camera_properties.z);
+      screenContext.stroke();
+
+      screenContext.fillStyle = `rgba(${snake.color},0.1)`;
+
+
+      screenContext.strokeStyle = 'rgba(0,0,0,0)';
+
+      screenContext.beginPath();
+      screenContext.lineWidth = 2 * camera_properties.z;
+      screenContext.arc(
+        (sn.x * camera_properties.z),
+        (sn.y * camera_properties.z),
+        ((snake.size * 1.5) * camera_properties.z),
+        0, Math.PI * 2, false
+      );
+      screenContext.fill();
+      //screenContext.stroke();
+    } else {
+      screenContext.strokeStyle = `rgba(${snake.color},1)`;
+      screenContext.quadraticCurveTo(
+        snake.nodes[index - 1].x * camera_properties.z,
+        snake.nodes[index - 1].y * camera_properties.z,
+        snake.nodes[index - 2].x * camera_properties.z,
+        snake.nodes[index - 2].y * camera_properties.z);
+      screenContext.stroke();
+    }
+    // 
+
+    if (sn.ishead) {
+      screenContext.save();
+      screenContext.beginPath();
+      screenContext.strokeStyle = `rgba(${snake.color},0.5)`;
+      screenContext.lineWidth = 2 * camera_properties.z;
+      screenContext.arc(
+        (sn.x * camera_properties.z),
+        (sn.y * camera_properties.z),
+        (snake.size * 2 * camera_properties.z),
+        0, Math.PI * 2, false
+      );
+
+      screenContext.stroke();
+      screenContext.clip();
+      // drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh);
+      //screenContext.globalAlpha = 1;
+      screenContext.drawImage(snake.skin,
+        (sn.x * camera_properties.z) - (snake.size * 2 * camera_properties.z),
+        (sn.y * camera_properties.z) - (snake.size * 2 * camera_properties.z),
+        (snake.size * 2 * 2 * camera_properties.z),
+        (snake.size * 2 * 2 * camera_properties.z)
+
+      );
+      screenContext.restore();
+    }
+    lastsn = sn;
+  });
+  snake.nodes.reverse();
+
+
+
+
+
+  //////////////////
+
+  // lets draw a line out of the head from segments behind it
+  screenContext.beginPath();
+  screenContext.strokeStyle = `rgba(${snake.color},1)`;
+  screenContext.lineWidth = 2 * camera_properties.z;
+  screenContext.moveTo(snake.nodes[2].x * camera_properties.z, snake.nodes[2].y * camera_properties.z);
+  // calc line end 
+  radians = Math.atan2(snake.nodes[2].y - snake.nodes[1].y, snake.nodes[2].x - snake.nodes[1].x) + Math.PI;
+  screenContext.lineTo((snake.nodes[0].x + 100 * Math.cos(radians)) * camera_properties.z, (snake.nodes[0].y + 100 * Math.sin(radians)) * camera_properties.z);
+  screenContext.stroke();
+  firstradians = radians;
+  //draw additional line from head this time head to cursor
+  screenContext.beginPath();
+  screenContext.strokeStyle = `rgba(255,0,0,1)`;
+  screenContext.lineWidth = 1 * camera_properties.z;
+  screenContext.moveTo(snake.nodes[1].x * camera_properties.z, snake.nodes[1].y * camera_properties.z);
+  // calc line end 
+  radians = Math.atan2(snake.nodes[2].y - snake.nodes[0].y, snake.nodes[2].x - snake.nodes[0].x) + Math.PI;
+  screenContext.lineTo((snake.nodes[0].x + 150 * Math.cos(radians)) * camera_properties.z, (snake.nodes[0].y + 150 * Math.sin(radians)) * camera_properties.z);
+  secondradians = radians;
+  if (Math.abs(firstradians - secondradians) > 0.3) {
+    screenContext.strokeStyle = `rgba(255,255,255,1)`;
+  }
+  screenContext.stroke();
+
+  /////////////////
+
+  // move camera
+  camera_properties.x = snake.nodes[0].x * camera_properties.z;
+  camera_properties.y = snake.nodes[0].y * camera_properties.z;
+  camera.drawImage(screen, 275 - camera_properties.x, 275 - camera_properties.y);
+
+
+  //wht text
+  camera.lineWidth = 5;
+  camera.strokeStyle = `white`;
+  camera.font = "14px Georgia";
+  camera.strokeText('meep meep electronoobzsssssnake a comin through. ', 20, 500);
+  camera.font = "10px Georgia";
+  camera.strokeText(debug_msg, 20, 520);
+
+  //blk text
+  camera.fillStyle = `black`;
+  camera.font = "14px Georgia";
+  camera.fillText('meep meep electronoobzsssssnake a comin through. ', 20, 500);
+  camera.font = "10px Georgia";
+  camera.fillText(debug_msg, 20, 520);
+
+  // minimap
+  var minimapScale = {
+    x: minimap.width / background.width,
+    y: minimap.height / background.height
+  };
+  minimapContext.fillStyle = 'rgba(0,0,0,0.2)';
+  minimapContext.fillRect(0, 0, minimap.width, minimap.height);
+  minimapContext.strokeStyle = 'white';
+  minimapContext.beginPath();
+  minimapContext.arc(
+    (minimapScale.x * snake.nodes[0].x),
+    (minimapScale.y * snake.nodes[0].y),
+    (snake.size * 2 * ((minimapScale.x + minimapScale.y) / 2)),
+    0, Math.PI * 2, false
+  );
+  minimapContext.stroke();
+  camera.drawImage(minimap, canvas.width - minimap.width, canvas.height - minimap.height);
+
+  fps++;
+  var end_timestamp = Date.now();
+  var total_time_taken = end_timestamp - begin_timestamp;
+  msf = total_time_taken;
+  msfa += msf;
+  window.requestAnimationFrame(draw);
+}
+
+
+
+background_do_lines();
+initsnake();
+draw();
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id=canvas width=550px height=550px style="">
+</canvas>
+
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "0hh3hxhu"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

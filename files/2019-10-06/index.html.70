@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      canvas {
+position: absolute;
+left: 0px;
+top: 0px;
+}
+canvas#hg {
+  z-index: -1;
+  filter: blur(10px);
+}
+canvas#hl {
+  z-index: 2;
+  filter: blur(4px);
+}
+canvas#hlb {
+  filter: blur(10px);
+}
+body {
+  background-color: #000;
+}
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+var ctx = view.getContext("2d"); // scene
+var hgctx = hg.getContext("2d"); // head glow layer
+var hlctx = hl.getContext("2d"); // head laser layer
+var hlbctx = hlb.getContext("2d"); // head laser burn target layer
+var img = new Image();
+img.crossOrigin = "Anonymous";
+var offset = 0;
+var kx = 5;
+var ky = 3;
+var gaze = [];
+gaze.push('up');
+gaze.push('none');
+gaze.push('up');
+gaze.push('up');
+gaze.push('up');
+gaze.push('mid');
+gaze.push('mid');
+gaze.push('up');
+gaze.push('up');
+gaze.push('mid');
+gaze.push('up');
+gaze.push('mid');
+gaze.push('mid');
+gaze.push('up');
+gaze.push('none');
+gaze.push('up');
+  var gazex = 100;
+  var gazey = 50;
+  var gazeyrandom = 0;
+img.src = 'http://botb.iomods.com/jsfiddle/qxwvzne.png';
+offset = 0;
+offset2 = 0;
+var draw = function () {
+  ctx.clearRect(0,0,800,600);
+  
+  newx = Math.cos(offset2 * kx) * 50 + 500;
+  newy = Math.sin(offset2 * ky) * 150 + 200;
+  newx = Math.floor(newx);
+  newy = Math.floor(newy);
+  ctx.drawImage  (img,offset * 189*.75,0, 189*.75, 277*.75, newx,newy,189*.75,277*.75);
+  
+  hgctx.fillStyle = 'rgba(0,0,0,0.05)';
+  hgctx.fillRect(0,0,800,600);
+  hgctx.fillStyle = 'rgba(77, 37, 09, 1)';
+  hgctx.beginPath();
+  hgctx.arc(newx+75,newy+200,50,0,2*Math.PI);
+  hgctx.fill();
+  
+  hlctx.clearRect(0,0,800,600);
+	var burnx = gazex + r(0,30);
+  var burny = gazey + r(0,30);
+  if(gaze[offset] !== 'none') {
+    if(gaze[offset] == 'up') {
+    	gazey = 50 + gazeyrandom;
+    }
+    if(gaze[offset] == 'mid') {
+    	gazey = 550 - gazeyrandom;
+    }
+    
+    hlctx.beginPath();
+    hlctx.moveTo(burnx, burny);
+    hlctx.lineTo(newx+34+ r(0,5),newy+116+ r(0,5));
+    hlctx.strokeStyle = 'rgba(255,255,255,0.5)';
+    hlctx.lineWidth =10;
+    hlctx.stroke();
+    hlctx.beginPath();
+
+    hlctx.moveTo(burnx, burny);
+    hlctx.lineTo(newx+78+ r(0,5),newy+116+ r(0,5));
+    hlctx.strokeStyle = 'rgba(255,255,255,0.5)';
+    hlctx.lineWidth =10;
+    hlctx.stroke();
+  } else {
+  	gazex = r(20,400);
+    gazeyrandom = r(0,100);
+  }
+  hlbctx.clearRect(0,0,800,600);
+  if(gaze[offset] !== 'none') {
+    hlbctx.fillStyle = 'yellow';
+    hlbctx.beginPath();
+    hlbctx.arc(burnx,burny,10,0,2*Math.PI);
+    hlbctx.fill();
+  }
+	window.requestAnimationFrame(draw);
+};
+draw();
+function r (min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+setInterval (function(){
+offset++;
+if (offset==15) offset=0;
+}, 200);
+
+setInterval (function(){
+offset2+=0.016;
+}, 10);
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id='hlb'   width='800px' height='600px'></canvas>
+<canvas id='hg'   width='800px' height='600px'></canvas>
+<canvas id='hl'   width='800px' height='600px'></canvas>
+<canvas id='view' width='800px' height='600px'></canvas>
+
+
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "L6f20xq5"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

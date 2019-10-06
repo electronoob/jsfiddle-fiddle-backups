@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      textarea {
+  border: 11px inset #ccc;
+  width: calc(100% - 22px);
+  height: 200px;
+}
+
+div#output {
+  border: 11px inset #faa;
+  width: calc(100% - 22px);
+}
+
+.noshow {
+  display: none;
+}
+
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+window.gogogo = function(gtlt) {
+  //report, bases
+  let buffer = {};
+  buffer.bases = document.getElementById("bases").value;
+  buffer.report = document.getElementById("report").value;
+  buffer.bases = buffer.bases.split("\n");
+  buffer.report = buffer.report.split("\n");
+  let sizes = {};
+  sizes.bases = buffer.bases.length;
+  sizes.report = buffer.report.length;
+  let store = {};
+  store.bases = [];
+  store.report = [];
+  store.basesByLocation = [];
+  store.fleetsByLocation = [];
+  store.matches = [];
+  store.regions = [];
+  let i;
+  for (i = 0; i < sizes.bases; i++) {
+    let str = buffer.bases[i];
+    let tok = str.split("\t");
+    let name = tok[0];
+    let base = tok[1];
+    let location = tok[2];
+    let path = {};
+    if (location) {
+      path = location.split(":");
+      let data = {
+        location: location,
+        path: path,
+        owner: name
+      };
+      store.bases.push(data);
+      if (!Array.isArray(store.basesByLocation[path[0] + path[1]])) {
+        store.basesByLocation[path[0] + path[1]] = [];
+      }
+      store.basesByLocation[path[0] + path[1]].push(data);
+      store.regions.push(path[0] + path[1]);
+    }
+  }
+	store.regions = Array.from(new Set(store.regions));
+  for (i = 0; i < sizes.report; i++) {
+    let str = buffer.report[i];
+    let tok = str.split("\t");
+    let name = tok[0];
+    let location = tok[1];
+    let size = -1;
+    let age = -1;
+    if(tok.length === 5) {
+      size = parseInt(String(tok[3]).replace(",", ""));
+      age = tok[4];
+    } 
+    if(tok.length === 4) {
+      size = parseInt(String(tok[2]).replace(",", ""));
+      age = tok[3];
+    }
+ 
+    console.log(tok.length, size);
+
+    let path = {};
+    if (location) {
+      path = location.split(":");
+      let search = path[0] + path[1];
+      let data = {
+        location: location,
+        path: path,
+        owner: name,
+        size: size,
+        age: age
+      };
+      if (!Array.isArray(store.fleetsByLocation[path[0] + path[1]])) {
+        store.fleetsByLocation[path[0] + path[1]] = [];
+      }
+      store.fleetsByLocation[path[0] + path[1]].push(data);
+      store.report.push(data);
+    }
+  }
+  let html = "";
+  let hbuf = `hey guys scouts that need popping near your bases are listed below, remember to check target level so you keep your level protection. you can use ctrl+f on a computer to search for your own name should you prefer.
+  <br><br>
+`;
+  for (i = 0; i < store.regions.length; i++) {
+    //
+    let region = store.regions[i];
+    let bases = store.basesByLocation[region];
+    let fleets = store.fleetsByLocation[region];
+    if (bases && fleets) {
+      let fleetmax = 0;
+      //bases, fleets
+      //{location: location, path: path, owner: name};
+      // {location: location, path: path, owner: name, size: size, age: age};
+      let ik = 0;
+      let path = region.substr(0, 3) + ":" + region.substr(3, 2)
+      hbuf += `<div class="region">${path}<br>`;
+      for (ik = 0; ik < bases.length; ik++) {
+        hbuf += `&bull;[u]${bases[ik].owner} [/u]&nbsp;&nbsp;`;
+      }
+      hbuf += "<br>[code]";
+			let doweshowthisregion = false;
+      for (ik = 0; ik < fleets.length; ik++) {
+        let show = "show";
+        let size = fleets[ik].size;//parseInt(fleets[ik].size.replace(",", ""));
+        if(gtlt == "greater") {
+          if (size < maxfleetsize.value) {
+            show = "noshow";
+          } else {
+            show = "show";
+            doweshowthisregion = true;
+          }        
+        } else {
+          if (size > maxfleetsize.value) {
+            show = "noshow";
+          } else {
+            show = "show";
+            doweshowthisregion = true;
+          }
+        }
+        hbuf += `<div class="${show}" >
+        <small class="${show} flowner">${fleets[ik].owner}</small>
+        <small class="${show} fllocation">${fleets[ik].location}</small>
+        <small class="${show} flsize">${fleets[ik].size}</small>
+        <small class="${show} flage">${fleets[ik].age}</small>
+        </div>`;
+      }
+      hbuf += "[/code]";
+      hbuf += "</div>";
+      if (doweshowthisregion) {     
+      	html += hbuf;
+      }
+      hbuf = "";
+    }
+  }
+  html = html.replace(/\[Elo\]/g, '&nbsp;');
+  document.getElementById("output").innerHTML = html;
+  console.log(store.regions)
+  /*
+
+        if (Array.isArray(store.basesByLocation[search])) {
+  				console.log(data,store.basesByLocation[search] );
+          store.matches.push(
+          	{fleet: data, base: store.basesByLocation[search]}
+          );
+        }
+
+  okay data is in managable format
+
+  store.bases:
+  location,path,owner
+
+  store.report:
+  location, path, owner, size, age
+  */
+
+  //console.log(store.basesByLocation, store.fleetsByLocation)
+
+
+
+};
+
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+     paste in the scanner information found in empire>reports>guild><br> in this instance you would probably select either aG or oG.<br><br> make sure to select the fleets option and click get report...<br> and then copy and paste the info into this box.<br>
+
+<a target="_blank" href="https://i.imgur.com/Qy6eLcv.png"><img src=https://i.imgur.com/Qy6eLcvb.png></a>
+<a target="_blank" href="https://i.imgur.com/v1eMruG.png"><img src=https://i.imgur.com/v1eMruGb.png></a>
+
+
+<textarea id=report class=report onfocus="this.select();">
+[aG] Rambo	M17:17:14:21	0:30:33	584,700	
+[aG] Rambo	M17:17:14:21	0:50:12	183,240	
+[aG] Mr Smith	M17:17:14:21	0:11:47	17,500	0 hour(s) ago
+[aG] Ozmosis	M17:17:14:21	0:41:04	793,850	
+[aG] PewPew	M17:17:14:21	10,000	0 hour(s) ago
+[aG] Jean Girard	M17:17:14:21	20,000	
+[aG] Sulley	M14:67:46:10	50,000	2 hour(s) ago
+[aG] Sulley	M14:67:83:20	50,000	2 hour(s) ago
+[aG] Twincatzz	M14:68:20:20	10,000	
+[aG] Velvet Thunder	M14:68:62:20	10,000	
+[aG] MAD_DOG	M14:68:83:10	5	
+[aG] Twincatzz	M14:70:04:20	10,000	6 hour(s) ago
+[aG] Two Dogs	M14:72:08:20	20,000	
+[aG] Mr Smith	M14:73:11:20	50,000	0 hour(s) ago
+</textarea>
+<br>
+<br> our guild bases list<br>
+<textarea id=bases class=bases onfocus="this.select();">
+[HUNT] BobTheBuilder	10	M10:55:36:21
+[HUNT] BobTheBuilder	11	M11:54:82:21
+[HUNT] Roe	10-01	M12:27:58:22
+[HUNT] BobTheBuilder	12	M12:55:26:21
+[HUNT] Roe	09-02	M13:37:47:21
+[HUNT] BobTheBuilder	13	M13:45:17:21
+[HUNT] Wiz777	11	M14:21:98:22
+[HUNT] -Repo-	Io	M14:38:65:20
+[HUNT] Roe	08-02	M14:38:65:22
+[HUNT] -Repo-	Boom	M14:42:87:20
+[HUNT] Macro	Tazenda	M14:68:83:21
+[HUNT] Lebowski	B31	M14:94:31:11
+[HUNT] Kedrick	10	M15:11:06:11
+[HUNT] Alphanideos	OS08	M15:11:06:12
+[HUNT] Alphanideos	OS04	M15:14:58:21
+[HUNT] -Repo-	Curalhu	M15:17:50:10
+[HUNT] -Repo-	Hiiii	M15:17:85:10
+[HUNT] Macro	61Cyngi	M15:23:87:22
+[HUNT] Fred Astaire	Home Planet h	M15:25:97:31
+[HUNT] Wodan	Útgarðar	M15:26:19:11
+[HUNT] Macro	Terminus	M15:27:45:20
+[HUNT] Macro	Kalgan	M15:28:48:10
+[HUNT] Fred Astaire	Tomatoes	M15:29:90:30
+[HUNT] Roe	03-02	M15:31:95:21
+[HUNT] Alphanideos	OS06	M15:32:80:21
+[HUNT] Legend	ACER™	M15:33:07:10
+[HUNT] Legend	HONOR 8X	M15:33:39:10
+[HUNT] Macro	Trantor	M15:33:40:12
+[HUNT] Legend	KIA PICANTO EX	M15:34:01:30
+[HUNT] Macro	Aurora	M15:34:29:11
+[HUNT] Legend	Vivo™	M15:34:36:10
+[HUNT] Roe	02-02	M15:34:44:21
+[HUNT] Legend	Lenovo™	M15:34:48:11
+[HUNT] Legend	Dell™	M15:34:86:20
+[HUNT] Legend	I am Legend h	M15:34:86:21
+[HUNT] Macro	Anacreonte h	M15:35:29:11
+[HUNT] Macro	Solaria	M15:35:67:13
+[HUNT] House Tim	3	M15:35:98:10
+[HUNT] House Tim	2	M15:35:98:11
+[HUNT] House Tim	Prime h	M15:35:98:12
+[HUNT] Roe	01-02 h	M15:36:87:22
+[HUNT] -Repo-	Bills	M15:38:84:10
+[HUNT] electronoob	☠ 1 ☠	M15:40:08:12
+[HUNT] Roe	04-02	M15:44:80:21
+[HUNT] House Tim	5	M15:45:18:10
+[HUNT] House Tim	4	M15:45:18:11
+[HUNT] Alphanideos	OS05	M15:45:47:21
+[HUNT] -Repo-	Vottex	M15:45:75:10
+[HUNT] Fred Astaire	Parsnips	M15:46:30:40
+[HUNT] Roe	05-02	M15:48:04:21
+[HUNT] Alphanideos	OS01 h	M15:48:08:11
+[HUNT] BobTheBuilder	15	M15:54:35:21
+[HUNT] -Repo-	Cascade h	M15:57:68:12
+[HUNT] -Repo-	Mars	M15:57:96:10
+[HUNT] Alphanideos	OS02	M15:61:53:20
+[HUNT] Roe	06-02	M15:63:29:23
+[HUNT] -Repo-	Dollars	M15:66:93:20
+[HUNT] -Repo-	Lonis	M15:68:06:10
+[HUNT] Alphanideos	OS07	M15:68:12:21
+[HUNT] Fred Astaire	Green Onions	M15:71:57:30
+[HUNT] Fred Astaire	Swede	M15:86:93:40
+[HUNT] Lebowski	B32	M15:92:09:11
+[HUNT] Alphanideos	OS03	M15:95:29:10
+[HUNT] Roe	07-03	M15:97:05:21
+[HUNT] Phuker	Mirratown	M16:02:72:10
+[HUNT] Wiz777	4	M16:02:94:21
+[HUNT] Snipes3563	Amarr BPC** N	M16:04:28:20
+[HUNT] K.A.C.E	K7	M16:04:77:20
+[HUNT] Wodan	Álfheimr	M16:04:79:12
+[HUNT] Snipes3563	Plasma*** N	M16:06:53:20
+[HUNT] House Tim	6	M16:07:39:11
+[HUNT] House Tim	8	M16:08:98:20
+[HUNT] House Tim	7	M16:08:98:21
+[HUNT] Wiz777	5	M16:11:90:13
+[HUNT] Snipes3563	Dodixie BPO**	M16:12:87:23
+[HUNT] Snipes3563	Jita BPC***	M16:13:69:20
+[HUNT] Angel001	Amber Homestead	M16:15:93:11
+[HUNT] Snipes3563	Legion BPC**	M16:15:95:20
+[HUNT] Yokai	Agony	M16:15:96:12
+[HUNT] K.A.C.E	K6	M16:16:38:21
+[HUNT] Wiz777	Utopia h	M16:16:91:21
+[HUNT] Kedrick	7	M16:18:90:21
+[HUNT] Wiproc	Iridis	M16:21:78:20
+[HUNT] Gannon	Terra Hotel	M16:22:40:10
+[HUNT] Snipes3563	Proteus BPO* h	M16:22:71:41
+[HUNT] Snipes3563	Tengu BPO**	M16:22:80:10
+[HUNT] electronoob	☠ 2 ☠	M16:25:18:31
+[HUNT] Rift21	28	M16:25:29:20
+[HUNT] Wiz777	3	M16:25:93:21
+[HUNT] Wiz777	2	M16:26:34:21
+[HUNT] KAPTN	Clash	M16:26:57:22
+[HUNT] electronoob	☠ 3 ☠	M16:26:82:11
+[HUNT] Wodan	Vanaheimr	M16:28:51:10
+[HUNT] Archer	Amber10	M16:28:85:11
+[HUNT] Snipes3563	Loki BPC**	M16:32:80:20
+[HUNT] Wiproc	Baker	M16:32:95:20
+[HUNT] Phuker	Mirraoid	M16:33:14:21
+[HUNT] Gannon	Terra Delta	M16:33:85:11
+[HUNT] KAPTN	Dragon	M16:35:66:10
+[HUNT] Phuker	Mirramonisaries	M16:35:85:10
+[HUNT] Lebowski	B35 - RDL N	M16:35:90:30
+[HUNT] Rift21	25	M16:35:93:20
+[HUNT] Lebowski	B36 - D	M16:36:19:11
+[HUNT] Yokai	Hate	M16:36:19:21
+[HUNT] KAPTN	Clans h	M16:36:27:42
+[HUNT] Rift21	26	M16:36:52:20
+[HUNT] Archer	Amber5	M16:37:47:10
+[HUNT] KAPTN	Valkyrie	M16:37:72:21
+[HUNT] Wiz777	8	M16:38:34:21
+[HUNT] Archer	Amber6	M16:38:54:11
+[HUNT] Wiproc	Farawin	M16:40:09:20
+[HUNT] Angel001	Jade Town	M16:41:03:30
+[HUNT] Wiproc	Consola h	M16:41:13:11
+[HUNT] Gannon	Terra Alpha h	M16:41:24:31
+[HUNT] Gannon	Terra Omega	M16:41:28:10
+[HUNT] KAPTN	Golem	M16:41:85:11
+[HUNT] Macro	Askone	M16:41:94:10
+[HUNT] Wiproc	Bersalink	M16:41:94:20
+[HUNT] Gannon	Terra Prime	M16:42:45:10
+[HUNT] Kedrick	9	M16:42:66:11
+[HUNT] Kedrick	8	M16:43:43:21
+[HUNT] Phuker	Mirraville	M16:44:37:10
+[HUNT] Rift21	23	M16:44:58:20
+[HUNT] KAPTN	Archer	M16:44:63:20
+[HUNT] Partyfoot	Lobornam h	M16:44:95:12
+[HUNT] Rift21	21 h	M16:45:40:21
+[HUNT] Rift21	24	M16:45:43:20
+[HUNT] electronoob	☠ 5 ☠ h	M16:45:45:11
+[HUNT] Gannon	Terra Fox	M16:45:55:21
+[HUNT] Phuker	Mirratopia	M16:45:74:11
+[HUNT] Yokai	Flintstone	M16:45:74:21
+[HUNT] electronoob	☠ 6 ☠	M16:46:38:10
+[HUNT] Rift21	22	M16:46:40:20
+[HUNT] KAPTN	Giant	M16:46:47:10
+[HUNT] Archer	Amber1 h	M16:47:94:31
+[HUNT] Archer	Amber2	M16:48:36:11
+[HUNT] KAPTN	Wizard	M16:48:45:10
+[HUNT] Angel001	Amethyst Isle	M16:48:68:10
+[HUNT] Archer	Amber8	M16:49:53:10
+[HUNT] Wiproc	Sheylan	M16:50:47:20
+[HUNT] Gannon	Terra Charlie	M16:50:55:10
+[HUNT] Gannon	Terra Beta	M16:51:12:10
+[HUNT] -Repo-	Oi to	M16:52:86:10
+[HUNT] Partyfoot	Domicillius	M16:53:19:11
+[HUNT] Wiproc	Haitch	M16:53:47:20
+[HUNT] Gannon	Terra Golf	M16:53:68:10
+[HUNT] Rift21	27	M16:53:75:20
+[HUNT] Phuker	Mirradise	M16:54:24:11
+[HUNT] Yokai	Kage	M16:54:24:12
+[HUNT] Yokai	Iwagakure noSato h	M16:54:56:52
+[HUNT] Partyfoot	Phytophore II	M16:54:57:22
+[HUNT] BobTheBuilder	16	M16:54:84:21
+[HUNT] Phuker	Mirrajuana h	M16:55:04:11
+[HUNT] Yokai	Meth	M16:55:23:10
+[HUNT] Wodan	Yggdrasil	M16:55:24:10
+[HUNT] Archer	Amber 11	M16:55:39:11
+[HUNT] Wiz777	9	M16:55:41:22
+[HUNT] Partyfoot	Villiphius	M16:56:69:11
+[HUNT] Archer	Amber4	M16:57:50:10
+[HUNT] Wodan	Niðavellir	M16:58:58:22
+[HUNT] Archer	Amber7	M16:58:68:10
+[HUNT] Archer	Amber3	M16:59:20:20
+[HUNT] Alphanideos	ND01	M16:60:06:10
+[HUNT] Wodan	Muspelheim	M16:60:27:10
+[HUNT] Wiproc	Keylote	M16:61:46:20
+[HUNT] Rift21	31	M16:61:64:20
+[HUNT] Angel001	Stargem Planet h	M16:63:14:11
+[HUNT] Wiproc	Halo	M16:63:36:20
+[HUNT] Partyfoot	Sathye	M16:63:98:11
+[HUNT] Phuker	Mirraland	M16:64:22:20
+[HUNT] Angel001	Sapphire City	M16:64:40:11
+[HUNT] KAPTN	Bowler	M16:64:92:20
+[HUNT] electronoob	☠ 7 ☠	M16:65:76:31
+[HUNT] Archer	Amber 9	M16:67:48:10
+[HUNT] Kedrick	4	M16:69:65:20
+[HUNT] Partyfoot	Faytrethe	M16:73:04:11
+[HUNT] Partyfoot	Dreeka	M16:73:04:12
+[HUNT] Wiproc	Weyce	M16:73:13:20
+[HUNT] Angel001	Garnet Pride	M16:74:30:10
+[HUNT] Rift21	30	M16:74:36:20
+[HUNT] Angel001	Pearl Harbor	M16:75:11:10
+[HUNT] Phuker	Mirrahaven	M16:75:18:10
+[HUNT] Angel001	Rubys Fire	M16:75:62:20
+[HUNT] Kedrick	1	M16:76:20:20
+[HUNT] Kedrick	Home Planet h	M16:76:58:12
+[HUNT] Rift21	29	M16:77:01:20
+[HUNT] Wiz777	7	M16:78:38:21
+[HUNT] Kedrick	5	M16:79:05:20
+[HUNT] Wiz777	6	M16:81:22:13
+[HUNT] Gannon	Terra Echo	M16:82:16:11
+[HUNT] Macro	Arcturus	M16:82:19:23
+[HUNT] Partyfoot	Ovium	M16:82:27:21
+[HUNT] Wodan	Niflheim h	M16:83:10:10
+[HUNT] Wiproc	Tento	M16:83:91:20
+[HUNT] Fred Astaire	Red Cabbage	M16:84:77:10
+[HUNT] Kedrick	6	M16:85:90:20
+[HUNT] Wodan	Jötunheimr	M16:87:41:21
+[HUNT] Kedrick	2	M16:87:47:20
+[HUNT] electronoob	☠ 8 ☠	M16:91:26:40
+[HUNT] Partyfoot	Heliosyncrona	M16:92:52:11
+[HUNT] Yokai	Gaia	M16:93:03:10
+[HUNT] Macro	Wencory	M16:94:33:20
+[HUNT] Partyfoot	Milliennia	M16:94:59:11
+[HUNT] Kedrick	3	M16:97:52:10
+[HUNT] Fluffy doggies	Hair ball	M17:03:49:10
+[HUNT] Kedrick	12	M17:11:68:11
+[HUNT] K.A.C.E	K3	M17:15:07:21
+[HUNT] electronoob	☠ 9 ☠	M17:16:36:20
+[HUNT] Wiz777	10	M17:17:14:22
+[HUNT] Lebowski	B39 - P	M17:21:55:20
+[HUNT] Chicken Nougat	Northwest Front	M17:22:70:13
+[HUNT] KAPTN	Miner	M17:23:86:11
+[HUNT] K.A.C.E	K2	M17:26:65:20
+[HUNT] K.A.C.E	K1 h	M17:26:91:21
+[HUNT] Lebowski	B40 - BDL	M17:31:76:20
+[HUNT] Chicken Nougat	Core Province 8	M17:34:28:21
+[HUNT] KAPTN	Barbarian	M17:36:38:10
+[HUNT] Chicken Nougat	Core Province 9	M17:36:38:13
+[HUNT] K.A.C.E	K5	M17:40:69:20
+[HUNT] Angel001	Jasper Hide Away	M17:41:06:10
+[HUNT] Lebowski	B41 - PDL	M17:41:41:12
+[HUNT] Lebowski	B42 PDL h	M17:41:43:21
+[HUNT] kraven	Ska Gora	M17:43:19:10
+[HUNT] Colmonkey	Lol	M17:43:39:10
+[HUNT] Colmonkey	Noice	M17:43:90:10
+[HUNT] Chicken Nougat	Core Province 3	M17:44:88:10
+[HUNT] Legend	Mirage	M17:45:53:11
+[HUNT] Chicken Nougat	Central Republic h	M17:45:54:21
+[HUNT] Chicken Nougat	Core Province 7	M17:46:82:21
+[HUNT] Snipes3563	Goon Outpost	M17:49:52:21
+[HUNT] Chicken Nougat	Southwest Front	M17:52:80:21
+[HUNT] Chicken Nougat	Core Province 4	M17:54:87:20
+[HUNT] Colmonkey	crystalsGalore	M17:55:09:11
+[HUNT] Lebowski	B38 - RDL N	M17:55:09:20
+[HUNT] BobTheBuilder	17	M17:55:33:21
+[HUNT] Colmonkey	Home Planet h	M17:55:35:21
+[HUNT] Chicken Nougat	Core Province 6	M17:55:38:20
+[HUNT] Colmonkey	Nice	M17:55:44:11
+[HUNT] Colmonkey	T	M17:55:73:11
+[HUNT] Colmonkey	o	M17:56:83:20
+[HUNT] Yokai	Deception	M17:62:37:11
+[HUNT] Lebowski	B37 - D	M17:62:56:31
+[HUNT] Colmonkey	Y	M17:64:95:20
+[HUNT] Colmonkey	1	M17:66:83:20
+[HUNT] Lebowski	B34 OPL N	M17:67:89:21
+[HUNT] electronoob	☠ 10 ☠	M17:67:89:30
+[HUNT] electronoob	☠ 11 ☠	M17:72:47:21
+[HUNT] Partyfoot	Uthulian	M17:74:53:21
+[HUNT] Partyfoot	Brumialli	M17:75:12:21
+[HUNT] Chicken Nougat	Southeast Front	M17:76:98:21
+[HUNT] K.A.C.E	K4	M17:81:38:21
+[HUNT] kraven	Titain	M17:83:93:12
+[HUNT] Wodan	Valhalla	M17:88:12:11
+[HUNT] Legend	Panasonic	M17:88:12:20
+[HUNT] Fred Astaire	Brussels sprouts	M17:88:12:31
+[HUNT] Fluffy doggies	Doggie door	M18:02:97:10
+[HUNT] Wiproc	P	M18:14:66:20
+[HUNT] kraven	Crematora	M18:17:02:11
+[HUNT] Fluffy doggies	Puppy pad h	M18:21:59:52
+[HUNT] Fluffy doggies	Not here	M18:22:28:21
+[HUNT] kraven	NOX	M18:22:65:20
+[HUNT] Fluffy doggies	Opps	M18:22:70:10
+[HUNT] Fluffy doggies	Fire hydrant	M18:27:94:11
+[HUNT] Fluffy doggies	Chew toy	M18:33:85:11
+[HUNT] BobTheBuilder	18	M18:45:24:21
+[HUNT] Lebowski	B33	M18:46:08:21
+[HUNT] viper1	viper 5	M18:47:27:11
+[HUNT] kraven	spartax	M18:54:43:30
+[HUNT] viper1	viper 3	M18:56:85:10
+[HUNT] viper1	Viper 1 h	M18:57:15:21
+[HUNT] viper1	Viper 2	M18:57:63:20
+[HUNT] viper1	viper 4	M18:58:87:10
+[HUNT] Fred Astaire	Cauliflower	M18:59:83:20
+[HUNT] Fred Astaire	Turnip	M18:71:88:10
+[HUNT] kraven	IX h	M18:76:33:42
+[HUNT] Fluffy doggies	Free time	M18:82:78:22
+[HUNT] Fluffy doggies	Nap	M18:92:08:21
+[HUNT] Wodan	Miðgarðr	M18:97:03:11
+[HUNT] viper1	viper 6	M19:31:13:10
+[HUNT] Phuker	Mirrabear	M19:36:31:21
+[HUNT] K.A.C.E	k8	M19:36:36:23
+[HUNT] Fred Astaire	Beetroot	M19:42:69:40
+[HUNT] viper1	Viper 7	M19:43:09:10
+[HUNT] Fluffy doggies	Dog house	M19:47:29:11
+[HUNT] BobTheBuilder	19	M19:55:47:21
+[HUNT] Wodan	Helheim	M19:92:20:21
+[HUNT] K.A.C.E	K9	M30:37:29:20
+[HUNT] BobTheBuilder	eco h	M38:55:65:20
+
+</textarea>
+<br><br> the result pops out below:<br>
+<input type="button" onclick="gogogo('greater');" value="GREATER THAN">
+<input value="601" id="maxfleetsize">
+<input type="button" onclick="gogogo('less');" value="LESS THAN">
+<div id=output class=output onfocus="this.select();"></div>
+<div id=gals class=gals onfocus="this.select();"></div>
+
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "bckn1h8w"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>mirror 1hgj</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      canvas#c {
+  background: rgb(0, 183, 234);
+  background: -moz-linear-gradient(top, rgb(0, 183, 234) 0%, rgb(0, 158, 195) 100%);
+  background: -webkit-linear-gradient(top, rgb(0, 183, 234) 0%, rgb(0, 158, 195) 100%);
+  background: linear-gradient(to bottom, rgb(0, 183, 234) 0%, rgb(0, 158, 195) 100%);
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#00b7ea', endColorstr='#009ec3', GradientType=0);
+}
+
+div#scoresbox {
+  position: absolute;
+  top: 420px;
+  display: table;
+  margin: 0 auto;
+  z-index: 50;
+  width: 800px;
+  height: 50px;
+  background-color: #334499;
+  color: #ffffff;
+}
+
+canvas {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+var gctx = document.getElementById('c').getContext('2d');
+var scoresbox = document.getElementById('scoresbox');
+var dead, score, points, lives, difficulty, laststrike, everstrike, ballshow, items, debris, power, starttime, kb, ai, jp, jp2, jp3, deb, nrg, pickups, init, scores = [];
+init = 0;
+init_vars();
+
+function init_vars() {
+  init = 1;
+  dead = 0;
+  score = 0;
+  points = 0;
+  lives = 2;
+  difficulty = 0;
+  laststrike = Date.now();
+  everstrike = 0;
+  ballshow = 1;
+  items = [];
+  debris = [];
+  power = 100;
+  starttime = Date.now();
+  kb = {
+    l: 0,
+    r: 0,
+    u: 0,
+    d: 0
+  };
+  ai = {
+    x: 400,
+    y: 200
+  };
+  jp = new Image();
+  jp.src = "http://i.imgur.com/cAJaJpt.png";
+  jp2 = new Image();
+  jp2.src = "http://i.imgur.com/cnGIs2G.png";
+  jp3 = new Image();
+  jp3.src = "http://i.imgur.com/EibYcdV.png";
+  deb = new Image();
+  deb.src = "http://i.imgur.com/O3yYl1d.png";
+  nrg = new Image();
+  nrg.src = "http://i.imgur.com/AzKvlfD.png";
+  pickups = [];
+}
+newDebris();
+newItem('energy', 16, 0.6, 0, nrg);
+window.requestAnimationFrame(draw);
+
+
+function death(index) {
+  if (index >= 0) debris.splice(index, 1);
+  if (index == -1) laststrike = 0;
+  if (index == -1) lives = 0;
+  if ((laststrike + 3000) > (Date.now())) {
+    return;
+  }
+  laststrike = Date.now();
+  everstrike++;
+  if (lives > 0) {
+    lives--;
+    return;
+  }
+  score = Math.round((Date.now() - starttime) / 1000) + points;
+  dead = 1;
+
+  scores.push(score);
+  scoresbox.innerHTML =
+    'last score: ' + scores[scores.length - 1] + '<br>all scores:' + scores.join();
+  init_vars();
+}
+
+
+
+function draw() {
+  if (!dead)
+    score = Math.round((Date.now() - starttime) / 1000) + points;
+
+  gctx.clearRect(0, 0, 800, 400);
+  lifes = lives;
+
+  while (lifes > 0) {
+    //gctx.beginPath();
+    gctx.fillStyle = 'rgba(255,255,255,1)';
+    gctx.strokeStyle = "#000";
+    gctx.lineWidth = "2";
+    gctx.beginPath();
+    gctx.arc((lifes * 16) - 7 + 100, 8, 5, 0, 2 * Math.PI);
+    gctx.stroke();
+    gctx.fill();
+    gctx.closePath();
+    lifes--;
+  }
+  gctx.lineWidth = "1";
+  gctx.strokeStyle = "#000";
+  gctx.font = "12px verdana";
+  gctx.fillStyle = 'rgba(' + (255 - Math.round(power)) + ',0,0,1)';
+  gctx.fillRect(2, 20, Math.round(power), 8);
+  gctx.strokeRect(1, 20, 200, 9);
+  gctx.fillStyle = 'rgba(0,0,0,1)';
+  gctx.fillText('ENERGY ' + Math.round(power) + '%', 1, 12);
+  gctx.font = "16px verdana";
+  gctx.fillText('Score: ' + score, 10, 380);
+  items.forEach(function(d, i, a) {
+    gctx.fillStyle = 'rgba(255,255,255,0.2)';
+    gctx.fillRect(d.x, d.y, 32, 32);
+    gctx.drawImage(d.img, d.x, d.y, 32, 32);
+  });
+  debris.forEach(function(d, i, a) {
+    gctx.drawImage(deb, d.x, d.y, 16, 16);
+  });
+  gctx.drawImage(jp, ai.x, ai.y, 32, 32);
+  gctx.drawImage(jp2, 800 - ai.x - 32, 400 - ai.y - 32, 32, 32);
+
+  if (everstrike) {
+    if ((laststrike + 3000) > Date.now()) {
+      if (ballshow) {
+        gctx.drawImage(jp3, ai.x, ai.y, 32, 32);
+        gctx.drawImage(jp3, 800 - ai.x - 32, 400 - ai.y - 32, 32, 32);
+      }
+    }
+  }
+
+  window.requestAnimationFrame(draw);
+}
+
+function getRandomIntInclusive(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+function newItem(t, p, v, l, i) {
+  // type, points, velocity, lives, image
+  var nc = [];
+  nc.x = getRandomIntInclusive(50, 700);
+  nc.y = getRandomIntInclusive(50, 350);
+  nc.type = t;
+  nc.points = p;
+  nc.lives = l;
+  nc.img = i;
+  nc.v = v;
+  items.push(nc);
+}
+
+function newDebris() {
+  if (debris.length > difficulty) return;
+  var nc = [];
+  nc.x = getRandomIntInclusive(820, 900);
+  nc.y = getRandomIntInclusive(0, 390);
+  nc.z = getRandomIntInclusive(2, 15);
+  nc.v = getRandomIntInclusive(1, 5);
+  debris.push(nc);
+}
+
+window.onkeydown = function(e) {
+  switch (e.keyCode) {
+    case 38:
+      kb.u = 1;
+      e.preventDefault();
+      break;
+    case 40:
+      kb.d = 1;
+      e.preventDefault();
+      break;
+    case 37:
+      kb.l = 1;
+      e.preventDefault();
+      break;
+    case 39:
+      kb.r = 1;
+      e.preventDefault();
+      break;
+  }
+};
+window.onkeyup = function(e) {
+  switch (e.keyCode) {
+    case 38:
+      kb.u = 0;
+      e.preventDefault();
+      break;
+    case 40:
+      kb.d = 0;
+      e.preventDefault();
+      break;
+    case 37:
+      kb.l = 0;
+      e.preventDefault();
+      break;
+    case 39:
+      kb.r = 0;
+      e.preventDefault();
+      break;
+  }
+};
+window.setInterval(function() {
+  if (dead) {
+    return;
+  }
+  newItem('energy', 16, 0.6, 0, nrg);
+}, 7000);
+
+window.setInterval(function() {
+  if (dead) {
+    return;
+  }
+  // new debris will be contolled by difficulty level
+  newDebris();
+  power -= 0.1; // reduce player's power
+  if (power <= 0) {
+    death(-1);
+  }
+}, 500);
+
+window.setInterval(function() {
+  if (dead) {
+    return;
+  }
+  debris.forEach(function(d, i, a) {
+    a[i].x -= a[i].v;
+    if (a[i].x < -60) {
+      debris.splice(i, 1);
+      if (debris.length < 10) {
+        //newDebris();
+      }
+    }
+  });
+  items.forEach(function(d, i, a) {
+    a[i].y += a[i].v;
+    if (a[i].y > 400) {
+      items.splice(i, 1);
+      if (items.length < 10) {
+        //
+      }
+    }
+  });
+}, 30);
+
+function getItem(i) {
+  if (dead) {
+    return;
+  }
+  points += items[i].points;
+  if (items[i].type == 'energy') {
+    power += 30;
+    if (power >= 200) {
+      power = 100;
+      lives++;
+    }
+  }
+  items.splice(i, 1);
+}
+window.setInterval(function() {
+  if (dead) {
+    return;
+  }
+  // collisions
+  var i;
+  for (i = 0; i < items.length; i++) {
+    //  items.forEach(function(d, i, a) {
+    var d = items[i];
+    hitplayer = Math.hypot(d.x - (ai.x + 16 - 16), d.y - (ai.y + 16 - 16));
+    hitmirror = Math.hypot(d.x - (800 - ai.x - 32 + 16), d.y - (400 - ai.y - 32 + 16));
+    if ((hitplayer <= 32) || (hitmirror <= 32)) {
+      getItem(i);
+    }
+  }
+
+  //player x, y, size, size
+  //ai.x,ai.y, 32, 32
+  //mirror x y size size
+  //800-ai.x-32, 400-ai.y-32, 32 ,32);
+  //  debris.forEach(function(d, i, a) {
+  for (i = 0; i < debris.length; i++) {
+    var d = debris[i];
+    hitplayer = Math.hypot(d.x - (ai.x + 16 - 8), d.y - (ai.y + 16 - 8));
+    hitmirror = Math.hypot(d.x - (800 - ai.x - 32 + 8), d.y - (400 - ai.y - 32 + 8));
+    if ((hitplayer <= 20) || (hitmirror <= 20)) {
+      death(i);
+    }
+  }
+}, 3);
+window.setInterval(function() {
+  if (dead) {
+    return;
+  }
+  ballshow = !ballshow;
+}, 10);
+window.setInterval(function() {
+  if (dead) {
+    return;
+  }
+  difficulty++;
+}, 10000);
+window.setInterval(function() {
+  if (dead) {
+    return;
+  }
+
+  if (kb.u) {
+    power -= 0.08;
+    ai.y = ai.y - 2;
+  }
+  if (kb.d) {
+    power -= 0.08;
+    ai.y = ai.y + 2;
+  }
+  if (kb.l) {
+    power -= 0.08;
+    ai.x = ai.x - 2;
+  }
+  if (kb.r) {
+    power -= 0.08;
+    ai.x = ai.x + 2;
+  }
+
+  if (ai.x < 40) ai.x = 40;
+  if (ai.x > 720) ai.x = 720;
+  if (ai.y < 0) ai.y = 0;
+  if (ai.y > 360) ai.y = 360;
+  if (power <= 0) death(-1);
+}, 4);
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id=c width=800 height=400 style="z-index:1;">
+</canvas>
+
+<div id=scoresbox>
+
+</div>
+
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "1f2bxy1y"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

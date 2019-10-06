@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+var asm = "\
+Num2Dec:\n\
+        ld      bc,-10000\n\
+        call    Num1\n\
+        ld      bc,-1000\n\
+        call    Num1\n\
+        ld      bc,-100\n\
+        call    Num1\n\
+        ld      c,-10\n\
+        call    Num1\n\
+        ld      c,b\n\
+\n\
+Num1:\n\
+        ld      a,'0'-1\n\
+Num2:\n\
+        inc     a\n\
+        add     hl,bc\n\
+        jr      c,Num2\n\
+        sbc     hl,bc\n\
+\n\
+        ld      [de],a\n\
+        inc     de\n\
+        ret\n\
+";
+asm = asm.split("\n");
+
+//p(asm[1]);
+for (let cocks of asm) p(cocks);
+
+function p(line) {
+  let o = line.trim().split(/[ ,\s]+/g);
+  switch (o[0]) {
+    case 'nop':
+      console.log("TODO nop");
+    break;
+    case 'ld':
+      console.log("TODO ld");
+    break;
+    case 'inc':
+      console.log("TODO inc");
+    break;
+    case 'dec':
+      console.log("TODO dec");
+    break;
+    case 'rlca':
+      console.log("TODO rlca");
+    break;
+    case 'add':
+      console.log("TODO add");
+    break;
+    case 'rrca':
+      console.log("TODO rrca");
+    break;
+    case 'stop':
+      console.log("TODO stop");
+    break;
+    case 'rla':
+      console.log("TODO rla");
+    break;
+    case 'jr':
+      console.log("TODO jr");
+    break;
+    case 'rra':
+      console.log("TODO rra");
+    break;
+    case 'daa':
+      console.log("TODO daa");
+    break;
+    case 'cpl':
+      console.log("TODO cpl");
+    break;
+    case 'scf':
+      console.log("TODO scf");
+    break;
+    case 'ccf':
+      console.log("TODO ccf");
+    break;
+    case 'halt':
+      console.log("TODO halt");
+    break;
+    case 'adc':
+      console.log("TODO adc");
+    break;
+    case 'sub':
+      console.log("TODO sub");
+    break;
+    case 'sbc':
+      console.log("TODO sbc");
+    break;
+    case 'and':
+      console.log("TODO and");
+    break;
+    case 'xor':
+      console.log("TODO xor");
+    break;
+    case 'or':
+      console.log("TODO or");
+    break;
+    case 'cp':
+      console.log("TODO cp");
+    break;
+    case 'ret':
+      console.log("TODO ret");
+    break;
+    case 'pop':
+      console.log("TODO pop");
+    break;
+    case 'jp':
+      console.log("TODO jp");
+    break;
+    case 'call':
+      console.log("TODO call");
+    break;
+    case 'push':
+      console.log("TODO push");
+    break;
+    case 'rst':
+      console.log("TODO rst");
+    break;
+    case 'prefix':
+      console.log("TODO prefix");
+    break;
+    case 'reti':
+      console.log("TODO reti");
+    break;
+    case 'ldh':
+      console.log("TODO ldh");
+    break;
+    case 'di':
+      console.log("TODO di");
+    break;
+    case 'ei':
+      console.log("TODO ei");
+    break;
+    default:
+      console.log("Unknown:",o);
+  }
+}
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "84cdc3sc"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      canvas {
+  background-color: rgb(50, 50, 50);
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+
+body {
+  background-color: #000
+}
+
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+let game = document.getElementById('game');
+let ctx = game.getContext('2d');
+var snow = document.createElement('canvas');
+snow.id = 'snow';
+snow.width = game.width;
+snow.height = game.height;
+snow.bins = [];
+snow.mass = 0;
+snow.massStart = 0;
+for (i = 0; i < game.width; i++) {
+  snow.bins[i] = Math.floor(Math.sin(6606 + (i / 100)) * 30 + 40);
+  snow.massStart += snow.bins[i];
+}
+stx = snow.getContext('2d');
+
+ctx.mozImageSmoothingEnabled = false;
+ctx.webkitImageSmoothingEnabled = false;
+ctx.msImageSmoothingEnabled = false;
+ctx.imageSmoothingEnabled = false;
+
+ctx.fillStyle = 'white';
+ctx.font = "20px Arial";
+ctx.fillText('snow', 10, 20);
+
+let draw = function() {
+  ctx.clearRect(0, 0, game.width, game.height);
+  ctx.drawImage(snow, 0, 0);
+  for (i = 0; i < grid.points.length; i++) {
+    let x = grid.points[i].x;
+    let y = grid.points[i].y;
+    ctx.fillStyle = 'rgba(255,255,255,0.' + grid.points[i].a + ')';
+    ctx.fillRect(x, y, grid.points[i].r, grid.points[i].r);
+  }
+  ctx.fillStyle = 'white';
+  ctx.font = "20px Arial";
+  ctx.fillText('specs of fallen snow', 10, 70);
+  ctx.font = "40px Arial";
+  ctx.fillText(snow.mass, 10, 40);
+  window.requestAnimationFrame(draw);
+};
+
+//gen
+
+var grid = {};
+grid.ready = false;
+grid.points = [];
+grid.genMax = 100;
+grid.stop = 700;
+wind = {};
+wind.x = 0;
+wind.y = 0;
+let genSpeck = function() {
+  grid.points.push(
+    new Vector(
+      gri(0, game.width * 2) - game.width / 2,
+      gri(0, game.height) - game.height,
+      gri(2, 3),
+      gri(2, 7)
+    )
+  );
+
+};
+let genSnow = function() {
+  if (grid.points.length >= grid.stop) return;
+  for (i = 0; i < grid.genMax; i++) {
+    genSpeck();
+  }
+}
+
+genSnow();
+draw();
+
+setInterval(function() {
+  for (i = 0; i < grid.points.length; i++) {
+    if ((grid.points[i].y > game.height) ||
+      (grid.points[i].y > game.height - snow.bins[grid.points[i].x])) {
+      //snow bin
+      if (grid.points[i].x >= 0 && grid.points[i].x < game.width) {
+        let d = grid.points[i].y - (game.height - snow.bins[grid.points[i].x]);
+        if (Math.abs(d) < 8) {
+          //console.log(d);
+          snow.bins[grid.points[i].x] += grid.points[i].r / 2;
+          grid.points.splice(i, 1);
+          genSpeck();
+          continue;
+        } else {
+
+        }
+      }
+
+    }
+    if (grid.points[i].y > game.height) {
+      grid.points.splice(i, 1);
+      genSpeck();
+    }
+
+    let calc = 0;
+    calc += Math.round(Math.cos(Date.now() / 3000) * 1);
+    calc += Math.round(Math.sin(Date.now() / 10000) * 2);
+    calc += Math.round(Math.sin(Date.now() / 1000) * 1);
+    wind.x = calc;
+    grid.points[i].x += wind.x;
+    grid.points[i].y += gri(1, 3) + wind.y;
+  }
+
+
+}, 20);
+setInterval(function() {
+  genSnow();
+}, 600);
+setInterval(function() {
+  stx.clearRect(0, 0, game.width, game.height)
+  stx.fillStyle = 'rgba(100,100,100,1)';
+  let mass = 0;
+  for (i = 0; i < game.width; i++) {
+    stx.fillRect(i, game.height - snow.bins[i], 5, snow.bins[i]);
+    mass += snow.bins[i];
+  }
+  snow.mass = Math.round(mass - snow.massStart);
+}, 100);
+
+
+
+function gri(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function Vector(x = 0, y = 0, r = 0, a = 0) {
+  this.x = x;
+  this.y = y;
+  this.r = r
+  this.a = a;
+  Vector.prototype.sub = function(b) {
+    this.x -= b.x;
+    this.y -= b.y;
+  };
+  Vector.prototype.add = function(b) {
+    this.x += b.x;
+    this.y += b.y;
+  };
+  Vector.prototype.mag = function() {
+    return Math.sqrt(Math.abs(this.x) ^ 2 + Math.abs(this.y) ^ 2);
+  };
+  Vector.prototype.magsq = function() {
+    return Math.abs(this.x) ^ 2 + Math.abs(this.y) ^ 2;
+  };
+  Vector.prototype.div = function(value) {
+    this.x /= value;
+    this.y /= value;
+  };
+  Vector.prototype.mul = function(value) {
+    this.x *= value;
+    this.y *= value;
+  };
+  Vector.prototype.setMag = function(value) {
+    var m = this.mag();
+    if (m !== 0 && m != 1) {
+      this.div(m);
+    }
+    this.mul(value);
+  };
+  Vector.prototype.hypot = function(b) {
+    return Math.hypot(this.x - b.x, this.y - b.y);
+  };
+  Vector.prototype.lerp = function(b, step) {
+    var a = new Vector(this.x, this.y);
+    b.sub(a);
+    b.mul(step);
+    b.add(a);
+    return b;
+  };
+}
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id="game" width="640" height="480"></canvas>
+
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "5qmzwa5a"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

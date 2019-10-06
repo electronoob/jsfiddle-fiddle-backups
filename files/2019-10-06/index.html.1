@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      @import url('https://fonts.googleapis.com/css?family=Gloria+Hallelujah');
+
+canvas {
+  border: 2px solid white;
+}
+
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+var grid = {};
+grid.width = 2;
+grid.height = 2;
+grid.points = [];
+grid.swarm = []
+
+ctx = can.getContext("2d");
+
+function draw(){
+	ctx.clearRect(0,0,can.width,can.height);
+if (grid.points.length === 0) { 
+	ctx.strokeStyle="blue";
+  ctx.font = "120px arial";
+  ctx.lineWidth = 2;
+ 	ctx.strokeText("& Knuckles",25,180);
+  if (grid.points.length === 0) nonAlphaPointsOnGrid();
+  ctx.clearRect(0,0,can.width,can.height);
+  } else { 
+  var i;
+  for(i=0;i<grid.points.length;i++) {
+
+    ctx.fillStyle="rgba(0,0,0,0.2)";
+    ctx.font = "12px arial";
+  
+      ctx.fillText(String.fromCodePoint(Math.round(Date.now() % 20000 + i+400)),grid.swarm[i].pos.x,grid.swarm[i].pos.y);  //ctx.fillRect(grid.swarm[i].target.pos.x,grid.swarm[i].target.pos.y,10,10);
+		}
+  }
+  window.requestAnimationFrame(draw);
+}
+setInterval(function () {
+		for(i=0;i<grid.points.length;i++) {
+    	grid.swarm[i].attract();
+   		//grid.swarm[i].update();
+    }
+}, 10);
+setInterval(function() {
+     for(i=0;i<grid.points.length;i++) {grid.swarm[i].update();}
+},32);
+window.requestAnimationFrame(draw);
+
+
+function nonAlphaPointsOnGrid() {
+	var x,y;
+  d = ctx.getImageData(0,0,can.width,can.height);
+  for (x=0;x<can.width;x+=grid.width) {
+    for (y=0;y<can.height;y+=grid.height) {
+      var o = 4 * (x + (y * can.width));
+      if ( d.data[o+3] > 80 ) {
+        grid.points.push({x: x, y: y});
+        grid.swarm.push(new fly(x,y));
+      } 
+    }
+  }
+  console.log(grid.points.length,grid.swarm.length);
+}
+
+function gri(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function fly(tx,ty) {
+  this.pos = new Vector(gri(0, can.width), gri(0, can.height));
+  this.target = {};
+  this.target.pos = new Vector(tx,ty);
+  this.lpos = new Vector();
+  this.acc = new Vector();
+  this.vel = new Vector();
+  fly.prototype.update = function() {
+    this.lpos.x = this.pos.x;
+    this.lpos.y = this.pos.y;
+    this.pos.add(this.vel);
+    this.vel.mul(0);
+    this.vel.add(this.acc);
+    this.acc.mul(0);
+  }
+  fly.prototype.attract = function() {
+    var force = new Vector(this.target.pos.x, this.target.pos.y);
+    force.sub(this.pos);
+    distance = force.mag();
+    var G = 2;
+    var strength = G / (distance^2);
+    strength = constrain(strength, 0, 1);
+    force.setMag(strength/2);
+    this.acc.add(force);
+  }
+}
+
+function constrain (value, min,max) {
+	return Math.min(Math.max(value, min), max)
+}
+function Vector(x = 0, y = 0) {
+    this.x = x;
+    this.y = y;
+	Vector.prototype.sub = function(b) {
+	    this.x -= b.x;
+	    this.y -= b.y;
+	};
+	Vector.prototype.add = function(b) {
+	    this.x += b.x;
+	    this.y += b.y;
+	};
+	Vector.prototype.mag = function() {
+	    return Math.sqrt(Math.abs(this.x) ^ 2 + Math.abs(this.y) ^ 2);
+	};
+	Vector.prototype.magsq = function() {
+	    return Math.abs(this.x) ^ 2 + Math.abs(this.y) ^ 2;
+	};
+	Vector.prototype.div = function(value) {
+	    this.x /= value;
+	    this.y /= value;
+	};
+	Vector.prototype.mul = function(value) {
+	    this.x *= value;
+	    this.y *= value;
+	};
+	Vector.prototype.setMag = function(value) {
+	    var m = this.mag();
+	    if (m !== 0 && m != 1) {
+	        this.div(m);
+	    }
+	    this.mul(value);
+	};
+	Vector.prototype.hypot = function(b) {
+	    return Math.hypot(this.x - b.x, this.y - b.y);
+	};
+	Vector.prototype.lerp = function(b, step) {
+	    var a = new Vector(this.x, this.y);
+	    b.sub(a);
+	    b.mul(step);
+	    b.add(a);
+	    return b;
+	};
+}
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id=can width=800 height=300></canvas>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "751ktb8f"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

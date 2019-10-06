@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      body {
+  background-color:#000000;
+  text-align:center;
+}
+canvas {
+
+}
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+// kicad 
+let scr = document.getElementById('scr');
+let ctx = scr.getContext('2d');
+let lib = `
+EESchema-LIBRARY Version 2.3
+#encoding utf-8
+#
+# GAL16V8
+#
+DEF GAL16V8 U 0 40 Y Y 1 F N
+F0 "U" -350 650 50 H V L CNN
+F1 "GAL16V8" 50 650 50 H V L CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+$FPLIST
+ DIP*
+ PDIP*
+ SOIC*
+ SO*
+ PLCC*
+$ENDFPLIST
+DRAW
+X GND 10 0 -600 0 U 50 50 0 0 W N
+X VCC 20 0 600 0 D 50 50 0 0 W N
+X I1/CLK 1 -500 500 150 R 50 50 1 1 I
+X I2 2 -500 400 150 R 50 50 1 1 I
+X I3 3 -500 300 150 R 50 50 1 1 I
+X I4 4 -500 200 150 R 50 50 1 1 I
+X I5 5 -500 100 150 R 50 50 1 1 I
+X I6 6 -500 0 150 R 50 50 1 1 I
+X I7 7 -500 -100 150 R 50 50 1 1 I
+X I8 8 -500 -200 150 R 50 50 1 1 I
+X I9 9 -500 -300 150 R 50 50 1 1 I
+X I10/~OE~ 11 -500 -400 150 R 50 50 1 1 I
+X IO8 12 500 -200 150 L 50 50 1 1 T
+X IO7 13 500 -100 150 L 50 50 1 1 T
+X IO6 14 500 0 150 L 50 50 1 1 T
+X IO5 15 500 100 150 L 50 50 1 1 T
+X IO4 16 500 200 150 L 50 50 1 1 T
+X I03 17 500 300 150 L 50 50 1 1 T
+X IO2 18 500 400 150 L 50 50 1 1 T
+X IO1 19 500 500 150 L 50 50 1 1 T
+S -350 600 350 -600 0 1 10 f
+ENDDRAW
+ENDDEF
+`;
+//
+
+
+
+let list = lib.split("\n");
+let scale = 2;
+
+function draw() 
+{
+	ctx.fillStyle = '#dddddd';
+	ctx.fillRect(0,0,scr.width,scr.height);
+
+  // crosshair
+  ctx.strokeStyle = '#0000aa';
+  ctx.fillStyle = '#aaaaaa';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(0,scr.height/2);
+  ctx.lineTo(scr.width,scr.height/2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(scr.width/2,0);
+  ctx.lineTo(scr.width/2,scr.height);
+  ctx.stroke();
+    //flip y axis -- doesnt work when applying text
+  ctx.transform(1, 0, 0, -1, 0, scr.height)
+  ctx.translate(scr.width/2, scr.height/2);
+
+  
+  var index = 0;
+  for(index=0;index<list.length;index++) {
+    ctx.strokeStyle = 'black';
+    ctx.fillStyle = 'white';
+    let item = list[index].split(" ");
+    let mode = item[0];
+    switch (mode) {
+    	case "DEF":
+      	//DEF name ref 0 offs Y Y 1 F N
+      	//DEF PCA9536D U 0 40 Y Y 1 F N
+        var name = item[1];
+        var ref = item[2];
+        var offs = item[4]; //pin name offset in mil from endpoint of pin. if 0 outside shape
+        var showpinnumber = item[5];
+        var showpinname = item[6];
+        var parts = item[7];
+        //optional
+        var locked = item[8];  // L or F
+        var ispowersym = item[9]; // P or N
+      	break;
+      case "P":
+        var points = item[1];
+        var unit = item[2];
+        var convert = item[3];
+        var thickness = item[4];
+        var filled = item[item.length-1];
+        var ti = 0;
+        for (ti=0; ti<points; ti++) {
+          status += ".";
+        }
+        break;
+      case "S":
+      //  S X1 Y1 X2 Y2 part dmg pen fill
+        var x = item[1]/scale;
+        var y = item[2]/scale;
+        var w = (item[3]/scale) -x;
+        var h = (item[4]/scale) -y;
+        var thickness = item[7]/scale;
+        var cc = item[8];
+        var filled = item[item.length-1];
+        ctx.lineWidth = thickness;
+        if(filled == "f") {
+          ctx.fillRect(x,y,w,h);
+        } 
+        ctx.strokeRect(x,y,w,h);
+        break;
+      case "C":
+        // C posx posy radius unit convert thickness cc
+        var x = item[1]/scale;
+        var y = item[2]/scale;
+        var r = item[3]/scale;
+        var unit = item[4];
+        var convert = item[5];
+        var thickness = item[6]/scale;
+        var cc = item[7];
+
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, 2 * Math.PI, false);
+        if (cc = "f")
+          ctx.fill();
+        ctx.lineWidth = thickness;
+        ctx.stroke();
+        break;
+      case "T":
+				// T angle X Y size hidden part dmg text italic bold Halign Valigm
+        var angle = item[1];
+        var x = item[2]/scale;
+        var y = item[3]/scale;
+        var size = item[4]/scale;
+        var hidden = item[5];
+        var part = item[6];
+        var dmg = item[7];
+        var text = item[8];
+        var italic = item[9];
+        var bold = item[10];
+        var halign = item[11];
+        switch(halign) {
+        	case "L":
+          	halign = "Left";
+          	break;
+        	case "R":
+          	halign = "Right";
+          	break;
+          case "C":
+          	halign = "Center";
+          	break;
+        }
+        var valign = item[12];
+        switch(valign){
+        	case "T":
+         		ctx.textBaseline="top"; 
+          	break;
+          case "B":
+          	ctx.textBaseline="bottom";
+          	break;
+        }
+        ctx.font = size + "px Arial";
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(angle* (Math.PI / 180));
+            ctx.textAlign = halign;
+            ctx.fillText(text, 0, 0);
+            ctx.restore();
+        break;
+      case "X":
+				//  X name pin X Y length orientation sizenum sizename part dmg type shape
+        var name = item[1];
+        var pin = item[2];
+        var x = item[3]/scale;
+        var y = item[4]/scale;
+        var length = item[5]/scale;
+        var orientation = item[6];
+        var sizenum = item[7]/scale;
+        var sizename = item[8]/scale;
+        var part = item[9];
+        var dmg = item[10];
+        var type = item[11];
+        var shape = item[12];
+        var x2 = x;
+        var y2 = y;
+        var ptx = x;
+        var pty = y;
+        var nty = y;
+        var ntx = x;
+        var tr = 0;
+        
+        
+        ctx.font = sizenum+"px Arial";
+        switch(orientation) {
+        	case "U":
+          	y2 += length;
+            tr = 90;
+            nty += ctx.measureText(name).width - length;
+          	break;
+        	case "D":
+         		y2 -= length;
+            pty -= ctx.measureText(pin).width;
+            nty -= ctx.measureText(name).width + length;
+            tr = 90;
+          	break;
+        	case "L":
+          	x2 -= length;
+            ptx -= ctx.measureText(pin).width;
+            ntx -=  ctx.measureText(name).width + length;
+          	break; 
+        	case "R":
+          	x2 += length;
+            ntx +=  ctx.measureText(name).width - length;
+          	break;
+        }
+        if (shape === undefined) {
+        	ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(x,y);
+          ctx.lineTo(x2,y2);
+          ctx.stroke();
+        } else {
+        	ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(x,y);
+          ctx.lineTo(x2,y2);
+          ctx.stroke();
+        }
+        //ctx.measureText(pin)
+        // pin num
+        ctx.textBaseline="alphabetic"
+        ctx.fillStyle ="red";
+        ctx.save();
+        ctx.translate(ptx,pty);
+        ctx.rotate(tr*Math.PI/180);
+        ctx.scale(1, -1);
+        ctx.fillText(pin, 0,0);
+        ctx.restore();
+        //pinname
+        ctx.textBaseline="middle"
+        ctx.fillStyle ="green";
+        ctx.save();
+        ctx.translate(ntx,nty);
+        ctx.rotate(tr*Math.PI/180);
+        ctx.scale(1, -1);
+        ctx.fillText(name, 0,0);
+        ctx.restore();
+    	  break;
+      default:
+  	}
+  }
+  //window.requestAnimationFrame(draw);
+}
+var t0 = performance.now();
+draw();
+var t1 = performance.now();
+console.log("Call to draw took " + (t1 - t0) + " milliseconds.");
+  
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id="scr" width=1000px height=1000px></canvas>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "rs12n438"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

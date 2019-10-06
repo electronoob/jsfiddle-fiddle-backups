@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>commands</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      canvas {
+  border: 5px inset white;
+  width: 400px;
+}
+input {
+  border: 5px solid grey;
+  width: 638px;
+  font-size: 24px;
+  background-color: grey;
+  color: white;
+}
+input.outp {
+  border: 5px solid rgba(200,100,100,0.5);
+  margin-top: 40px;
+  background-color: rgba(200,100,100,0.5);
+  color: white;
+}
+div.cmd {
+position: absolute;
+top: 20px;
+left: 660px;
+width: 200px;
+height:200px;
+border: 5px inset white;
+}
+div.hist {
+position: absolute;
+top: 20px;
+left: 440px;
+width: 200px;
+height:200px;
+border: 5px inset white;
+overflow:scroll;
+}
+textarea {
+  border: 5px inset white;
+  width: 638px;
+  height: 200px;
+}
+body {
+  margin:10px;
+  padding: 10px;
+}
+span.error {
+  background-color: rgba(255,0,0,0.2);
+}
+span.ok {
+  background-color: rgba(0,255,0,0.1);
+}
+span.warn {
+  background-color: rgba(0,0,255,0.08);
+}
+
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+var ctx = document.getElementById('c').getContext('2d');
+ctx.fillStyle = "#000000";
+ctx.fillRect(0,0,400,200);
+ctx.fillStyle = "#aa0000";
+ctx.strokeStyle = "#ffffff";
+ctx.lineWidth = 1;
+var zoom = 2;
+var parseState = [];
+parseState['draw_offset_x'] = 0;
+parseState['draw_offset_y'] = 0;
+var macroStore = [];
+var history = [];
+
+document.getElementById('inp').addEventListener("keypress", function(e) {
+  switch (e.keyCode) {
+    case 13:
+      var ci = document.getElementById('inp').value;
+      document.getElementById('inp').value = "";
+      history.push ({cmd: ci, meta: {css: 'ok'} });
+      updateCanvasView();
+      updateHistoryView();
+      e.preventDefault();
+      break;
+  };
+});
+
+function line(x1,y1,x2,y2) {
+    ctx.beginPath();
+    ctx.moveTo(x1 * zoom, y1 * zoom);
+    ctx.lineTo(x2 * zoom, y2 * zoom);
+    ctx.stroke();
+}
+function sRect(x,y,w,h) {
+		ctx.strokeRect(x * zoom,y * zoom,w * zoom,h * zoom);
+}
+function fRect(x,y,w,h) {
+		ctx.fillRect(x * zoom,y * zoom,w * zoom,h * zoom);
+}
+function updateCanvasView () {
+	var data = history[history.length-1]['cmd'];
+  preParseLine(data);
+}
+function redrawCanvasView() {
+
+}
+function preParseLine (data) {
+	var datat = data.trim();
+	var coffset = datat.indexOf(' ');
+  if (coffset === -1) coffset=datat.length;
+  var cmd = datat.substr(0, coffset);
+  if (cmd == "") return -1;
+  var argv = datat.substr(coffset, datat.length-coffset);
+  argv = argv.replace(" ","");
+  argv = argv.split(",");
+  var i=0;
+  for(;i<argv.length;i++) {
+  	argv[i] = argv[i].trim();
+  }
+  return (parseLine ( cmd, argv ));
+}
+function parseLine (cmd, argv) {
+	errorClear();
+  var draw = 1;
+  if (parseState['macro_inside'] == 1) { draw = 0 }
+	switch (cmd) {
+  	case "MACRO":
+    	if (parseState['macro_inside'] == 1) {
+      	error(cmd, argv, "already inside macro definition '"+parseState['macro_name']+"' unable to process '"+argv[0]+"'");
+        return -1;
+      }
+    	if(argv.length == 1) {
+        var index = getMacroIndex(argv[0]);
+        if (index !== -1) {
+          error(cmd, argv, "macro "+ argv[0] +" already registered.");
+          parseState['macro_inside'] = 0;
+          return -1;
+        }
+        parseState['macro_inside'] = 1;
+        parseState['macro_name'] = argv[0];
+        parseState['macro_list'] = [];
+      } else {
+      	error(cmd, argv, "1 parameter expected, " + argv.length + " found.");
+        return -1;
+      }
+      return;
+    	break;
+    case "ENDM":
+    	if (parseState['macro_inside'] == 0) {
+      	error(cmd, argv, "unable to end macro. missing 'MACRO name'.");
+        return -1;
+      } else {
+        parseState['macro_inside'] = 0;
+        //alert(parseState['macro_list']);
+        var macro = [];
+        macro['name'] = parseState['macro_name'];
+        macro['list'] = parseState['macro_list']
+        parseState['macro_name'] = '';
+        parseState['macro_list'] = [];
+        macroStore.push (macro) ;
+        history.push({cmd:'; macro added ' + macroStore[macroStore.length-1].name, meta:{css: 'warn'}});
+      }
+    	break;
+  	case "dl":
+    	if(argv.length == 4) {
+      	if (draw) line(argv[0]+parseState['draw_offset_x'], argv[1]+parseState['draw_offset_y'], argv[2]+parseState['draw_offset_x'], argv[3]+parseState['draw_offset_y']);
+      } else {
+      	error(cmd, argv, "4 parameters expected, " + argv.length + " found.");
+        return -1;
+      }
+  		break;
+    case "dsr":
+    	if(argv.length == 4) {
+      	if (draw) sRect(argv[0]+parseState['draw_offset_x'], argv[1]+parseState['draw_offset_y'], argv[2], argv[3]);
+      } else {
+      	error(cmd, argv, "4 parameters expected, " + argv.length + " found.");
+        return -1;
+      }
+    	break;
+    case "dfr":
+    	if(argv.length == 4) {
+      	if (draw) fRect(argv[0]+parseState['draw_offset_x'], argv[1]+parseState['draw_offset_y'], argv[2], argv[3]);
+      } else {
+      	error(cmd, argv, "4 parameters expected, " + argv.length + " found.");
+        return -1;
+      }
+    	break;
+    case "da":
+    	break;
+    case "dm"://draw macro name,x,y
+    	if(argv.length == 3) {
+        var index = getMacroIndex(argv[0]);
+        if (index === -1) {
+          error(cmd, argv, "macro "+ argv[0] +" not found.");
+          return -1;
+        }
+        
+      //  parseState['draw_offset_x'] = argv[1];
+      //  parseState['draw_offset_y'] = argv[2];
+        
+        history.push({cmd:'; macro executed ' + macroStore[macroStore.length-1].name, meta:{css: 'warn'}});
+        var data = macroStore[index]['list'];
+        var i;
+        for(i=0;i<data.length;i++) {
+        	if (preParseLine(data[i]) === -1) {
+             return -1;
+          }
+        }
+        parseState['draw_offset_x'] = 0;
+        parseState['draw_offset_y'] = 0;
+      } else {
+      	error(cmd, argv, "3 parameters expected, " + argv.length + " found.");
+        return -1;
+      }
+    	break;
+    case "cps"://clear parse state
+    		parseState = [];
+    	break;
+    case "pta": //parse textarea content
+    		parseState = []; //clear passstate
+        var data = document.getElementById('pta').value;
+        data = data.split("\n");  
+        var i;
+        for(i=0;i<data.length;i++) {
+        	if (preParseLine(data[i]) === -1) {
+             return -1;
+          }
+        }
+    	break;
+  }
+  // I'm assuming here that all checks in above switch block will return -1 on error avoidin this stuff entirely.
+  if (parseState['macro_inside'] == 1) {
+  	parseState['macro_list'].push(cmd + " " + argv.join(","));
+  }
+}
+function getMacroIndex(name) {
+	var i = 0;
+  for (;i<macroStore.length;i++) {
+  	if(macroStore[i]['name'] == name) {
+    	return i;
+    }
+  }
+  return -1;
+}
+function errorClear () {
+	document.getElementById('outp').value = "";
+}
+function error (cmd, argv, msg) {
+	document.getElementById('outp').value = msg + ": " + cmd + " " + argv.join(" ");
+}
+
+function updateHistoryView() {
+      var buffer="<center><u>history</u><br></center>", i=0; for(;i<history.length;i++) {
+      	buffer += "<span class='"+ history[i]['meta']['css'] +"'>" + history[i]['cmd'] + "</span><br>";
+      }
+      var histbox = document.getElementById('hist');
+      histbox.innerHTML = buffer;
+      histbox.scrollTop  = histbox.scrollHeight;
+}
+
+
+
+
+
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id=c width=400 height=200></canvas>
+<br>
+<input type="text" id="inp" placeholder="type cad commands into this field"><br>
+<input type="text" id="outp" class="outp" disabled>
+<div class=cmd id=cmd>
+<center>
+<u>commands</u><br>
+</center>
+line: dl x1,y2,x2,y2<br>
+srect: dsr x,y,w,h<br>
+frect: dfr x,y,w,h<br>
+arc: da ...<br>
+parse textarea: pta
+</div>
+<div class=hist id=hist>
+</div>
+<br>
+<br>
+<textarea id=pta>
+MACRO fingers
+  dfr 10,10,1,20
+  dfr 11.5,10,1,20
+  dfr 13,10,1,20
+  dfr 14.5,10,1,20
+  dfr 14.5,10,1.5,20
+  dfr 9.5,10,1,20
+ENDM
+dm fingers, 20, 20
+</textarea>
+<pre>
+todo:
+
+draw a line
+draw a rect
+draw a circle
+</pre>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "gd975e0p"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

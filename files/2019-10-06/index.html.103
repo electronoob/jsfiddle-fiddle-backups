@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+
+ var mX = 0;
+ var mY = 0;
+ var canvas = document.getElementById('canvas');
+ var screenContext = canvas.getContext('2d');
+ var points = new Array(550).fill(
+ 		{
+       r: 0,
+       x: 0,
+       y: 0,
+       angle: 0
+     }
+ );
+ draw();
+
+
+ document.getElementById('canvas').addEventListener('mousemove', function(evt) {
+   var mousePos = getMousePos(canvas, evt);
+   mX = mousePos.x;
+   mY = mousePos.y;
+ }, false);
+
+ function getMousePos(canvas, evt) {
+   var rect = canvas.getBoundingClientRect();
+   return {
+     x: evt.clientX - rect.left,
+     y: evt.clientY - rect.top
+   };
+ }
+
+
+ function draw() {
+   var ctx = document.getElementById('canvas').getContext('2d');
+   ctx.globalCompositeOperation = 'destination-under';
+   ctx.clearRect(0, 0, 550, 550);
+   screenContext.strokeStyle = 'rgba(255,255,255,0.5)';
+
+   radians = Math.atan2(275 - mY, 275 - mX) + Math.PI;
+   a = 275 - mX;
+   b = 275 - mY;
+   c = Math.sqrt(a * a + b * b);
+   
+   points.shift();
+   points.push(
+     {
+       r: c,
+       x: mX,
+       y: mY,
+       angle: radians
+     }
+   );
+let i=0;
+let divider = 2;
+		for(i=0; i<points.length; i+=divider){
+   		//radius
+     screenContext.fillStyle = "rgba(255,0,0,1)";
+     screenContext.fillRect(i, 25/550 * points[i].r, divider, 1);
+     //angle
+     screenContext.fillStyle = "rgba(0,255,0,1)";
+     screenContext.fillRect(i, 25/(Math.PI*2) * points[i].angle+30, divider, 1);
+     //x 
+     screenContext.fillStyle = "rgba(0,0,255,1)";
+     screenContext.fillRect(i, 25/550 * points[i].x + 60, divider, 1);
+     //y
+     screenContext.fillStyle = "rgba(0,255,255,1)";
+     screenContext.fillRect(i, 25/550 * points[i].y+90, divider, 1);
+	 }
+   screenContext.fillStyle = "rgba(255,255,255,1)";
+   screenContext.fillRect(0,0,40,130);
+   screenContext.fillStyle = "rgba(0,0,0,1)";
+   screenContext.fillText("radius", 10,10);
+   screenContext.fillText("angle", 10,40);
+   screenContext.fillText("x", 10,70);
+   screenContext.fillText("y", 10,100);
+  
+   if (c >= 250) c = 250;
+   if (c <= 40) c = 40;
+   screenContext.lineWidth = c/16;
+   screenContext.beginPath();
+   screenContext.arc(275, 275, c, 0, Math.PI * 2, false);
+   screenContext.fillStyle = "rgba(0,0,0,0.3)";
+   screenContext.fill();
+   screenContext.stroke();
+   screenContext.beginPath();
+   screenContext.arc(275, 275, c/2, 0, radians, false);
+   screenContext.stroke();
+   xx = 275 + c * Math.cos(radians);
+   yy = 275 + c * Math.sin(radians);
+   screenContext.beginPath();
+   screenContext.moveTo(275, 275);
+   screenContext.lineTo(xx, yy);
+   screenContext.stroke();
+
+   window.requestAnimationFrame(draw);
+ }
+function gri(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id="canvas" width=550 height=550></canvas>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "unma9fs2"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

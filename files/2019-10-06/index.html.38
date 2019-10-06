@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      canvas {
+  background-color: rgb(50, 50, 50);
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+
+body {
+  color:#ffffff;
+  background-color: #000
+}
+
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+let game = document.getElementById('game');
+let ctx = game.getContext('2d');
+
+let c = 1000;
+let radius = 200;
+let derp = 0;
+let draw = function() {
+  ctx.clearRect(0, 0, game.width, game.height);
+  for (i = 0; i < c; i++) {
+  	let x = (Math.random()*100) ;
+		let y = (Math.random()*100) ;
+
+    x = Math.cos(x) * 400;
+    y = Math.sin(y) * 400;
+    
+    //ctx.fillRect(x,y,2,2);
+    
+      ctx.beginPath();
+      ctx.arc(x, y, 4, 0, 2 * Math.PI);
+      ctx.fillStyle = 'blue';
+      ctx.fill();
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = '#000000';
+      ctx.stroke();
+     
+  }
+
+  window.requestAnimationFrame(draw);
+};
+
+draw();
+
+setInterval(function(){
+	derp+=0.001;
+},1);
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    weird noise thing
+<canvas id="game" width="640" height="480"></canvas>
+
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "avfp0h6v"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

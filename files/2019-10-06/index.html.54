@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      canvas {
+  border: 2px solid white;
+}
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+ctx = can.getContext("2d");
+var v1 = new Vector(80,93);
+var v2 = new Vector(333,130);
+var vi = -1;
+var v3 = new Vector();
+setInterval(function(){
+	v3.mul(0);
+  v3.add(lerp(v1,v2,sigmoid(vi)));
+  vi+=0.01;
+  if(vi>1)vi=-1;
+},10);
+function lerp(a,b,step) {
+	tmp = new Vector();
+  tmp.add(b);
+  tmp.sub(a);
+  tmp.mul(step);
+  tmp.add(a);
+  return tmp;
+}
+function sigmoid(x) {
+  var L = 1;
+  var k = 3;
+  var Xo = 0;
+	return L/(1+Math.pow(Math.E,-k*(x-Xo)));
+}
+function draw(){
+	ctx.clearRect(0,0,500,300);
+	ctx.fillStyle="blue";
+  ctx.font = "30px Arial";
+ 	ctx.fillText("cocks",20,40);
+  ctx.fillRect(v1.x-5,v1.y-5,10,10);
+  ctx.fillRect(v2.x-5,v2.y-5,10,10);
+	ctx.fillStyle="red";
+  ctx.fillRect(v3.x-3,v3.y-3,6,6);
+  window.requestAnimationFrame(draw);
+}
+
+window.requestAnimationFrame(draw);
+
+ function Vector(x = 0, y = 0) {
+            this.x = x;
+            this.y = y;
+            this.sub = function(b) {
+                this.x -= b.x;
+                this.y -= b.y;
+            }
+            this.add = function(b) {
+                this.x += b.x;
+                this.y += b.y;
+            }
+            this.mag = function() {
+                return Math.sqrt(Math.abs(this.x) ^ 2 + Math.abs(this.y) ^ 2);
+            }
+            this.magsq = function() {
+                return Math.abs(this.x) ^ 2 + Math.abs(this.y) ^ 2;
+            }
+            this.div = function(value) {
+                this.x /= value;
+                this.y /= value;
+            }
+            this.mul = function(value) {
+                this.x *= value;
+                this.y *= value;
+            }
+            this.setMag = function(value) {
+                m = this.mag();
+                if (m != 0 && m != 1) {
+                    this.div(m);
+                }
+                this.mul(value);
+            }
+        }
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id=can width=500 height=300></canvas>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "ehvpg9tr"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

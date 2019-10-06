@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      canvas {
+  width: 200px;
+  height: 200px;
+    image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+// quadtree?
+
+//10x10
+let x=0;
+let y=0;
+let scr = document.getElementById('scr');
+let ctx = scr.getContext('2d');
+let d = [];
+
+//ctx.font = '6px arial';
+
+for(x=0;x<10;x++)
+{
+  d[x] = [];
+  for(y=0;y<10;y++)
+  {
+    d[x][y] = gri(0,1);
+  }
+}
+
+
+
+function draw() 
+{
+	ctx.fillStyle = 'white';
+	ctx.fillRect(0,0,100,100);
+  for(x=0;x<10;x++)
+  {
+    for(y=0;y<10;y++)
+    {
+      if(d[x][y]===1)
+      {
+        	ctx.fillStyle = 'rgba(255,'+x*25+','+y*25+',0.8)';
+          ctx.fillRect(1+x*10,1+y*10,8,8);
+      }
+      else
+      {
+        ctx.fillStyle = 'rgba(255,'+x*25+','+y*25+',0.1)';
+        ctx.fillRect(1+x*10,1+y*10,8,8);
+      }
+
+    }
+  }
+}
+
+setInterval(function (){
+window.requestAnimationFrame(draw);
+}, 120 );
+
+
+
+function gri(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function quad(x=0,y=0,w=0,h=0)
+{
+  this.x = x;
+  this.y = y;
+  this.w = w;
+  this.h = h;
+  this.q = [];
+	this.q[0] = [];
+    this.q[0].x = x;
+    this.q[0].y = y;
+    this.q[0].children = null;
+  this.q[1] = [];
+    this.q[1].x = x + w/2;
+    this.q[1].y = y;
+    this.q[1].children = null;
+   this.q[2] = [];
+    this.q[2].x = x + w/2;
+    this.q[2].y = y + h/2;
+    this.q[2].children = null;
+   this.q[3] = [];
+    this.q[3].x = x;
+    this.q[3].y = y + h/2;
+    this.q[3].children = null;
+   
+   this.points = [];
+   
+   this.check = function (x,y)
+   {
+   		if(x<this.x)
+				return false;
+   		if(x>(this.x+this.w))
+				return false;
+   		if(y<this.y)
+				return false;
+   		if(y>(this.y+this.h))
+				return false;
+      
+      let i = 0;
+      //console.log('------------------------------');
+      for (i=0; i<4; i++)
+      {
+      	if (
+          	(this.q[i].x <= x ) && 
+        		(this.q[i].y <= y ) && 
+            (this.q[i].x + this.w / 2 > x) &&
+            (this.q[i].y + this.h / 2 > y)
+        )
+        {
+        	//console.log(x,y,'woo',i);
+          //this.check(x,y);
+          if(this.q[i].children)
+          {
+          	let results = [];
+					  let k = 0;
+            this.q[i].children.forEach(function(element) {
+            	if(element.check(x,y) === 1)
+              	return 1;
+            });
+          } else {
+          	this.points.forEach(function(element) {
+            	if ( (element.x == x) && (element.y == y) )
+              {
+              	console.log(x,y,'found q');
+              	return 1;
+              }
+            });
+            console.log(x,y,'unable to find q');
+            return -2;
+          }
+        	
+        }
+      }
+
+   }
+}
+function qt (x,y,w,h) {
+	this.root = new quad(x,y,w,h);
+  this.check = function (x,y)
+  {
+  		let r = this.root.check(x,y);
+    	if (r === 0)
+        return -1;
+      else if (r === 1)
+        return 1;
+  };
+  this.ins = function (x,y)
+  {
+  		if(this.check(x,y) === 1)
+      {
+        console.log('meow found unfortunately');
+        return -1;
+      }
+      else
+      {
+      	console.log('woof proceeding as not present');
+        
+        return;
+      }
+  };
+}
+
+let q = new qt(0,0,10,10);
+
+q.ins(6,6);
+
+//console.log(q.check(2,2));
+return;
+for(x=0;x<10;x++) {
+  for(y=0;y<10;y++)
+  {
+    if(d[x][y]===1) 
+    {
+    	//q.ins(x,y);
+    }
+  }
+}
+
+      
+console.log(q);
+
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id="scr" width=100px height=100px></canvas>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "q6pu8e0x"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+
+var ctx = dick.getContext('2d');
+var gctx = ctx;
+var rgbi = 0;
+var r = 0;
+var c = 0;
+var s = 3;
+var draw = function () {
+  var color="black";
+  c++;
+	ctx.fillStyle = "#000000";
+  ctx.fillRect(0,0,400,400);
+   ctx.lineWidth = 15;
+   switch ( rgbi ) {
+   		case 0:
+      	ctx.fillStyle = "#ff0000";
+        color='red';
+      	rgbi++;
+      	break;
+      case 1:
+      	ctx.fillStyle = "#00ff00";
+        color='green';
+      	rgbi++;
+      	break;
+      case 2:
+      	ctx.fillStyle = "#0000ff";
+        color='blue';
+      	rgbi = 0;
+      	break;
+   }
+   ctx.strokeStyle = ctx.fillStyle;
+   drawPoly(150, 200 + (Math.sin(r*s)*80 ), s, 100, 0, r);
+   if(c == 2) { c=0; r+=0.05; }
+   if(color=='red') ctx.fillText("dildo",150,150);
+   if(color=='green') ctx.fillText("wagon",150,180);
+   if(color=='blue') ctx.fillText("#gbdev",150,230);
+   window.requestAnimationFrame(draw);
+};
+
+setInterval(function () {
+	s++;
+  if(s==10) s=3;
+},3000);
+
+ctx.font="30px Arial";
+draw();
+
+
+function drawPoly(x, y, sides, radius, fill, DRAW_ROT) {
+  gctx.beginPath();
+  for (var i = 0; i < sides; i++) {
+    var lx = (radius * Math.cos(DRAW_ROT + (2 * Math.PI) * i / (sides))) + x;
+    var ly = (radius * Math.sin(DRAW_ROT + (2 * Math.PI) * i / (sides))) + y;
+    gctx.lineTo(lx, ly);
+  }
+  gctx.closePath();
+  if (fill) {
+    gctx.fill();
+  }
+  gctx.stroke();
+}
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id=dick width=400 height=400></canvas>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "rrtwhyab"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>teensy3.2 pins</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      canvas {
+  border: 2px solid black;
+  /*cursor: none;*/
+}
+
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+var vheight = 16;
+var hwidth = 20;
+//"http://i.imgur.com/Q9doff0.gif";
+var x = document.getElementById('canvas');
+var ctx = x.getContext("2d");
+var pins = [
+    { iclabel: 'PTC2', port: 'C', num: '2', icpin: '45', tpin: '23', tlabel: 'A9' },
+    { iclabel: 'PTC1', port: 'C', num: '1', icpin: '44', tpin: '22', tlabel: 'A8' },
+    { iclabel: 'PTD6', port: 'D', num: '6', icpin: '63', tpin: '21', tlabel: 'A7' },
+    { iclabel: 'PTD5', port: 'D', num: '5', icpin: '62', tpin: '20', tlabel: 'A6' },
+    { iclabel: 'PTB2', port: 'B', num: '2', icpin: '37', tpin: '19', tlabel: 'A5' },
+    { iclabel: 'PTB3', port: 'B', num: '3', icpin: '38', tpin: '18', tlabel: 'A4' },
+    { iclabel: 'PTB1', port: 'B', num: '1', icpin: '36', tpin: '17', tlabel: 'A3' },
+    { iclabel: 'PTB0', port: 'B', num: '0', icpin: '35', tpin: '16', tlabel: 'A2' },
+    { iclabel: 'PTC0', port: 'C', num: '0', icpin: '43', tpin: '15', tlabel: 'A1' },
+    { iclabel: 'PTD1', port: 'D', num: '1', icpin: '58', tpin: '14', tlabel: 'A0' },
+    { iclabel: 'PTC5', port: 'C', num: '5', icpin: '50', tpin: '13', tlabel: 'LED' },
+//    { iclabel: 'spacer', port: '', num: '', icpin: '', tpin: '', tlabel: '' },
+    { iclabel: 'PTC7', port: 'C', num: '7', icpin: '52', tpin: '12', tlabel: '' },
+    { iclabel: 'PTC6', port: 'C', num: '6', icpin: '51', tpin: '11', tlabel: '' },
+    { iclabel: 'PTC4', port: 'C', num: '4', icpin: '49', tpin: '10', tlabel: '' },
+    { iclabel: 'PTC3', port: 'C', num: '3', icpin: '46', tpin: '9', tlabel: '' },
+    { iclabel: 'PTD3', port: 'D', num: '3', icpin: '60', tpin: '8', tlabel: '' },
+    { iclabel: 'PTD2', port: 'D', num: '2', icpin: '59', tpin: '7', tlabel: '' },
+    { iclabel: 'PTD4', port: 'D', num: '4', icpin: '61', tpin: '6', tlabel: '' },
+    { iclabel: 'PTD7', port: 'D', num: '7', icpin: '64', tpin: '5', tlabel: '' },
+    { iclabel: 'PTA13', port: 'A', num: '13', icpin: '29', tpin: '4', tlabel: '' },
+    { iclabel: 'PTA12', port: 'A', num: '12', icpin: '28', tpin: '3', tlabel: '' },
+    { iclabel: 'PTD0', port: 'D', num: '0', icpin: '57', tpin: '2', tlabel: '' },
+    { iclabel: 'PTB17', port: 'B', num: '17', icpin: '40', tpin: '1', tlabel: '' },
+    { iclabel: 'PTB16', port: 'B', num: '16', icpin: '39', tpin: '0', tlabel: '' },
+//    { iclabel: 'spacer', port: '', num: '', icpin: '', tpin: '', tlabel: '' },
+//    { iclabel: 'spacer', port: '', num: '', icpin: '', tpin: '', tlabel: '' },
+    { iclabel: 'ADC0_DM3', port: 'ADC0_DM3', num: '', icpin: '12', tpin: '', tlabel: 'A13' },
+//    { iclabel: 'spacer', port: '', num: '', icpin: '', tpin: '', tlabel: '' },
+    { iclabel: 'PTA4', port: 'A', num: '4', icpin: '26', tpin: '33', tlabel: '' },
+    { iclabel: 'PTB18', port: 'B', num: '18', icpin: '41', tpin: '32', tlabel: '' },
+    { iclabel: 'PTE0', port: 'E', num: '0', icpin: '1', tpin: '31', tlabel: '' },
+    { iclabel: 'PTC11', port: 'C', num: '11', icpin: '56', tpin: '30', tlabel: '' },
+    { iclabel: 'PTC10', port: 'C', num: '10', icpin: '55', tpin: '29', tlabel: '' },
+    
+    { iclabel: 'PTC8', port: 'C', num: '8', icpin: '53', tpin: '28', tlabel: '' },
+    { iclabel: 'PTC9', port: 'C', num: '9', icpin: '54', tpin: '27', tlabel: '' },
+    { iclabel: 'PTE1', port: 'E', num: '1', icpin: '2', tpin: '26', tlabel: '' },
+    { iclabel: 'PTB19', port: 'B', num: '19', icpin: '42', tpin: '25', tlabel: '' },
+    { iclabel: 'PTA5', port: 'A', num: '5', icpin: '27', tpin: '24', tlabel: '' },
+//    { iclabel: 'spacer', port: '', num: '', icpin: '', tpin: '', tlabel: '' },
+    { iclabel: 'ADC0_DP3', port: 'ADC0_DP3', num: '', icpin: '11', tpin: '', tlabel: 'A12' },
+//    { iclabel: 'spacer', port: '', num: '', icpin: '', tpin: '', tlabel: '' },
+//    { iclabel: 'spacer', port: '', num: '', icpin: '', tpin: '', tlabel: '' },
+    { iclabel: 'DAC0', port: 'DAC0', num: '', icpin: '18', tpin: '', tlabel: 'DAC/A14' }
+];
+draw();
+var startY = 90;
+
+function draw() {
+    ctx.clearRect(0,0,400,1024);
+    var i = 0;
+    for (; i < pins.length; i++) {
+        if (pins[i].port=="C") {      
+            ctx.fillStyle = "rgba("+parseInt(pins[i].port+"0", 16)+","+(255-parseInt(pins[i].port+"0", 16))+",255,0.7)";
+            ctx.fillRect(hwidth * 3, 20 + (vheight * i) +1, hwidth * 10, vheight -1);
+            ctx.font=vheight + "px Arial";
+            ctx.fillStyle = "white";
+            ctx.fillText(pins[i].iclabel, hwidth * 4, 20 + (vheight * i) +vheight );
+            ctx.fillStyle = "black";
+            ctx.fillText(pins[i].icpin, hwidth, 20 + (vheight * i) +vheight );           
+            ctx.fillText(pins[i].tpin,  hwidth * 14, 20 + (vheight * i) +vheight );   
+            ctx.fillText(pins[i].tlabel, hwidth * 16, 20 + (vheight * i) +vheight );             
+        } else {
+            ctx.fillStyle = "rgba(255,0,0,0.2)";
+            ctx.fillRect(hwidth * 3, 20 + (vheight * i)+1,  hwidth * 10, vheight);
+        }
+    }
+    window.requestAnimationFrame(draw);
+}
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id="canvas" width="400" height="1024"></canvas>
+<textarea id="data"></textarea>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "2zfvfysc"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

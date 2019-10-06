@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      body
+{
+  background-color: #000;
+}
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+let c = document.getElementById('c');
+let ctx = c.getContext("2d");
+let en = new Image();
+en.src = "https://i.imgur.com/rzTmt5z.png";
+en.addEventListener('load', function () {console.log('loaded en img');});
+
+var dp,
+		m, // magnitude
+    s, // multiplier added to sin function input
+    i,  // position of loop
+    d, //direction 1 or -1
+    p,// x sin multiplier adj for en
+    xx;
+var stop;
+function init() {
+  dp = 300; //data points along curve
+  m = 0; // magnitude
+  s = 0; // multiplier added to sin function input
+  xx=0;
+  d=1;
+  p=1;
+  stop = 0;
+}
+function timers () {
+	setInterval(function(){
+		m-=(Math.random()*10)*d;
+    s-=0.01*d;
+  },10);
+  setInterval(function(){
+  	dp-=2;
+    if (dp<1) {
+    	dp = 300;
+    }
+  },50);
+  setInterval(function(){
+	p+=d/(Math.random()*10);
+  },10);
+  setInterval(function(){
+	if(d === 1)d=-1;else d=1;
+  },5000);
+}
+function draw() {
+	if(stop) {return;}
+  ctx.fillStyle="rgba(0,0,0,"+ (Math.random()) +")";
+  ctx.fillRect(0,0,c.width,c.height);
+	let i=0;   // position of loop
+  ctx.beginPath();
+  ctx.moveTo(0,0);
+  ctx.lineTo(xx,0);
+  for(;i<=dp;i++){
+    let ys = c.height/dp;
+    let y = ys*i;
+    let xs = Math.sin(s+i)*m;
+    let x = xx + xs;
+    ctx.lineTo(x,y);
+    //lets add my namwe over top
+    ctx.drawImage(en, Math.sin(i)*20*p,xs,i*100,c.height/i)
+}
+  ctx.lineTo(0,c.height);
+  ctx.closePath();
+  ctx.fillStyle = "rgba(100,100,100,0.2)";
+  ctx.fill();
+  //ctx.fillText(p, 30,30)
+  window.requestAnimationFrame(draw);
+}
+init();
+timers();
+draw();
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id=c width=400px height=300px></canvas>
+
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "8v0p3qe8"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+// webcam 1.2
+
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+
+var v = document.getElementById("videoElement");
+var c = canvas.getContext('2d');
+var freeze = 0;
+
+var echo = function (text, clears) {
+    if(clears==1) c.clearRect(0,0,400,400);
+    c.font = 'bold 30px Oswald';
+    height = 15;
+    width = c.measureText(text).width;
+    c.fillStyle = 'rgba(0,0,0,1)';
+    c.fillText(text, 200 - (width/2),200 + height + 50);
+    c.fillStyle = 'rgba(255,255,255,1)';
+    c.fillText(text, 198 - (width/2),198 + height + 50);
+}
+
+var echo_status = function (text) {
+    c.font = '18px Oswald';
+    height = 9;
+    width = c.measureText(text).width;
+    c.fillStyle = 'rgba(0,0,0,1)';
+    c.fillText(text, 200 - (width/2),200 + height + 80);
+    c.fillStyle = 'rgba(255,255,255,1)';
+    c.fillText(text, 199 - (width/2),199 + height + 80);
+    //console.log(height);
+}
+var echo_status2 = function (text) {
+    c.font = '18px Oswald';
+    height = 9;
+    width = c.measureText(text).width;
+    c.fillStyle = 'rgba(0,0,0,1)';
+    c.fillText(text, 200 - (width/2),200 + height +95);
+    c.fillStyle = 'rgba(255,255,255,1)';
+    c.fillText(text, 199 - (width/2),199 + height +95);
+    //console.log(height);
+}
+
+if (navigator.getUserMedia) {
+	echo('Loading...',1);
+    navigator.getUserMedia({video: true}, handleVideoCallback, videoError);
+} else {
+	echo('cant access camera',1);
+}
+
+function handleVideoCallback(stream) {
+    v.src = window.URL.createObjectURL(stream);
+    echo ('Loaded.',1);
+}
+
+function videoError(e) {
+	echo('cant access camera',1);
+}
+
+var snap = function () {
+
+    c.clearRect(0,0,400,400);
+    if(v.paused || v.ended || freeze) return false;
+    c.fillStyle = 'rgba(0,0,0,0)';
+    c.beginPath();
+    c.fillRect(0,0,400,400);
+    c.closePath();
+    c.save();
+    c.beginPath();
+    c.strokeStyle='rgba(0,0,0,1)';
+    c.arc(200,200, 198, 0, 2*Math.PI);
+    c.lineWidth = 5;
+    c.stroke();
+    c.clip();
+    c.drawImage(v,0,0,400,400);
+    c.restore();
+    
+    echo_status('agariomods blowing up the competition');
+		echo_status2('for one last time, maybe.');
+		echo('agariomods.com');
+    //
+    var pxlz = canvas.toDataURL("image/webp", 0.0001);
+    iii.src = pxlz;
+    s.innerHTML = pxlz.length;
+    //
+
+}
+
+setInterval(snap, 250);
+
+  WebFontConfig = {
+    google: { families: [ 'Oswald:700,300:latin' ] }
+  };
+  (function() {
+    var wf = document.createElement('script');
+    wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+    wf.type = 'text/javascript';
+    wf.async = 'true';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(wf, s);
+  })();
+
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <video autoplay id="videoElement" width="400" height="400" style="visibility:hidden;position:absolute;top:-1000; "></video>
+<canvas id="canvas" width="400" height="400"
+  
+    style="visibility:hidden;position:absolute;top:-1000; "
+  
+></canvas>
+<span id=s></span>
+<img id=iii>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "99ub9vwb"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

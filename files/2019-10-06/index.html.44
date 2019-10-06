@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      body {
+  margin: 0px;
+  padding: 0px;
+  font-size: 20px;
+  overflow: hidden;
+}
+html,body {
+    height:100%;
+}
+
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+  var x = 0.0;
+  var mX = 300;
+  var mY = 300;
+  var mM = 0;
+  var mR = 0;
+  /* sx,sy: pos from server */
+  var sX = 0;
+  var sY = 0;
+  var scale = 100.00;
+  var sineoffset = 0.00;
+
+
+  var canvas = document.getElementById('canvas');
+  var screenContext = canvas.getContext('2d');
+  var player = document.createElement("canvas");
+  var playerContext = player.getContext('2d');
+  screenContext.imageSmoothingEnabled  = 0;
+  
+  var playerWidth = 100;
+  var playerHeight = 100;
+  player.setAttribute('width', playerWidth);
+  player.setAttribute('height', playerHeight);
+
+  var gameStarted = false;
+
+  var imageObj = new Image();
+  imageObj.name = "";
+
+  imageObj.onload = function() {
+    playerContext.save();
+    playerContext.beginPath();
+    playerContext.moveTo(playerWidth/2, playerHeight/2);
+    playerContext.arc(playerWidth/2, playerHeight/2, (playerHeight + playerWidth /2), 0, 2 * Math.PI);
+    playerContext.clip();
+    playerContext.globalAlpha = 1;
+    playerContext.drawImage(imageObj, 0, 0, playerWidth, playerHeight);
+    playerContext.restore();
+
+    playerContext.strokeStyle = 'rgba(' + imageObj.red + ',' + imageObj.green + ',' + imageObj.blue + ',1)';
+    playerContext.lineWidth = 3;//= (playerHeight + playerWidth /2) / 100;
+    playerContext.beginPath();
+   // playerContext.arc(playerWidth/2, playerHeight/2, 32, 0, Math.PI * 2, false);
+    playerContext.stroke();
+    playerContext.font = ((playerWidth)/6) + "px  'Comic Sans MS', cursive, sans-serif";
+    var nameLen = playerContext.measureText(this.name).width;
+    playerContext.lineWidth = (playerHeight + playerWidth /2) / 70;
+    playerContext.strokeStyle = 'rgba(0,0,0,1)';
+    playerContext.strokeText(this.name,playerWidth/2  - (nameLen / 2),  (playerHeight/2) + ((playerWidth)/6));
+    playerContext.fillStyle =  'rgba(' + imageObj.red + ',' + imageObj.green + ',' + imageObj.blue + ',1)';
+    playerContext.fillText(this.name, playerWidth/2 - (nameLen / 2),  (playerHeight/2)+ ((playerWidth)/6));
+  };
+
+  document.getElementById('canvas').addEventListener('mousemove', function(evt) {
+    var mousePos = getMousePos(canvas, evt);
+    mX = mousePos.x;
+    mY = mousePos.y;
+    mR = Math.atan2(sY - mY, sX - mX) + Math.PI;
+    a = sX - mX;
+    b = sY - mY;
+    mM = Math.sqrt(a * a + b * b);
+  }, false);
+
+  function getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: evt.clientX - rect.left,
+      y: evt.clientY - rect.top
+    };
+  }
+
+  function draw() {
+    var ctx = document.getElementById('canvas').getContext('2d');
+    ctx.globalCompositeOperation = 'destination-under';
+    ctx.clearRect(0, 0, 800, 800);
+    ctx.drawImage(player, Math.round(sX - (scale / 2)), Math.round(sY - (scale / 2)), scale, scale);
+    window.requestAnimationFrame(draw);
+  }
+
+  function net(url) {
+    var fd = new WebSocket(url);
+    var mouseTimerId;
+    fd.parent = this;
+    fd.onopen = function() {
+      fd.send("LD34 Entry by Electronoob\n");
+      console.log("connection made");
+      this.mouseTimerId = setInterval(function () {
+      	argv = new Array (
+                        mX,
+                        mY,
+                        mM,
+                        mR);
+      	pkt = build.packet(100, argv);
+        fd.send(pkt);
+      }, 60);
+    }
+    fd.onmessage = function(e) {
+      //console.log('recv: ' + e.data);
+      this.parent.parse(e.data);
+    }
+    fd.onclose = function() {
+      console.log('closed');
+      clearInterval(this.mouseTimerId);
+      canvas.style.display = 'none';
+    }
+  }
+  net.prototype.parse = function(buffer) {
+    lines = buffer.split("\n");
+    lines.forEach(function(val, index, arr) {
+      tok = val.split(',');
+      switch (tok[0]) {
+        case '100':
+          /*
+          
+                        tmp.x,1
+                        tmp.y,2
+                        val.amGetVisible(),3
+                        val.amGetNickname(),4
+                        val.amGetMood(),5
+                        val.amGetPersonalJumbotron(),6
+                        val.amGetColorRed(),7
+                        val.amGetColorGreen(),8
+                        val.amGetColorBlue(),9
+                        val.amGetSkin()10
+          
+          
+          */
+          sX = tok[1];
+          sY = tok[2];
+          //
+          imageObj.name = tok[4];
+          //
+          //
+          //
+          //
+          //
+          skin = tok[10];
+          if (!gameStarted) {
+            if (skin != '') {
+              imageObj.src = 'http://skins.agariomods.com/i/' + tok[10] + '.png';
+            } else {
+              imageObj.src = 'http://connect.agariomods.com/LD34/bunnyb.png?3';
+            }
+            imageObj.red = tok[7];
+            imageObj.green = tok[8];
+            imageObj.blue = tok[9];
+            gameStarted = true;
+            //console.log('..');
+            window.requestAnimationFrame(draw);
+          }
+          break;
+      }
+    });
+  }
+
+  url = "ws://parisgamma.iomods.com:8080";
+  var ws = new net(url);
+  
+  
+function packet () {
+}
+packet.prototype.packet = function (opcode, argv) {
+        var pkt = opcode + ',' + argv.join();
+        return pkt;
+}       
+var build = new packet();
+
+
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas width="800" height="800" id="canvas" style="background-color: #130613; background: url(http://connect.agariomods.com/LD34/arena1.png); background-size: cover; position:relative; z-index: 10;">
+</canvas>
+<div style="position:absolute; top:10px; width: 400px;
+margin: 20px; display:table; border: 10px solid rgba(0,0,0,0.5); z-index: 2; padding: 20px; background-color: rgba(200,40,40,0.3);color:#fff;
+text-shadow: 1px 1px 3px #ff0000;
+">
+Disconnected from gameserver.<br>
+Refresh page to attempt reconnection.<br><br>
+<small>LD34. &lt;3 Electronoob</small><br>
+</div>
+<div style="position: absolute; top: 0px; left: 0px; z-index: 1; width: 100%; height: 100%; padding: 0px; margin: 0px;
+background: radial-gradient(ellipse at center,  rgba(229,112,231,1) 0%,rgba(200,94,199,1) 47%,rgba(168,73,163,1) 100%);
+">
+&nbsp;
+</div>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "bqL1as1n"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      body {
+  padding: 0px;
+  margin: 0px;
+}
+canvas {
+  background:
+      linear-gradient(
+      rgba(255, 255, 255, 0.25), 
+      rgba(255, 255, 255, 0.6)
+    );
+    url(http://bgfons.com/upload/fur_texture4244.jpg);
+  background-size: cover;
+}
+div.btn {
+  font-family: Courier New, monospace	;
+  background-color: rgba(80,80,255,1);
+  border: 4px solid rgba(255,255,255,1);
+  float:left;
+  font-size: 2em;
+  color: #ffffff;
+  margin:3px;
+}
+
+
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+var ctx = c.getContext('2d');
+var ui_key_length = 80.0;
+var ui_key_width = 12.0;
+
+window.click_plus = function () {
+  ui_key_length+=2;
+  ui_key_width+=2;
+};
+window.click_minus = function () {
+  ui_key_length-=2;
+  ui_key_width-=2;
+};
+
+var ui_octave_default = 4;
+var ui_octave_max = 10;
+var notes = ['c','c#','d','d#','e','f','f#','g','g#','a','a#','b'];
+notes = notes.reverse();
+
+window.requestAnimationFrame(draw);
+
+function draw() {
+  ctx.clearRect(0,0,c.width,c.height);
+  ui_generate_piano();
+  ui_generate_grid();
+  window.requestAnimationFrame(draw);
+}
+
+function ui_generate_grid() {
+  var i;
+  for(i=0;i<c.height;i++) {
+    ctx.fillStyle = 'rgba(225,225,225,0.5)';
+    ctx.fillRect(-30+ui_key_length,i * ui_key_width,c.width,ui_key_width-1);
+    ctx.strokeStyle = 'rgba(0,0,225,0.3)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(-30+ui_key_length,i * ui_key_width);
+    ctx.lineTo(c.width,i * ui_key_width);
+    ctx.stroke();
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function ui_generate_piano() {
+  //begin drawing white keys
+  ctx.font=ui_key_width -2 + "px arial";
+  ctx.fillStyle = 'rgba(0,0,0,1)';
+  ctx.fillRect(-30,0,ui_key_length,c.height);
+  var ui_key_yoffset = 0;
+  var i;
+  for(i=0;i<ui_octave_max;i++){
+    notes.forEach(function ( element, index, array){
+      if(element.indexOf('#') == -1) {
+        // white
+        ctx.fillStyle = 'rgba(225,225,225,1)';
+        ctx.fillRect(-30,ui_key_yoffset * ui_key_width,ui_key_length,ui_key_width-1);
+              ui_key_yoffset++;
+      }
+      if(element == 'c') {
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        ctx.fillText('c' + i, -30 + ui_key_length*.7, ui_key_yoffset * ui_key_width - 2);
+      }
+    });
+  }
+  //end white keys
+  //begin drawing black keys
+  var ui_key_yoffset = 0;
+  var i;
+  for(i=0;i<ui_octave_max;i++){
+    notes.forEach(function ( element, index, array){
+      if(element.indexOf('#') > -1) {
+        // sharp/flat
+        ctx.fillStyle = 'rgba(0,0,0,1)';
+        ctx.fillRect(-30,(ui_key_yoffset * ui_key_width) - ui_key_width / 2 ,ui_key_length*.7,ui_key_width*.8);
+      } else {
+   	  ui_key_yoffset++;
+      }
+    });
+  }
+}
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id=c width=800px height=600px style=''></canvas>
+
+<div class='zoom' style='position:absolute;z-index:2;height:20px;left: 820px; top: 2px;'>
+<div class='btn' onclick='window.click_plus()'>+</div>&nbsp;<div class='btn' onclick='window.click_minus()'>-</div>
+</div>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "3k49rtkj"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

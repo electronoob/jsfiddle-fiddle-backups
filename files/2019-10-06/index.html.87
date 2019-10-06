@@ -1,0 +1,3075 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+//norm and ext op code json
+console.log(norm)
+console.log(ext)
+
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <script>
+
+
+var norm = {
+   "10":{
+      "mnemonic":"STOP 0",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"4"
+   },
+   "11":{
+      "mnemonic":"LD DE,d16",
+      "flags":"- - - -",
+      "len":"3",
+      "cycles":"12"
+   },
+   "12":{
+      "mnemonic":"LD (DE),A",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "13":{
+      "mnemonic":"INC DE",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "14":{
+      "mnemonic":"INC D",
+      "flags":"Z 0 H -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "15":{
+      "mnemonic":"DEC D",
+      "flags":"Z 1 H -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "16":{
+      "mnemonic":"LD D,d8",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "17":{
+      "mnemonic":"RLA",
+      "flags":"0 0 0 C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "18":{
+      "mnemonic":"JR r8",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"12"
+   },
+   "19":{
+      "mnemonic":"ADD HL,DE",
+      "flags":"- 0 H C",
+      "len":"1",
+      "cycles":"8"
+   },
+   "20":{
+      "mnemonic":"JR NZ,r8",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"12/8"
+   },
+   "21":{
+      "mnemonic":"LD HL,d16",
+      "flags":"- - - -",
+      "len":"3",
+      "cycles":"12"
+   },
+   "22":{
+      "mnemonic":"LD (HL+),A",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "23":{
+      "mnemonic":"INC HL",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "24":{
+      "mnemonic":"INC H",
+      "flags":"Z 0 H -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "25":{
+      "mnemonic":"DEC H",
+      "flags":"Z 1 H -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "26":{
+      "mnemonic":"LD H,d8",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "27":{
+      "mnemonic":"DAA",
+      "flags":"Z - 0 C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "28":{
+      "mnemonic":"JR Z,r8",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"12/8"
+   },
+   "29":{
+      "mnemonic":"ADD HL,HL",
+      "flags":"- 0 H C",
+      "len":"1",
+      "cycles":"8"
+   },
+   "30":{
+      "mnemonic":"JR NC,r8",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"12/8"
+   },
+   "31":{
+      "mnemonic":"LD SP,d16",
+      "flags":"- - - -",
+      "len":"3",
+      "cycles":"12"
+   },
+   "32":{
+      "mnemonic":"LD (HL-),A",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "33":{
+      "mnemonic":"INC SP",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "34":{
+      "mnemonic":"INC (HL)",
+      "flags":"Z 0 H -",
+      "len":"1",
+      "cycles":"12"
+   },
+   "35":{
+      "mnemonic":"DEC (HL)",
+      "flags":"Z 1 H -",
+      "len":"1",
+      "cycles":"12"
+   },
+   "36":{
+      "mnemonic":"LD (HL),d8",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"12"
+   },
+   "37":{
+      "mnemonic":"SCF",
+      "flags":"- 0 0 1",
+      "len":"1",
+      "cycles":"4"
+   },
+   "38":{
+      "mnemonic":"JR C,r8",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"12/8"
+   },
+   "39":{
+      "mnemonic":"ADD HL,SP",
+      "flags":"- 0 H C",
+      "len":"1",
+      "cycles":"8"
+   },
+   "40":{
+      "mnemonic":"LD B,B",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "41":{
+      "mnemonic":"LD B,C",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "42":{
+      "mnemonic":"LD B,D",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "43":{
+      "mnemonic":"LD B,E",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "44":{
+      "mnemonic":"LD B,H",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "45":{
+      "mnemonic":"LD B,L",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "46":{
+      "mnemonic":"LD B,(HL)",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "47":{
+      "mnemonic":"LD B,A",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "48":{
+      "mnemonic":"LD C,B",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "49":{
+      "mnemonic":"LD C,C",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "50":{
+      "mnemonic":"LD D,B",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "51":{
+      "mnemonic":"LD D,C",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "52":{
+      "mnemonic":"LD D,D",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "53":{
+      "mnemonic":"LD D,E",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "54":{
+      "mnemonic":"LD D,H",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "55":{
+      "mnemonic":"LD D,L",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "56":{
+      "mnemonic":"LD D,(HL)",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "57":{
+      "mnemonic":"LD D,A",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "58":{
+      "mnemonic":"LD E,B",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "59":{
+      "mnemonic":"LD E,C",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "60":{
+      "mnemonic":"LD H,B",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "61":{
+      "mnemonic":"LD H,C",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "62":{
+      "mnemonic":"LD H,D",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "63":{
+      "mnemonic":"LD H,E",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "64":{
+      "mnemonic":"LD H,H",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "65":{
+      "mnemonic":"LD H,L",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "66":{
+      "mnemonic":"LD H,(HL)",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "67":{
+      "mnemonic":"LD H,A",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "68":{
+      "mnemonic":"LD L,B",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "69":{
+      "mnemonic":"LD L,C",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "70":{
+      "mnemonic":"LD (HL),B",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "71":{
+      "mnemonic":"LD (HL),C",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "72":{
+      "mnemonic":"LD (HL),D",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "73":{
+      "mnemonic":"LD (HL),E",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "74":{
+      "mnemonic":"LD (HL),H",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "75":{
+      "mnemonic":"LD (HL),L",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "76":{
+      "mnemonic":"HALT",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "77":{
+      "mnemonic":"LD (HL),A",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "78":{
+      "mnemonic":"LD A,B",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "79":{
+      "mnemonic":"LD A,C",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "80":{
+      "mnemonic":"ADD A,B",
+      "flags":"Z 0 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "81":{
+      "mnemonic":"ADD A,C",
+      "flags":"Z 0 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "82":{
+      "mnemonic":"ADD A,D",
+      "flags":"Z 0 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "83":{
+      "mnemonic":"ADD A,E",
+      "flags":"Z 0 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "84":{
+      "mnemonic":"ADD A,H",
+      "flags":"Z 0 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "85":{
+      "mnemonic":"ADD A,L",
+      "flags":"Z 0 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "86":{
+      "mnemonic":"ADD A,(HL)",
+      "flags":"Z 0 H C",
+      "len":"1",
+      "cycles":"8"
+   },
+   "87":{
+      "mnemonic":"ADD A,A",
+      "flags":"Z 0 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "88":{
+      "mnemonic":"ADC A,B",
+      "flags":"Z 0 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "89":{
+      "mnemonic":"ADC A,C",
+      "flags":"Z 0 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "90":{
+      "mnemonic":"SUB B",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "91":{
+      "mnemonic":"SUB C",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "92":{
+      "mnemonic":"SUB D",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "93":{
+      "mnemonic":"SUB E",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "94":{
+      "mnemonic":"SUB H",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "95":{
+      "mnemonic":"SUB L",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "96":{
+      "mnemonic":"SUB (HL)",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"8"
+   },
+   "97":{
+      "mnemonic":"SUB A",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "98":{
+      "mnemonic":"SBC A,B",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "99":{
+      "mnemonic":"SBC A,C",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "00":{
+      "mnemonic":"NOP",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "01":{
+      "mnemonic":"LD BC,d16",
+      "flags":"- - - -",
+      "len":"3",
+      "cycles":"12"
+   },
+   "02":{
+      "mnemonic":"LD (BC),A",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "03":{
+      "mnemonic":"INC BC",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "04":{
+      "mnemonic":"INC B",
+      "flags":"Z 0 H -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "05":{
+      "mnemonic":"DEC B",
+      "flags":"Z 1 H -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "06":{
+      "mnemonic":"LD B,d8",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "07":{
+      "mnemonic":"RLCA",
+      "flags":"0 0 0 C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "08":{
+      "mnemonic":"LD (a16),SP",
+      "flags":"- - - -",
+      "len":"3",
+      "cycles":"20"
+   },
+   "09":{
+      "mnemonic":"ADD HL,BC",
+      "flags":"- 0 H C",
+      "len":"1",
+      "cycles":"8"
+   },
+   "0A":{
+      "mnemonic":"LD A,(BC)",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "0B":{
+      "mnemonic":"DEC BC",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "0C":{
+      "mnemonic":"INC C",
+      "flags":"Z 0 H -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "0D":{
+      "mnemonic":"DEC C",
+      "flags":"Z 1 H -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "0E":{
+      "mnemonic":"LD C,d8",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "0F":{
+      "mnemonic":"RRCA",
+      "flags":"0 0 0 C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "1A":{
+      "mnemonic":"LD A,(DE)",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "1B":{
+      "mnemonic":"DEC DE",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "1C":{
+      "mnemonic":"INC E",
+      "flags":"Z 0 H -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "1D":{
+      "mnemonic":"DEC E",
+      "flags":"Z 1 H -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "1E":{
+      "mnemonic":"LD E,d8",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "1F":{
+      "mnemonic":"RRA",
+      "flags":"0 0 0 C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "2A":{
+      "mnemonic":"LD A,(HL+)",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "2B":{
+      "mnemonic":"DEC HL",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "2C":{
+      "mnemonic":"INC L",
+      "flags":"Z 0 H -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "2D":{
+      "mnemonic":"DEC L",
+      "flags":"Z 1 H -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "2E":{
+      "mnemonic":"LD L,d8",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "2F":{
+      "mnemonic":"CPL",
+      "flags":"- 1 1 -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "3A":{
+      "mnemonic":"LD A,(HL-)",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "3B":{
+      "mnemonic":"DEC SP",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "3C":{
+      "mnemonic":"INC A",
+      "flags":"Z 0 H -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "3D":{
+      "mnemonic":"DEC A",
+      "flags":"Z 1 H -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "3E":{
+      "mnemonic":"LD A,d8",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "3F":{
+      "mnemonic":"CCF",
+      "flags":"- 0 0 C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "4A":{
+      "mnemonic":"LD C,D",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "4B":{
+      "mnemonic":"LD C,E",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "4C":{
+      "mnemonic":"LD C,H",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "4D":{
+      "mnemonic":"LD C,L",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "4E":{
+      "mnemonic":"LD C,(HL)",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "4F":{
+      "mnemonic":"LD C,A",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "5A":{
+      "mnemonic":"LD E,D",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "5B":{
+      "mnemonic":"LD E,E",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "5C":{
+      "mnemonic":"LD E,H",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "5D":{
+      "mnemonic":"LD E,L",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "5E":{
+      "mnemonic":"LD E,(HL)",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "5F":{
+      "mnemonic":"LD E,A",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "6A":{
+      "mnemonic":"LD L,D",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "6B":{
+      "mnemonic":"LD L,E",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "6C":{
+      "mnemonic":"LD L,H",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "6D":{
+      "mnemonic":"LD L,L",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "6E":{
+      "mnemonic":"LD L,(HL)",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "6F":{
+      "mnemonic":"LD L,A",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "7A":{
+      "mnemonic":"LD A,D",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "7B":{
+      "mnemonic":"LD A,E",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "7C":{
+      "mnemonic":"LD A,H",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "7D":{
+      "mnemonic":"LD A,L",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "7E":{
+      "mnemonic":"LD A,(HL)",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "7F":{
+      "mnemonic":"LD A,A",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "8A":{
+      "mnemonic":"ADC A,D",
+      "flags":"Z 0 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "8B":{
+      "mnemonic":"ADC A,E",
+      "flags":"Z 0 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "8C":{
+      "mnemonic":"ADC A,H",
+      "flags":"Z 0 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "8D":{
+      "mnemonic":"ADC A,L",
+      "flags":"Z 0 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "8E":{
+      "mnemonic":"ADC A,(HL)",
+      "flags":"Z 0 H C",
+      "len":"1",
+      "cycles":"8"
+   },
+   "8F":{
+      "mnemonic":"ADC A,A",
+      "flags":"Z 0 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "9A":{
+      "mnemonic":"SBC A,D",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "9B":{
+      "mnemonic":"SBC A,E",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "9C":{
+      "mnemonic":"SBC A,H",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "9D":{
+      "mnemonic":"SBC A,L",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "9E":{
+      "mnemonic":"SBC A,(HL)",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"8"
+   },
+   "9F":{
+      "mnemonic":"SBC A,A",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "A0":{
+      "mnemonic":"AND B",
+      "flags":"Z 0 1 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "A1":{
+      "mnemonic":"AND C",
+      "flags":"Z 0 1 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "A2":{
+      "mnemonic":"AND D",
+      "flags":"Z 0 1 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "A3":{
+      "mnemonic":"AND E",
+      "flags":"Z 0 1 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "A4":{
+      "mnemonic":"AND H",
+      "flags":"Z 0 1 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "A5":{
+      "mnemonic":"AND L",
+      "flags":"Z 0 1 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "A6":{
+      "mnemonic":"AND (HL)",
+      "flags":"Z 0 1 0",
+      "len":"1",
+      "cycles":"8"
+   },
+   "A7":{
+      "mnemonic":"AND A",
+      "flags":"Z 0 1 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "A8":{
+      "mnemonic":"XOR B",
+      "flags":"Z 0 0 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "A9":{
+      "mnemonic":"XOR C",
+      "flags":"Z 0 0 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "AA":{
+      "mnemonic":"XOR D",
+      "flags":"Z 0 0 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "AB":{
+      "mnemonic":"XOR E",
+      "flags":"Z 0 0 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "AC":{
+      "mnemonic":"XOR H",
+      "flags":"Z 0 0 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "AD":{
+      "mnemonic":"XOR L",
+      "flags":"Z 0 0 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "AE":{
+      "mnemonic":"XOR (HL)",
+      "flags":"Z 0 0 0",
+      "len":"1",
+      "cycles":"8"
+   },
+   "AF":{
+      "mnemonic":"XOR A",
+      "flags":"Z 0 0 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "B0":{
+      "mnemonic":"OR B",
+      "flags":"Z 0 0 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "B1":{
+      "mnemonic":"OR C",
+      "flags":"Z 0 0 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "B2":{
+      "mnemonic":"OR D",
+      "flags":"Z 0 0 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "B3":{
+      "mnemonic":"OR E",
+      "flags":"Z 0 0 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "B4":{
+      "mnemonic":"OR H",
+      "flags":"Z 0 0 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "B5":{
+      "mnemonic":"OR L",
+      "flags":"Z 0 0 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "B6":{
+      "mnemonic":"OR (HL)",
+      "flags":"Z 0 0 0",
+      "len":"1",
+      "cycles":"8"
+   },
+   "B7":{
+      "mnemonic":"OR A",
+      "flags":"Z 0 0 0",
+      "len":"1",
+      "cycles":"4"
+   },
+   "B8":{
+      "mnemonic":"CP B",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "B9":{
+      "mnemonic":"CP C",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "BA":{
+      "mnemonic":"CP D",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "BB":{
+      "mnemonic":"CP E",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "BC":{
+      "mnemonic":"CP H",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "BD":{
+      "mnemonic":"CP L",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "BE":{
+      "mnemonic":"CP (HL)",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"8"
+   },
+   "BF":{
+      "mnemonic":"CP A",
+      "flags":"Z 1 H C",
+      "len":"1",
+      "cycles":"4"
+   },
+   "C0":{
+      "mnemonic":"RET NZ",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"20/8"
+   },
+   "C1":{
+      "mnemonic":"POP BC",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"12"
+   },
+   "C2":{
+      "mnemonic":"JP NZ,a16",
+      "flags":"- - - -",
+      "len":"3",
+      "cycles":"16/12"
+   },
+   "C3":{
+      "mnemonic":"JP a16",
+      "flags":"- - - -",
+      "len":"3",
+      "cycles":"16"
+   },
+   "C4":{
+      "mnemonic":"CALL NZ,a16",
+      "flags":"- - - -",
+      "len":"3",
+      "cycles":"24/12"
+   },
+   "C5":{
+      "mnemonic":"PUSH BC",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"16"
+   },
+   "C6":{
+      "mnemonic":"ADD A,d8",
+      "flags":"Z 0 H C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "C7":{
+      "mnemonic":"RST 00H",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"16"
+   },
+   "C8":{
+      "mnemonic":"RET Z",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"20/8"
+   },
+   "C9":{
+      "mnemonic":"RET",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"16"
+   },
+   "CA":{
+      "mnemonic":"JP Z,a16",
+      "flags":"- - - -",
+      "len":"3",
+      "cycles":"16/12"
+   },
+   "CB":{
+      "mnemonic":"PREFIX CB",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "CC":{
+      "mnemonic":"CALL Z,a16",
+      "flags":"- - - -",
+      "len":"3",
+      "cycles":"24/12"
+   },
+   "CD":{
+      "mnemonic":"CALL a16",
+      "flags":"- - - -",
+      "len":"3",
+      "cycles":"24"
+   },
+   "CE":{
+      "mnemonic":"ADC A,d8",
+      "flags":"Z 0 H C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "CF":{
+      "mnemonic":"RST 08H",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"16"
+   },
+   "D0":{
+      "mnemonic":"RET NC",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"20/8"
+   },
+   "D1":{
+      "mnemonic":"POP DE",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"12"
+   },
+   "D2":{
+      "mnemonic":"JP NC,a16",
+      "flags":"- - - -",
+      "len":"3",
+      "cycles":"16/12"
+   },
+   "D4":{
+      "mnemonic":"CALL NC,a16",
+      "flags":"- - - -",
+      "len":"3",
+      "cycles":"24/12"
+   },
+   "D5":{
+      "mnemonic":"PUSH DE",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"16"
+   },
+   "D6":{
+      "mnemonic":"SUB d8",
+      "flags":"Z 1 H C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "D7":{
+      "mnemonic":"RST 10H",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"16"
+   },
+   "D8":{
+      "mnemonic":"RET C",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"20/8"
+   },
+   "D9":{
+      "mnemonic":"RETI",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"16"
+   },
+   "DA":{
+      "mnemonic":"JP C,a16",
+      "flags":"- - - -",
+      "len":"3",
+      "cycles":"16/12"
+   },
+   "DC":{
+      "mnemonic":"CALL C,a16",
+      "flags":"- - - -",
+      "len":"3",
+      "cycles":"24/12"
+   },
+   "DE":{
+      "mnemonic":"SBC A,d8",
+      "flags":"Z 1 H C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "DF":{
+      "mnemonic":"RST 18H",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"16"
+   },
+   "E0":{
+      "mnemonic":"LDH (a8),A",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"12"
+   },
+   "E1":{
+      "mnemonic":"POP HL",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"12"
+   },
+   "E2":{
+      "mnemonic":"LD (C),A",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "E5":{
+      "mnemonic":"PUSH HL",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"16"
+   },
+   "E6":{
+      "mnemonic":"AND d8",
+      "flags":"Z 0 1 0",
+      "len":"2",
+      "cycles":"8"
+   },
+   "E7":{
+      "mnemonic":"RST 20H",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"16"
+   },
+   "E8":{
+      "mnemonic":"ADD SP,r8",
+      "flags":"0 0 H C",
+      "len":"2",
+      "cycles":"16"
+   },
+   "E9":{
+      "mnemonic":"JP (HL)",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "EA":{
+      "mnemonic":"LD (a16),A",
+      "flags":"- - - -",
+      "len":"3",
+      "cycles":"16"
+   },
+   "EE":{
+      "mnemonic":"XOR d8",
+      "flags":"Z 0 0 0",
+      "len":"2",
+      "cycles":"8"
+   },
+   "EF":{
+      "mnemonic":"RST 28H",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"16"
+   },
+   "F0":{
+      "mnemonic":"LDH A,(a8)",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"12"
+   },
+   "F1":{
+      "mnemonic":"POP AF",
+      "flags":"Z N H C",
+      "len":"1",
+      "cycles":"12"
+   },
+   "F2":{
+      "mnemonic":"LD A,(C)",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "F3":{
+      "mnemonic":"DI",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "F5":{
+      "mnemonic":"PUSH AF",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"16"
+   },
+   "F6":{
+      "mnemonic":"OR d8",
+      "flags":"Z 0 0 0",
+      "len":"2",
+      "cycles":"8"
+   },
+   "F7":{
+      "mnemonic":"RST 30H",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"16"
+   },
+   "F8":{
+      "mnemonic":"LD HL,SP+r8",
+      "flags":"0 0 H C",
+      "len":"2",
+      "cycles":"12"
+   },
+   "F9":{
+      "mnemonic":"LD SP,HL",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"8"
+   },
+   "FA":{
+      "mnemonic":"LD A,(a16)",
+      "flags":"- - - -",
+      "len":"3",
+      "cycles":"16"
+   },
+   "FB":{
+      "mnemonic":"EI",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"4"
+   },
+   "FE":{
+      "mnemonic":"CP d8",
+      "flags":"Z 1 H C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "FF":{
+      "mnemonic":"RST 38H",
+      "flags":"- - - -",
+      "len":"1",
+      "cycles":"16"
+   }
+};
+
+var ext = {
+   "10":{
+      "mnemonic":"RL B",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "11":{
+      "mnemonic":"RL C",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "12":{
+      "mnemonic":"RL D",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "13":{
+      "mnemonic":"RL E",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "14":{
+      "mnemonic":"RL H",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "15":{
+      "mnemonic":"RL L",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "16":{
+      "mnemonic":"RL (HL)",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"16"
+   },
+   "17":{
+      "mnemonic":"RL A",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "18":{
+      "mnemonic":"RR B",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "19":{
+      "mnemonic":"RR C",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "20":{
+      "mnemonic":"SLA B",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "21":{
+      "mnemonic":"SLA C",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "22":{
+      "mnemonic":"SLA D",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "23":{
+      "mnemonic":"SLA E",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "24":{
+      "mnemonic":"SLA H",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "25":{
+      "mnemonic":"SLA L",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "26":{
+      "mnemonic":"SLA (HL)",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"16"
+   },
+   "27":{
+      "mnemonic":"SLA A",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "28":{
+      "mnemonic":"SRA B",
+      "flags":"Z 0 0 0",
+      "len":"2",
+      "cycles":"8"
+   },
+   "29":{
+      "mnemonic":"SRA C",
+      "flags":"Z 0 0 0",
+      "len":"2",
+      "cycles":"8"
+   },
+   "30":{
+      "mnemonic":"SWAP B",
+      "flags":"Z 0 0 0",
+      "len":"2",
+      "cycles":"8"
+   },
+   "31":{
+      "mnemonic":"SWAP C",
+      "flags":"Z 0 0 0",
+      "len":"2",
+      "cycles":"8"
+   },
+   "32":{
+      "mnemonic":"SWAP D",
+      "flags":"Z 0 0 0",
+      "len":"2",
+      "cycles":"8"
+   },
+   "33":{
+      "mnemonic":"SWAP E",
+      "flags":"Z 0 0 0",
+      "len":"2",
+      "cycles":"8"
+   },
+   "34":{
+      "mnemonic":"SWAP H",
+      "flags":"Z 0 0 0",
+      "len":"2",
+      "cycles":"8"
+   },
+   "35":{
+      "mnemonic":"SWAP L",
+      "flags":"Z 0 0 0",
+      "len":"2",
+      "cycles":"8"
+   },
+   "36":{
+      "mnemonic":"SWAP (HL)",
+      "flags":"Z 0 0 0",
+      "len":"2",
+      "cycles":"16"
+   },
+   "37":{
+      "mnemonic":"SWAP A",
+      "flags":"Z 0 0 0",
+      "len":"2",
+      "cycles":"8"
+   },
+   "38":{
+      "mnemonic":"SRL B",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "39":{
+      "mnemonic":"SRL C",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "40":{
+      "mnemonic":"BIT 0,B",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "41":{
+      "mnemonic":"BIT 0,C",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "42":{
+      "mnemonic":"BIT 0,D",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "43":{
+      "mnemonic":"BIT 0,E",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "44":{
+      "mnemonic":"BIT 0,H",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "45":{
+      "mnemonic":"BIT 0,L",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "46":{
+      "mnemonic":"BIT 0,(HL)",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "47":{
+      "mnemonic":"BIT 0,A",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "48":{
+      "mnemonic":"BIT 1,B",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "49":{
+      "mnemonic":"BIT 1,C",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "50":{
+      "mnemonic":"BIT 2,B",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "51":{
+      "mnemonic":"BIT 2,C",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "52":{
+      "mnemonic":"BIT 2,D",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "53":{
+      "mnemonic":"BIT 2,E",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "54":{
+      "mnemonic":"BIT 2,H",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "55":{
+      "mnemonic":"BIT 2,L",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "56":{
+      "mnemonic":"BIT 2,(HL)",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "57":{
+      "mnemonic":"BIT 2,A",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "58":{
+      "mnemonic":"BIT 3,B",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "59":{
+      "mnemonic":"BIT 3,C",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "60":{
+      "mnemonic":"BIT 4,B",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "61":{
+      "mnemonic":"BIT 4,C",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "62":{
+      "mnemonic":"BIT 4,D",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "63":{
+      "mnemonic":"BIT 4,E",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "64":{
+      "mnemonic":"BIT 4,H",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "65":{
+      "mnemonic":"BIT 4,L",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "66":{
+      "mnemonic":"BIT 4,(HL)",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "67":{
+      "mnemonic":"BIT 4,A",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "68":{
+      "mnemonic":"BIT 5,B",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "69":{
+      "mnemonic":"BIT 5,C",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "70":{
+      "mnemonic":"BIT 6,B",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "71":{
+      "mnemonic":"BIT 6,C",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "72":{
+      "mnemonic":"BIT 6,D",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "73":{
+      "mnemonic":"BIT 6,E",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "74":{
+      "mnemonic":"BIT 6,H",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "75":{
+      "mnemonic":"BIT 6,L",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "76":{
+      "mnemonic":"BIT 6,(HL)",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "77":{
+      "mnemonic":"BIT 6,A",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "78":{
+      "mnemonic":"BIT 7,B",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "79":{
+      "mnemonic":"BIT 7,C",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "80":{
+      "mnemonic":"RES 0,B",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "81":{
+      "mnemonic":"RES 0,C",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "82":{
+      "mnemonic":"RES 0,D",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "83":{
+      "mnemonic":"RES 0,E",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "84":{
+      "mnemonic":"RES 0,H",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "85":{
+      "mnemonic":"RES 0,L",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "86":{
+      "mnemonic":"RES 0,(HL)",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "87":{
+      "mnemonic":"RES 0,A",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "88":{
+      "mnemonic":"RES 1,B",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "89":{
+      "mnemonic":"RES 1,C",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "90":{
+      "mnemonic":"RES 2,B",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "91":{
+      "mnemonic":"RES 2,C",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "92":{
+      "mnemonic":"RES 2,D",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "93":{
+      "mnemonic":"RES 2,E",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "94":{
+      "mnemonic":"RES 2,H",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "95":{
+      "mnemonic":"RES 2,L",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "96":{
+      "mnemonic":"RES 2,(HL)",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "97":{
+      "mnemonic":"RES 2,A",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "98":{
+      "mnemonic":"RES 3,B",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "99":{
+      "mnemonic":"RES 3,C",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "00":{
+      "mnemonic":"RLC B",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "01":{
+      "mnemonic":"RLC C",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "02":{
+      "mnemonic":"RLC D",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "03":{
+      "mnemonic":"RLC E",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "04":{
+      "mnemonic":"RLC H",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "05":{
+      "mnemonic":"RLC L",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "06":{
+      "mnemonic":"RLC (HL)",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"16"
+   },
+   "07":{
+      "mnemonic":"RLC A",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "08":{
+      "mnemonic":"RRC B",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "09":{
+      "mnemonic":"RRC C",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "0A":{
+      "mnemonic":"RRC D",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "0B":{
+      "mnemonic":"RRC E",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "0C":{
+      "mnemonic":"RRC H",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "0D":{
+      "mnemonic":"RRC L",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "0E":{
+      "mnemonic":"RRC (HL)",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"16"
+   },
+   "0F":{
+      "mnemonic":"RRC A",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "1A":{
+      "mnemonic":"RR D",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "1B":{
+      "mnemonic":"RR E",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "1C":{
+      "mnemonic":"RR H",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "1D":{
+      "mnemonic":"RR L",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "1E":{
+      "mnemonic":"RR (HL)",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"16"
+   },
+   "1F":{
+      "mnemonic":"RR A",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "2A":{
+      "mnemonic":"SRA D",
+      "flags":"Z 0 0 0",
+      "len":"2",
+      "cycles":"8"
+   },
+   "2B":{
+      "mnemonic":"SRA E",
+      "flags":"Z 0 0 0",
+      "len":"2",
+      "cycles":"8"
+   },
+   "2C":{
+      "mnemonic":"SRA H",
+      "flags":"Z 0 0 0",
+      "len":"2",
+      "cycles":"8"
+   },
+   "2D":{
+      "mnemonic":"SRA L",
+      "flags":"Z 0 0 0",
+      "len":"2",
+      "cycles":"8"
+   },
+   "2E":{
+      "mnemonic":"SRA (HL)",
+      "flags":"Z 0 0 0",
+      "len":"2",
+      "cycles":"16"
+   },
+   "2F":{
+      "mnemonic":"SRA A",
+      "flags":"Z 0 0 0",
+      "len":"2",
+      "cycles":"8"
+   },
+   "3A":{
+      "mnemonic":"SRL D",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "3B":{
+      "mnemonic":"SRL E",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "3C":{
+      "mnemonic":"SRL H",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "3D":{
+      "mnemonic":"SRL L",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "3E":{
+      "mnemonic":"SRL (HL)",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"16"
+   },
+   "3F":{
+      "mnemonic":"SRL A",
+      "flags":"Z 0 0 C",
+      "len":"2",
+      "cycles":"8"
+   },
+   "4A":{
+      "mnemonic":"BIT 1,D",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "4B":{
+      "mnemonic":"BIT 1,E",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "4C":{
+      "mnemonic":"BIT 1,H",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "4D":{
+      "mnemonic":"BIT 1,L",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "4E":{
+      "mnemonic":"BIT 1,(HL)",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "4F":{
+      "mnemonic":"BIT 1,A",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "5A":{
+      "mnemonic":"BIT 3,D",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "5B":{
+      "mnemonic":"BIT 3,E",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "5C":{
+      "mnemonic":"BIT 3,H",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "5D":{
+      "mnemonic":"BIT 3,L",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "5E":{
+      "mnemonic":"BIT 3,(HL)",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "5F":{
+      "mnemonic":"BIT 3,A",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "6A":{
+      "mnemonic":"BIT 5,D",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "6B":{
+      "mnemonic":"BIT 5,E",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "6C":{
+      "mnemonic":"BIT 5,H",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "6D":{
+      "mnemonic":"BIT 5,L",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "6E":{
+      "mnemonic":"BIT 5,(HL)",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "6F":{
+      "mnemonic":"BIT 5,A",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "7A":{
+      "mnemonic":"BIT 7,D",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "7B":{
+      "mnemonic":"BIT 7,E",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "7C":{
+      "mnemonic":"BIT 7,H",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "7D":{
+      "mnemonic":"BIT 7,L",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "7E":{
+      "mnemonic":"BIT 7,(HL)",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "7F":{
+      "mnemonic":"BIT 7,A",
+      "flags":"Z 0 1 -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "8A":{
+      "mnemonic":"RES 1,D",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "8B":{
+      "mnemonic":"RES 1,E",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "8C":{
+      "mnemonic":"RES 1,H",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "8D":{
+      "mnemonic":"RES 1,L",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "8E":{
+      "mnemonic":"RES 1,(HL)",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "8F":{
+      "mnemonic":"RES 1,A",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "9A":{
+      "mnemonic":"RES 3,D",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "9B":{
+      "mnemonic":"RES 3,E",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "9C":{
+      "mnemonic":"RES 3,H",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "9D":{
+      "mnemonic":"RES 3,L",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "9E":{
+      "mnemonic":"RES 3,(HL)",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "9F":{
+      "mnemonic":"RES 3,A",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "A0":{
+      "mnemonic":"RES 4,B",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "A1":{
+      "mnemonic":"RES 4,C",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "A2":{
+      "mnemonic":"RES 4,D",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "A3":{
+      "mnemonic":"RES 4,E",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "A4":{
+      "mnemonic":"RES 4,H",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "A5":{
+      "mnemonic":"RES 4,L",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "A6":{
+      "mnemonic":"RES 4,(HL)",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "A7":{
+      "mnemonic":"RES 4,A",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "A8":{
+      "mnemonic":"RES 5,B",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "A9":{
+      "mnemonic":"RES 5,C",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "AA":{
+      "mnemonic":"RES 5,D",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "AB":{
+      "mnemonic":"RES 5,E",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "AC":{
+      "mnemonic":"RES 5,H",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "AD":{
+      "mnemonic":"RES 5,L",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "AE":{
+      "mnemonic":"RES 5,(HL)",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "AF":{
+      "mnemonic":"RES 5,A",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "B0":{
+      "mnemonic":"RES 6,B",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "B1":{
+      "mnemonic":"RES 6,C",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "B2":{
+      "mnemonic":"RES 6,D",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "B3":{
+      "mnemonic":"RES 6,E",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "B4":{
+      "mnemonic":"RES 6,H",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "B5":{
+      "mnemonic":"RES 6,L",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "B6":{
+      "mnemonic":"RES 6,(HL)",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "B7":{
+      "mnemonic":"RES 6,A",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "B8":{
+      "mnemonic":"RES 7,B",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "B9":{
+      "mnemonic":"RES 7,C",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "BA":{
+      "mnemonic":"RES 7,D",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "BB":{
+      "mnemonic":"RES 7,E",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "BC":{
+      "mnemonic":"RES 7,H",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "BD":{
+      "mnemonic":"RES 7,L",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "BE":{
+      "mnemonic":"RES 7,(HL)",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "BF":{
+      "mnemonic":"RES 7,A",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "C0":{
+      "mnemonic":"SET 0,B",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "C1":{
+      "mnemonic":"SET 0,C",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "C2":{
+      "mnemonic":"SET 0,D",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "C3":{
+      "mnemonic":"SET 0,E",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "C4":{
+      "mnemonic":"SET 0,H",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "C5":{
+      "mnemonic":"SET 0,L",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "C6":{
+      "mnemonic":"SET 0,(HL)",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "C7":{
+      "mnemonic":"SET 0,A",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "C8":{
+      "mnemonic":"SET 1,B",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "C9":{
+      "mnemonic":"SET 1,C",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "CA":{
+      "mnemonic":"SET 1,D",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "CB":{
+      "mnemonic":"SET 1,E",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "CC":{
+      "mnemonic":"SET 1,H",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "CD":{
+      "mnemonic":"SET 1,L",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "CE":{
+      "mnemonic":"SET 1,(HL)",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "CF":{
+      "mnemonic":"SET 1,A",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "D0":{
+      "mnemonic":"SET 2,B",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "D1":{
+      "mnemonic":"SET 2,C",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "D2":{
+      "mnemonic":"SET 2,D",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "D3":{
+      "mnemonic":"SET 2,E",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "D4":{
+      "mnemonic":"SET 2,H",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "D5":{
+      "mnemonic":"SET 2,L",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "D6":{
+      "mnemonic":"SET 2,(HL)",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "D7":{
+      "mnemonic":"SET 2,A",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "D8":{
+      "mnemonic":"SET 3,B",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "D9":{
+      "mnemonic":"SET 3,C",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "DA":{
+      "mnemonic":"SET 3,D",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "DB":{
+      "mnemonic":"SET 3,E",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "DC":{
+      "mnemonic":"SET 3,H",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "DD":{
+      "mnemonic":"SET 3,L",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "DE":{
+      "mnemonic":"SET 3,(HL)",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "DF":{
+      "mnemonic":"SET 3,A",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "E0":{
+      "mnemonic":"SET 4,B",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "E1":{
+      "mnemonic":"SET 4,C",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "E2":{
+      "mnemonic":"SET 4,D",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "E3":{
+      "mnemonic":"SET 4,E",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "E4":{
+      "mnemonic":"SET 4,H",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "E5":{
+      "mnemonic":"SET 4,L",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "E6":{
+      "mnemonic":"SET 4,(HL)",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "E7":{
+      "mnemonic":"SET 4,A",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "E8":{
+      "mnemonic":"SET 5,B",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "E9":{
+      "mnemonic":"SET 5,C",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "EA":{
+      "mnemonic":"SET 5,D",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "EB":{
+      "mnemonic":"SET 5,E",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "EC":{
+      "mnemonic":"SET 5,H",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "ED":{
+      "mnemonic":"SET 5,L",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "EE":{
+      "mnemonic":"SET 5,(HL)",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "EF":{
+      "mnemonic":"SET 5,A",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "F0":{
+      "mnemonic":"SET 6,B",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "F1":{
+      "mnemonic":"SET 6,C",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "F2":{
+      "mnemonic":"SET 6,D",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "F3":{
+      "mnemonic":"SET 6,E",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "F4":{
+      "mnemonic":"SET 6,H",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "F5":{
+      "mnemonic":"SET 6,L",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "F6":{
+      "mnemonic":"SET 6,(HL)",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "F7":{
+      "mnemonic":"SET 6,A",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "F8":{
+      "mnemonic":"SET 7,B",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "F9":{
+      "mnemonic":"SET 7,C",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "FA":{
+      "mnemonic":"SET 7,D",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "FB":{
+      "mnemonic":"SET 7,E",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "FC":{
+      "mnemonic":"SET 7,H",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "FD":{
+      "mnemonic":"SET 7,L",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   },
+   "FE":{
+      "mnemonic":"SET 7,(HL)",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"16"
+   },
+   "FF":{
+      "mnemonic":"SET 7,A",
+      "flags":"- - - -",
+      "len":"2",
+      "cycles":"8"
+   }
+};
+// norm and ext.
+</script>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "qngh984p"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

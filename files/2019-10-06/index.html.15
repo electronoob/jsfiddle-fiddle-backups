@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      @import url('https://fonts.googleapis.com/css?family=Indie+Flower');
+
+canvas#display {
+  
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+    image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
+    
+    background-color: #000;
+}
+
+canvas#crt {
+  opacity: 0.4;
+}
+canvas {
+  position:absolute;
+  width: 512px;
+  height: 512px;
+  top: 20px;
+  left: 20px;
+  border: 5px solid white;
+
+}
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+var ctx = buffer.getContext('2d');
+var screen = display.getContext('2d');
+
+var pos = {x: 5, y: 64},debris = [],levels = [],gameover,started,go,current_level, gamename, lineseg = [], dance = 0, kb = {l: 0,r: 0,u: 0,d: 0}, insults,current_insult=[],DO_POST_PROCESS=1;
+
+var a = new Audio('//www.electronoob.com/stargame.mp3');
+var aa = new Audio('//www.electronoob.com/stargame-ok.mp3');
+
+crtlines();
+function crtlines () {
+  /* some lame crt like lines */
+  var vdu = crt.getContext('2d');
+  for (i=0;i<256;i+=1) {
+    vdu.beginPath();
+    vdu.moveTo(i*2,0);
+    vdu.lineWidth = 1;
+    vdu.strokeStyle = "rgba(0,0,0,0)";
+    switch(i%4) {
+      case 0:
+        vdu.strokeStyle = "rgba(255,0,0,0.3)";
+        break;
+      case 1:
+        vdu.strokeStyle = "rgba(0,255,0,0.3)";
+        break;
+      case 2:
+        vdu.strokeStyle = "rgba(0,0,0,0.3)";
+        break;
+      case 3:
+        vdu.strokeStyle = "rgba(0,0,0,1)";
+        break;
+    }
+    vdu.lineTo(i*2, 512);
+    vdu.stroke();
+  }
+  for (i=0;i<512;i+=6) {
+    vdu.beginPath();
+    vdu.moveTo(0,i);
+    vdu.lineWidth = 1;
+    vdu.strokeStyle = "rgba(0,0,0,0.2)";
+    vdu.lineTo(512,i);
+    vdu.stroke();
+  }
+}
+function init() {
+  pos = {x: 5, y: 64};
+  debris = [];
+  levels = [];
+   gameover = 0;
+   started = 0;
+   go = 0;
+   current_level = 0;
+   gamename = "deathtwinkle";
+   lineseg = [];
+   dance = 0;
+    kb = {
+      l: 0,
+      r: 0,
+      u: 0,// we will up key
+      d: 0
+  };
+  insults = "Tosser,Wanker,Slag,Daft Cow,Arsehole,Barmy,Chav,Git,Gormless,Manky,Minger,Muppet,Naff,Nutter,Pillock,Plonker,Prat,Scrubber,Trollop,Twit,Knob Head,Bell End,Lazy Sod,Knob,Wazzock,Ninny,Berk,Airy-fairy,Ankle-biter,Arse-licker,Arsemonger,Chuffer,Gannet,Maggot,Mingebag".split(',');
+  current_insult = [];
+  for (i=0;i<10;i++) {
+    var l = {level: i, stars: i*2, gate: 40-(i*4)};
+    levels.push(l);
+  }
+  levels[-1] = ({level: -1, stars: 0, gate: 0});
+  a.play();
+}
+
+
+function levelup() {
+  pos      = {x: 5, y: 64};
+  debris   = [];
+  lineseg  = [];
+  gameover = 0;
+  current_level++;
+}
+
+
+function draw() {
+  var i;
+
+  if(current_level != -1) {
+  	ctx.fillStyle = "#000";
+  } else {
+    ctx.fillStyle = "rgba(" + getRandomIntInclusive(0,100) + "," + getRandomIntInclusive(0,0) + "," + getRandomIntInclusive(0,0) + ",0.0" + getRandomIntInclusive(1,999) + ")";
+  }
+  ctx.fillRect(0,0,128,128);
+  for(i=0;i<debris.length;i++) {
+  	ctx.fillStyle = "#fff";
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 1;
+  	drawPoly(debris[i].x, debris[i].y, 3, debris[i].r, 1, dance);
+  }
+  var lastpos = {x:0, y:0};
+  for(i=0;i<lineseg.length;i++) {
+  	if(i==0) {
+    	lastpos.x = 5;
+      lastpos.y = 64;
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(lastpos.x,lastpos.y);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#fff";
+    ctx.lineTo(lineseg[i].x, lineseg[i].y);
+    ctx.stroke();
+    
+  	lastpos.x = lineseg[i].x;
+    lastpos.y = lineseg[i].y;
+  }
+  if(current_level == 0) {
+ 		 ctx.setTransform(1, 0, 0, 1, 0, 0);
+  	//lets write some bs
+		ctx.fillStyle = "#fff";
+    ctx.strokeStyle = "#c0c0c0";
+    ctx.lineWidth = 1;
+    var yoffsin = (Math.sin(Date.now() / 140) * 8);
+    drawPoly(20, 30-yoffsin, 3, 20, 1, dance/4);
+		ctx.fillStyle = "#000";
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 1;
+    drawPoly(20, 30-(yoffsin/2), 3, 14, 1, -(dance/10));
+    ctx.strokeStyle="#fff";
+		ctx.fillStyle = "#000";
+    ctx.lineWidth = 4;
+    ctx.font = "24px 'Indie Flower' ";
+    var twidth = ctx.measureText(gamename);
+    ctx.strokeText(gamename, 64-(twidth.width/2),40+yoffsin);
+    ctx.fillText(gamename, 64-(twidth.width/2),40+yoffsin);
+    ctx.font = "18px 'Indie Flower' ";
+		var stext = "PRESS UP";
+    var twidth = ctx.measureText(stext);
+    ctx.strokeText(stext, 64-(twidth.width/2),80);
+    ctx.fillText(stext, 64-(twidth.width/2),80);
+		var stext = "TO PLAY";
+    var twidth = ctx.measureText(stext);
+    ctx.strokeText(stext, 64-(twidth.width/2),100);
+    ctx.fillText(stext, 64-(twidth.width/2),100);
+    if(kb.u) {
+    	current_level = 1;
+      started = 1;
+      go = 1;
+      aa.play();
+    }
+  } else {
+  	if(current_level == -1) {
+        ctx.strokeStyle="#000";
+        ctx.fillStyle = "#fff";
+        //insult you
+        ctx.lineWidth = 8;
+        ctx.font = "32px 'Indie Flower' ";
+        var stext = "heh";
+        var twidth = ctx.measureText(stext);
+        ctx.strokeText(stext, 64-(twidth.width/2),50);
+        ctx.fillText(stext, 64-(twidth.width/2),50);
+        //insult 0
+        ctx.lineWidth = 4;
+        ctx.font = "24px 'Indie Flower' ";
+        var stext = current_insult[0] + "ing";
+        var twidth = ctx.measureText(stext);
+        ctx.strokeText(stext, 64-(twidth.width/2),80);
+        ctx.fillText(stext, 64-(twidth.width/2),80);
+        //insult 1
+        ctx.lineWidth = 4;
+        ctx.font = "16px 'Indie Flower' ";
+        var stext = current_insult[1];
+        var twidth = ctx.measureText(stext);
+        ctx.strokeText(stext, 64-(twidth.width/2),90);
+        ctx.fillText(stext, 64-(twidth.width/2),90);
+        //
+        ctx.translate(64, 64);
+        ctx.rotate(0.008);
+        ctx.translate(-64, -64);
+    } else {
+      draw_border();
+    }
+    
+  }
+  // try to reduce antialiasing
+  // and copy result to screen
+  postProcess();
+	window.requestAnimationFrame(draw);
+};
+init();
+draw();
+function postProcess() {
+  var imageData = ctx.getImageData(0,0,128, 128);
+	var data = imageData.data;
+	  for (var i = 0; i < data.length; i += 4) {
+      var average = (data[i] + data[i+1] + data[i+2]) /3;
+      if(DO_POST_PROCESS)
+			if(average > 220) 	{
+          data[i]     = 200;
+          data[i + 1] = 200;
+          data[i + 2] = 200;
+          data[i + 3] = 255;
+      } else {
+      	data[i] = 0;
+        data[i + 1] = 0; 
+        data[i + 2] = 0;
+        data[i + 3] = 0;
+      }
+    }
+    screen.putImageData(imageData, 0, 0);
+}
+function draw_border()  {
+  ctx.beginPath();
+  ctx.moveTo(4,4);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "#fff";
+  ctx.lineTo(124, 4);
+  ctx.stroke();
+  
+  
+  ctx.beginPath();
+  ctx.moveTo(4,124);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "#fff";
+  ctx.lineTo(124, 124);
+  ctx.stroke();
+  
+  
+  ctx.beginPath();
+  ctx.moveTo(124,3);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "#fff";
+  ctx.lineTo(124, 125);
+  ctx.stroke();
+  
+  var g = levels[current_level].gate;
+  if(current_level == 0) {
+  	g = 100;
+  }
+  var gate_ypos = (128/2) - (g/2);
+  ctx.beginPath();
+  ctx.moveTo(124,gate_ypos);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "#000";
+  ctx.lineTo(124, gate_ypos + g);
+  ctx.stroke();
+}
+setInterval(function(){
+	if(debris.length < levels[current_level].stars) { 
+    var di = {x:0,y:0,r:0};
+      di.x = getRandomIntInclusive(15,115);
+      di.y = getRandomIntInclusive(15,115);
+      di.r = getRandomIntInclusive(2,7);
+    debris.push(di);
+  } else {
+  	if(!gameover)
+    	if(!started)
+      {	go=1; started=1;}
+  }
+}, 64);
+
+setInterval(function(){
+	dance+=0.04;
+}, 16);
+var tock = 0;
+setInterval(function() {
+  if(current_level == -1) return;
+  tock++;
+  if(tock > (17 - current_level)) {
+		tock = 0;
+    if ( (current_level > 0) && ( !gameover ) && (go) )  {
+      if(kb.u) {
+        lineseg.push({x: pos.x+1, y:pos.y-1});
+        pos.x += 1;
+        pos.y -= 1;
+      } else {
+        lineseg.push({x: pos.x+1, y:pos.y+1});
+        pos.x += 1;
+        pos.y += 1;
+      }
+      // collision stars
+      for(i=0;i<debris.length;i++) {
+				if(distance(pos, debris[i]) < (debris[i].r-1)) {
+        		gameover=1;
+            started=0;
+            go=0;
+            current_level = -1;
+						current_insult[0] = insults[getRandomIntInclusive(0,insults.length-1)];
+						current_insult[1] = insults[getRandomIntInclusive(0,insults.length-1)];
+            var msg = new SpeechSynthesisUtterance("you dead... you  " + current_insult[0] + "ing, " + current_insult[1] + " fucker!");
+msg.rate = 0, volume = 10;
+window.speechSynthesis.speak(msg);
+            setTimeout(function () {
+            	init();
+            }, 6000);
+        }
+			}
+      //collision gate
+      if(pos.x > 123) {
+        var g = levels[current_level].gate;
+        var gate_ypos = (128/2) - (g/2);
+        if ( (pos.y > gate_ypos) && (pos.y < (gate_ypos+g)) ) {
+        		gameover=1;//pause it
+            // start new game
+        		setTimeout(function () {
+            	levelup();
+            }, 1000);
+        } else {
+        		gameover=1;
+            started=0;
+            go=0;
+            current_level=-1;
+						current_insult[0] = insults[getRandomIntInclusive(0,insults.length-1)];
+						current_insult[1] = insults[getRandomIntInclusive(0,insults.length-1)];
+        		setTimeout(function () {
+            	init();
+            }, 6000);
+        }
+     	}
+    }
+ }
+}, 10); 
+
+function distance(p1,p2) {
+	return Math.hypot(p2.x - p1.x, p2.y - p1.y)
+}
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function drawPoly(x, y, sides, radius, fill, DRAW_ROT) {
+  ctx.beginPath();
+  for (var i = 0; i < sides; i++) {
+    var lx = (radius * Math.cos(DRAW_ROT + (2 * Math.PI) * i / (sides))) + x;
+    var ly = (radius * Math.sin(DRAW_ROT + (2 * Math.PI) * i / (sides))) + y;
+    ctx.lineTo(lx, ly);
+  }
+  if (fill) {
+    ctx.fill();
+  }
+  ctx.stroke();
+    ctx.closePath();
+}
+
+
+
+window.onkeydown = function(e) {
+  switch (e.keyCode) {
+    case 38:
+      kb.u = 1;
+      e.preventDefault();
+      break;
+    case 40:
+      kb.d = 1;
+      e.preventDefault();
+      break;
+    case 37:
+      kb.l = 1;
+      e.preventDefault();
+      break;
+    case 39:
+      kb.r = 1;
+      e.preventDefault();
+      break;
+  }
+};
+window.onkeyup = function(e) {
+  switch (e.keyCode) {
+    case 38:
+      kb.u = 0;
+      e.preventDefault();
+      break;
+    case 40:
+      kb.d = 0;
+      e.preventDefault();
+      break;
+    case 37:
+      kb.l = 0;
+      e.preventDefault();
+      break;
+    case 39:
+      kb.r = 0;
+      e.preventDefault();
+      break;
+  }
+};
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id=display width=128 height=128></canvas>
+<canvas id=crt width=512 height=512 style="/*display:none;*/"></canvas>
+<canvas id=buffer width=128 height=128 style="display:none;"></canvas>
+
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "3z1vfL01"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

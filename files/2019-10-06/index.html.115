@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      @import url('https://fonts.googleapis.com/css?family=Kavoon');
+
+canvas {
+    border: 10px solid #fff;
+    width: 800px;
+    height: 800px;
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+    image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
+}
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+var x = 0;
+var y = 0;
+var p = 0;
+var z = 400;
+var img = new Image();
+var ctxsquares = d.getContext('2d');
+var ctxcircles = w.getContext('2d');
+img.onload = function () {
+  drawCircles();
+};
+//img.src="http://i.unu.edu/media/ourworld.unu.edu-en/article/8634/The-Surprising-Healing-Qualities-of-Dirt.jpg";
+img.src="http://i.imgur.com/mjRWN7g.png";
+var imgme = new Image(); imgme.src="https://kelvin.onl/ShareX/2017-01-07_21-06-28.png"; //417x417
+
+setInterval(function() {
+	z-=Math.sin(p);
+  //if(z<=0) z=200;
+}, 15);
+setInterval (function() {
+	x = Math.sin(p/4)* 50 + 200; 
+  y = Math.cos(p/4)* 50 + 200;
+  p+=0.04;
+} ,20);
+function drawCircles() {
+  ctxcircles.fillStyle = "#440022";
+  ctxcircles.fillRect(0,0,400,400);
+  DRAW_ROT = Math.PI/2;
+  xx=x;yy=y;
+  ctxcircles.drawImage(imgme, 0,0,417,417,xx - 50,yy - 50,100,130);
+  for(radius=40;radius<300;radius+=1)
+  for (var i = 0; i < 360; i+=10) {
+    var lx = (radius * Math.cos(radius/1 + DRAW_ROT + p +   (2 * Math.PI) * i/360)) + xx;
+    var ly = (radius * Math.sin(radius/1 + DRAW_ROT + p + (2 * Math.PI) * i/360)) + yy;
+    ctxcircles.drawImage(img,i,radius+z,1,1,lx-(radius/40),ly-(radius/40),radius/20,radius/20);
+  }
+  ctxcircles.strokeStyle = "#fff";
+  ctxcircles.font = "20px Kavoon";
+  name = "hypnotunnel";
+  width = ctxcircles.measureText(name);
+  ctxcircles.strokeText (name,200-width.width/2,370);
+  window.requestAnimationFrame(drawCircles);
+}
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id=w width="400" height="400"></canvas>
+<canvas id=d width="360" height="360" style="visibility:hidden;"></canvas>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "q0us5rkk"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

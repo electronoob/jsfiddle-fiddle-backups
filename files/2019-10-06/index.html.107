@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      @import url('https://fonts.googleapis.com/css?family=Londrina+Outline');
+
+canvas {
+  border: 1px outset rgba(100,100,120,1);
+  background: url(http://i.imgur.com/knVTgR1.png);
+  z-index: 200;
+}
+small {
+  font-size: 10px;
+}
+body {
+  background: url(http://i.imgur.com/knVTgR1.png);
+  padding: 0px;
+  color: rgba(200,200,200,0.6);
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+                                  
+                               
+  /*
+  filter: grayscale(100%) contrast(400%);
+  */
+}
+span.matrix{
+  font-family: 'Londrina Outline', cursive;
+  text-shadow: 1px 2px #000;
+  font-size: 50px;
+}
+span.small {
+  font-size: 30px;
+}
+div#bgtint {
+ background-color: rgba(50,100,90,0.2);
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  z-index: -1;
+}
+div.credititem {
+  border: 1px outset rgba(100,100,120,1);
+  background-color: rgba(50,50,50,1);
+  margin-right:2px;
+}
+a {
+  color: white;
+  text-decoration: none;
+}
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+Array.prototype.count = function() {
+  var count = 0;
+  this.forEach(function(el) {
+    count++;
+  });
+  return count;
+};
+var matrix = document.getElementById('matrix');
+var songtitle = document.getElementById('title');
+var songauthor = document.getElementById('author');
+var credits = document.getElementById('credits');
+var textcolor = "rgba(200,200,200,0.2)";
+var ctx = matrix.getContext('2d');
+var song = {
+	sample: [272114,33,1234],
+  rows: [
+      {sample_id: 272114, volume: 1, pan: 0, start_position: 0, pattern: [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0]},
+      {sample_id: 33, volume: 1, pan: 0, start_position: 0, pattern: [1,1,0,0,1,0,0,0,1,0,0,0,1,0,0,0]},
+      {sample_id: 1234, volume: 1, pan: 0, start_position: 0, pattern: [1,0,1,0,1,0,0,0,1,0,0,0,1,0,0,0]},
+
+    ],
+  _title: 'This is not a test',
+  _author: 'electronoob'
+};
+
+var isLoaded = [];
+isLoaded['sample_metadata'] = false;
+window.meta = [];
+meta['sample'] = [];
+meta['sample_tbl'] = [];
+
+function getSoundMeta(id) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://www.freesound.org/apiv2/sounds/'+id+'/?token=nMo2go8tTAeZITAHeTGRnNjT1elwVGlaVnoAp9RN&format=json');
+  xhr.onload = function(e) {
+    window.meta.sample.push( JSON.parse(this.response) );
+    window.meta.sample_tbl[id] = window.meta.sample.count() -1;
+  }
+  xhr.send();
+}
+
+for(i=0;i<song.sample.count();i++) {
+   getSoundMeta(song.sample[i]);
+}
+songtitle.innerHTML = song._title;
+songauthor.innerHTML = "&nbsp;&nbsp;by "+song._author+"&nbsp;";
+
+setInterval(function(){
+  if(!isLoaded['sample_metadata']) {
+    if (meta.sample.count() == song.sample.count()) {
+      isLoaded['sample_metadata'] = true;
+      console.log('meta_is_loaded');
+      //load credits table
+      var buffer = "";
+      var template = `
+          <div class="credititem" style="width: 120px; height: 91px; padding: 2px; float:left;overflow:hidden;background: url(http://i.imgur.com/knVTgR1.png);">
+              <div style="width: 120px; height:71px; background: url({IMGSRC}); text-align: left; position:relative;">
+              <small style="background-color: rgba(0,0,0,0.7);">{SAMPLENAME}</small>
+              </div>
+              <a target='_blank' href='{LINK}'>&#8767;</a>
+              <small>{USERNAME}</small>
+              
+          </div>
+      `;
+      for(i=0;i<meta.sample.count();i++) {
+          var temp = template;
+          temp = temp.replace('{USERNAME}', meta['sample'][i].username);
+          temp = temp.replace('{LINK}', meta['sample'][i].url);
+          //120x71
+          temp = temp.replace("{IMGSRC}", meta['sample'][i].images.waveform_m);
+          temp = temp.replace('{SAMPLENAME}', meta['sample'][i].name);
+					buffer += temp;
+      }
+      credits.innerHTML = buffer;
+    }
+  }
+},1000);
+
+function render() {
+  ctx.clearRect(0,0,550,250);
+  var xoffset = 152;
+  var yoffset = -20;
+  var index = 0;
+  var beats = [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0];
+  line(145,0,145,250,4,'rgba(200,0,0,0.2)');
+  for(k=0;k<song.rows.count();k++) {
+    yoffset += 40;
+    xoffset = 152;
+  	index = 0;
+    beats = song.rows[k].pattern;
+    line(0,yoffset+10,550,yoffset+10,30,'rgba(0,0,0,0.4)');
+    ctx.fillStyle = 'rgba(255,255,255,1)';
+    ctx.font = "12px Arial";
+    var sample_name;
+    var sample_row = song.rows[k];
+    if(isLoaded['sample_metadata']) {
+      sample_name = meta.sample[meta.sample_tbl[sample_row.sample_id]].name;
+    } else {
+      sample_name = "Loading...";
+    }
+    ctx.fillText(sample_name, 5,yoffset+20);
+    
+    for (i=0;i<4;i++){
+      for(j=0;j<4;j++) {
+        if(i%2) {
+          ctx.fillStyle = 'rgba(200,200,200,0.6)';
+        } else {
+          ctx.fillStyle = 'rgba(100,100,100,0.9)';
+        }
+        if(beats[index]) {
+          ctx.fillStyle = 'rgba(255,255,255,1)';
+        }
+        ctx.fillRect(xoffset,yoffset,20,20);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+        ctx.strokeRect(xoffset+2,yoffset+2,16,16);
+        index++;
+        xoffset += 25;
+      }
+    }
+  }
+  window.requestAnimationFrame(render);
+}
+function line(x1,y1,x2,y2,width,style) {
+  ctx.strokeStyle = style;
+  ctx.lineWidth = width;
+  ctx.beginPath();
+  ctx.moveTo(x1,y1);
+  ctx.lineTo(x2,y2);
+  ctx.stroke();
+}
+render();
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <div id="bgtint"></div>
+<div>
+<span class="matrix" id='title'></span>
+<span class="matrix small" id='author'></span>
+</div><br>
+<canvas id=matrix width=550 height=250></canvas>
+<div class="credits" id="credits">
+[Loading sample attribution information]
+</div>
+
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "xy9pky0g"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

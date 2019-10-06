@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      div.ac{
+  background-image: url(http://i.imgur.com/2yChkJd.png);
+  width: 1608px;
+  height: 1316px;
+}
+div.ac .info {
+  color:#000;
+  position:relative;
+  left: 310px;
+  top:354px;
+  width: 500px;
+  height: 500px;
+  border: 4px double rgba(0,0,0,1);
+  padding: 10px;
+  font-size: 2em;
+  background-color: rgba(0,0,0,0.2);
+}
+span.pin {
+  width: 28px;
+  height: 28px;
+  background-color: rgba(0,0,0,0.3);
+  position:absolute;
+  z-index: 10;
+  border-radius: 180px;
+  transition: background-color 0.5s;
+}
+body {
+  margin:0px;
+  padding: 0px;
+  zoom: 0.75; 
+}
+
+
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+var ac = document.getElementById("ac");
+var info = document.getElementById("info");
+var ds = {
+  "1": { "Symbol":"DVDD0", "IO":"—", "x":"", "Description":"Digital power supply"},
+  "2": { "Symbol":"XRST", "IO":"I", "x":"", "Description":"System reset. Reset when low."},
+  "3": { "Symbol":"MUTE", "IO":"I", "x":"", "Description":"Mute input (low: off, high: on)"},
+  "4": { "Symbol":"DATA", "IO":"I", "x":"", "Description":"Serial data input from CPU"},
+  "5": { "Symbol":"XLAT", "IO":"I", "x":"", "Description":"Latch input from CPU. Serial data is latched at the falling edge."},
+  "6": { "Symbol":"CLOK", "IO":"I", "x":"", "Description":"Serial data transfer clock input from CPU."},
+  "7": { "Symbol":"SENS", "IO":"O", "x":"1, 0", "Description":"SENS output to CPU."},
+  "8": { "Symbol":"SCLK", "IO":"I", "x":"", "Description":"SENS serial data readout clock input."},
+  "9": { "Symbol":"ATSK", "IO":"I/O", "x":"1, 0", "Description":"Anti-shock input/output."},
+  "10": { "Symbol":"WFCK", "IO":"O", "x":"1, 0", "Description":"WFCK output."},
+  "11": { "Symbol":"XUGF", "IO":"O", "x":"1, 0", "Description":"XUGF output. MNT0 or RFCK is output by switching with the command."},
+  "12": { "Symbol":"XPCK", "IO":"O", "x":"1, 0", "Description":"XPCK output. MNT1 is output by switching with the command"},
+  "13": { "Symbol":"GFS", "IO":"O", "x":"1, 0", "Description":"GFS output. MNT2 or XROF is output by switching with the command."},
+  "14": { "Symbol":"C2PO", "IO":"O", "x":"1, 0", "Description":"G2PO output. MNT3 or GTOP is output by switching with the command."},
+  "15": { "Symbol":"SCOR", "IO":"O", "x":"1, 0", "Description":"Outputs a high signal when either subcode sync S0 or S1 is detected."},
+  "16": { "Symbol":"C4M", "IO":"O", "x":"1, 0", "Description":"4.2336MHz output. 1/4 frequency division output for V16M in CAV-W mode\nor variable pitch mode."},
+  "17": { "Symbol":"WDCK", "IO":"O", "x":"1, 0", "Description":"Word clock output. f = 2Fs. GRSCOR is output by the command switching."},
+  "18": { "Symbol":"DVSS0", "IO":"—", "x":"—", "Description":"Digital GND."},
+  "19": { "Symbol":"COUT", "IO":"I/O", "x":"1, 0", "Description":"Track count signal I/O"},
+  "20": { "Symbol":"MIRR", "IO":"I/O", "x":"1, 0", "Description":"Mirror signal I/O."},
+  "21": { "Symbol":"DFCT", "IO":"I/O", "x":"1, 0", "Description":"Detect signal I/O."},
+  "22": { "Symbol":"FOK", "IO":"I/O", "x":"1, 0", "Description":"Focus OK signal I/O."},
+  "23": { "Symbol":"PWMI", "IO":"I", "x":"", "Description":"Spindle motor external control input."},
+  "24": { "Symbol":"LOCK", "IO":"I/O", "x":"1, 0", "Description":"GFS is sampled at 460Hz; when GFS is high, this pin outputs a high signal.\nIf GFS is low eight consecutive samples, this pin outputs low. Input when LKIN = 1."},
+  "25": { "Symbol":"MDP", "IO":"O", "x":"1, Z, 0", "Description":"Spindle motor servo control output."},
+  "26": { "Symbol":"SSTP", "IO":"I", "x":"", "Description":"Disc innermost track detection signal input. "},
+  "27": { "Symbol":"FSTO", "IO":"O", "x":"1, 0", "Description":"2/3 frequency division output for XTAI pin."},
+  "28": { "Symbol":"DVDD1", "IO":"—", "x":"—", "Description":"Digital power supply."},
+  "29": { "Symbol":"SFDR", "IO":"O", "x":"1, 0", "Description":"Sled drive output."},
+  "30": { "Symbol":"SRDR", "IO":"O", "x":"1, 0", "Description":"Sled drive output"},
+  "31": { "Symbol":"TFDR", "IO":"O", "x":"1, 0", "Description":"Tracking drive output."},
+  "32": { "Symbol":"TRDR", "IO":"O", "x":"1, 0", "Description":"Tracking drive output."},
+  "33": { "Symbol":"FFDR", "IO":"O", "x":"1, 0", "Description":"Focus drive output."},
+  "34": { "Symbol":"FRDR", "IO":"O", "x":"1, 0", "Description":"Focus drive output"},
+  "35": { "Symbol":"DVSS1", "IO":"—", "x":"—", "Description":"Digital GND"},
+  "36": { "Symbol":"TEST", "IO":"I", "x":"", "Description":"Test. Normally, GND"},
+  "37": { "Symbol":"TES1", "IO":"I", "x":"", "Description":"Test. Normally, GND"},
+  "38": { "Symbol":"VC", "IO":"I", "x":"", "Description":"Center voltage input."},
+  "39": { "Symbol":"FE", "IO":"I", "x":"", "Description":"Focus error signal input."},
+  "40": { "Symbol":"SE", "IO":"I", "x":"", "Description":"Sled error signal input."},
+  "41": { "Symbol":"TE", "IO":"I", "x":"", "Description":"Tracking error signal input."},
+  "42": { "Symbol":"CE", "IO":"I", "x":"", "Description":"Center servo analog input."},
+  "43": { "Symbol":"RFDC", "IO":"I", "x":"", "Description":"RF signal input."},
+  "44": { "Symbol":"ADIO", "IO":"O", "x":"Analog", "Description":"Test. No connected."},
+  "45": { "Symbol":"AVSS0", "IO":"—", "x":"—", "Description":"Analog GND."},
+  "46": { "Symbol":"IGEN", "IO":"I", "x":"", "Description":"Constant current input for operational amplifier."},
+  "47": { "Symbol":"AVDD0", "IO":"—", "x":"—", "Description":"Analog power supply."},
+  "48": { "Symbol":"ASYO", "IO":"O", "x":"1, 0", "Description":"EFM full-swing output. (low = Vss, high = VDD)"},
+  "49": { "Symbol":"ASYI", "IO":"I", "x":"", "Description":"Asymmetry comparator voltage input."},
+  "50": { "Symbol":"RFAC", "IO":"I", "x":"", "Description":"EFM signal input."},
+  "51": { "Symbol":"AVSS1", "IO":"—", "x":"—", "Description":"Analog GND."},
+  "52": { "Symbol":"CLTV", "IO":"I", "x":"", "Description":"Multiplier VCO1 control voltage input."},
+  "53": { "Symbol":"FILO", "IO":"O", "x":"Analog", "Description":"Master PLL filter output (slave = digital PLL)."},
+  "54": { "Symbol":"FILI", "IO":"I", "x":"", "Description":"Master PLL filter input."},
+  "55": { "Symbol":"PCO", "IO":"O", "x":"1, Z, 0", "Description":"Master PLL charge pump output."},
+  "56": { "Symbol":"AVDD1", "IO":"—", "x":"—", "Description":"Analog power supply."},
+  "57": { "Symbol":"BIAS", "IO":"I", "x":"", "Description":"Asymmetry circuit constant current input."},
+  "58": { "Symbol":"VCTL", "IO":"I", "x":"", "Description":"Wide-band EFM PLL VCO2 control voltage input."},
+  "59": { "Symbol":"V16M", "IO":"I/O", "x":"1, 0", "Description":"Wide-band EFM PLL VCO2 oscillation output. Serves as wide-band EFM\nPLL clock input by switching with the command."},
+  "60": { "Symbol":"VPCO", "IO":"O", "x":"1, Z, 0", "Description":"Wide-band EFM PLL charge pump output."},
+  "61": { "Symbol":"DVDD2", "IO":"—", "x":"—", "Description":"Digital power supply."},
+  "62": { "Symbol":"ASYE", "IO":"I", "x":"", "Description":"Asymmetry circuit on/off (low = off, high = on)."},
+  "63": { "Symbol":"MD2", "IO":"I", "x":"", "Description":"Digital Out on/off control (low = off, high = on)."},
+  "64": { "Symbol":"DOUT", "IO":"O", "x":"1, 0", "Description":"Digital Out output."},
+  "65": { "Symbol":"LRCK", "IO":"O", "x":"1, 0", "Description":"D/A interface. LR clock output. f = Fs"},
+  "66": { "Symbol":"PCMD", "IO":"O", "x":"1, 0", "Description":"D/A interface. Serial data output (two's complement, MSB first)"},
+  "67": { "Symbol":"BCK", "IO":"O", "x":"1, 0", "Description":"D/A interface. Bit clock output."},
+  "68": { "Symbol":"EMPH", "IO":"O", "x":"1, 0", "Description":"Outputs a high signal when the playback disc has emphasis, and a low\nsignal when there is no emphasis."},
+  "69": { "Symbol":"XTSL", "IO":"I", "x":"", "Description":"Crystal selection input. Low when the crystal is 16.9344MHz; high when it is\n33.8688MHz"},
+  "70": { "Symbol":"DVSS2", "IO":"—", "x":"—", "Description":"Digital GND."},
+  "71": { "Symbol":"XTAI", "IO":"I", "x":"", "Description":"Crystal oscillation circuit input. When the master clock is input externally,\ninput it from this pin."},
+  "72": { "Symbol":"XTAO", "IO":"O", "x":"", "Description":"Crystal oscillation circuit output."},
+  "73": { "Symbol":"SOUT", "IO":"O", "x":"1, 0", "Description":"Serial data output in servo block."},
+  "74": { "Symbol":"SOCK", "IO":"O", "x":"1, 0", "Description":"Serial data readout clock output in servo block."},
+  "75": { "Symbol":"XOLT", "IO":"O", "x":"1, 0", "Description":"Serial data latch output in servo block."},
+  "76": { "Symbol":"SQSO", "IO":"O", "x":"1, 0", "Description":"Sub-Q 80-bit, PCM peak or level data outputs. CD TEXT data output."},
+  "77": { "Symbol":"SQCK", "IO":"I", "x":"", "Description":"SQSO readout clock input."},
+  "78": { "Symbol":"SCSY", "IO":"I", "x":"", "Description":"GRSCOR resynchronization input."},
+  "79": { "Symbol":"SBSO", "IO":"O", "x":"1, 0", "Description":"Sub-Q P to W serial output."},
+  "80": { "Symbol":"EXCK", "IO":"I", "x":"", "Description":"SBSO readout clock input."}
+};
+
+for (i=1;i<=80;i++) {
+pin = document.createElement("span");
+
+pin.className="pin";
+pin.addEventListener("mouseover", function( event ) {   
+    event.target.style.backgroundColor = "rgba(255,0,0,0.7)";
+		info.innerHTML = "<p>Pin: "+event.target.id+", IO: "+ ds[event.target.id].IO+"</><h1>" + ds[event.target.id].Symbol + "</h1><p>"+ds[event.target.id].Description+"</p>";
+    
+}, false);
+pin.addEventListener("mouseout", function( event ) {
+    event.target.style.backgroundColor = "rgba(255,0,0,0.3)";
+    setTimeout(function() {event.target.style.backgroundColor = "";}, 200);
+}, false);
+var lef,top;
+if(i >= 41 && i<= 60) {
+	left = 844 - (i-41) * 30.2;
+  top = 231;
+}
+if(i <= 20 && i>= 1) {
+	left = 270 + (i * 30.2) - 30;
+  top = 962;
+}
+if(i >= 61 && i<= 80) {
+	left = 192;
+  top = 303 + (i-61) * 30.2
+}
+if(i >= 21 && i<= 40) {
+	left = 924;
+  top = 878 - (i-21) * 30.2
+}
+pin.id = ""+i;
+pin.style.left = left + "px";
+pin.style.top = top + "px";
+
+ac.appendChild(pin);
+}
+
+
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <div class="ac" id="ac">
+  <div class="info" id="info">
+  Hover over a pin for more information.
+  </div>
+</div>
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "bdxkqahp"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

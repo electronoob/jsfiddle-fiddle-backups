@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      canvas {border: 1px solid #000;}
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">//<![CDATA[
+
+    window.onload=function(){
+      
+var o = new Image();
+var c = new Image();
+var cold = old.getContext("2d");
+var ccurrent = current.getContext("2d");
+var cmix = mix.getContext("2d");
+var l = 0;
+o.src="https://london.hackspace.org.uk/members/camera.php?id=6";
+o.onload = function() {
+  console.log('mooo');
+  cold.drawImage(this, -480,-190,800,1060);
+};
+c.src=o.src;
+c.onload = function() {
+  console.log('mooc');
+  ccurrent.drawImage(this, -480,-190,800,1060);
+};
+setInterval(function(){
+  l++;
+  c.src="https://london.hackspace.org.uk/members/camera.php?id=6&" + l;
+  cmix.globalCompositeOperation = "source-over";
+  cmix.drawImage(old,0,0);
+  cmix.globalCompositeOperation = "difference";
+  cmix.drawImage(current,0,0);
+},1000);
+
+    }
+
+  //]]></script>
+
+</head>
+<body>
+    <canvas id="old" width="200" height="200"></canvas><br>
+
+<canvas id="mix" width="200" height="200"></canvas><br>
+
+<canvas id="current" width="200" height="200"></canvas><br>
+
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "vg7tL31x"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>
